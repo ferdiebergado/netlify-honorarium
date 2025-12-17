@@ -7,12 +7,12 @@ import {
 } from "@/components/ui/card";
 import CreateActivityForm from "./CreateActivityForm";
 
-export default function CreateActivityPage() {
+export default function ActivitiesPage() {
   return (
-    <Card className="w-full md:max-w-lg">
+    <Card className="m-8">
       <CardHeader>
-        <CardTitle>New Activity</CardTitle>
-        <CardDescription>Create a new activity</CardDescription>
+        <CardTitle className="text-3xl font-bold">Activities</CardTitle>
+        <CardDescription>List of Activities</CardDescription>
       </CardHeader>
       <CardContent>
         <CreateActivityForm />

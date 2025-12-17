@@ -1,10 +1,6 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
-import * as z from "zod";
-
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { DialogClose, DialogFooter } from "@/components/ui/dialog";
 import {
   Field,
   FieldDescription,
@@ -25,67 +21,24 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Spinner } from "@/components/ui/spinner";
-import { useMutation } from "@tanstack/react-query";
 import { ChevronDownIcon } from "lucide-react";
 import { useState } from "react";
+import { Controller } from "react-hook-form";
+import type { ActivityFormdata, useActivityForm } from "./activity";
 
-const formSchema = z.object({
-  title: z
-    .string()
-    .min(5, "Title must be at least 5 characters.")
-    .max(150, "Title must be at most 150 characters."),
-  venue: z
-    .string()
-    .min(20, "Venue must be at least 20 characters.")
-    .max(100, "Venue must be at most 100 characters."),
-  startDate: z.iso.date(),
-  endDate: z.iso.date(),
-  code: z.string(),
-  fund: z.string(),
-});
+type ActivityFormProps = {
+  form: ReturnType<typeof useActivityForm>;
+  isLoading: boolean;
+  onSubmit: (data: ActivityFormdata) => void;
+};
 
-type ActivityFormdata = z.infer<typeof formSchema>;
-
-async function createActivity(formData: ActivityFormdata) {
-  console.log("formData", formData);
-
-  const res = await fetch("/create-activity", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(formData),
-  });
-
-  if (!res.ok) throw new Error("request failed");
-
-  const data = await res.json();
-  return data;
-}
-
-export function ActivityForm() {
+export default function ActivityForm({
+  form,
+  isLoading,
+  onSubmit,
+}: ActivityFormProps) {
   const [startDateOpen, setStartDateOpen] = useState(false);
   const [endDateOpen, setEndDateOpen] = useState(false);
-
-  const form = useForm<ActivityFormdata>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: "",
-      code: "",
-    },
-  });
-
-  const { mutate, isPending, isError, error } = useMutation({
-    mutationFn: createActivity,
-    onSuccess: (data) => {
-      form.reset();
-      toast.success(data.message);
-    },
-  });
-
-  const onSubmit = (data: ActivityFormdata) => mutate(data);
-
-  if (isError) return <p>Error: {error.message}</p>;
 
   return (
     <form id="activity-form" onSubmit={form.handleSubmit(onSubmit)}>
@@ -250,11 +203,14 @@ export function ActivityForm() {
             </Field>
           )}
         />
-        <Field orientation="horizontal">
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DialogClose>
           <Button type="button" variant="outline" onClick={() => form.reset()}>
             Reset
           </Button>
-          {isPending ? (
+          {isLoading ? (
             <Button disabled>
               <Spinner />
               Submitting...
@@ -264,7 +220,7 @@ export function ActivityForm() {
               Submit
             </Button>
           )}
-        </Field>
+        </DialogFooter>
       </FieldGroup>
     </form>
   );
