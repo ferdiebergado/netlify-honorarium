@@ -10,7 +10,12 @@ export default async () => {
   try {
     const query = "SELECT * FROM activities";
     const { rows } = await turso.execute(query);
-    return Response.json({ data: rows });
+    const data = rows.map((a) => ({
+      ...a,
+      startDate: a.start_date,
+      endDate: a.end_date,
+    }));
+    return Response.json({ data });
   } catch (error) {
     console.error(error);
     throw error;

@@ -1,6 +1,16 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+
+export type Activity = {
+  title: string;
+  venue: string;
+  startDate: string;
+  endDate: string;
+  code: string;
+  fund: string;
+};
 
 export const formSchema = z.object({
   title: z
@@ -30,4 +40,19 @@ export const useActivityForm = () =>
       code: "",
       fund: "",
     },
+  });
+
+async function listActivities() {
+  const res = await fetch("/list-activities");
+
+  if (!res.ok) throw new Error("request failed");
+
+  const data = await res.json();
+  return data.data;
+}
+
+export const useActivityList = () =>
+  useQuery({
+    queryKey: ["list", "activities"],
+    queryFn: listActivities,
   });
