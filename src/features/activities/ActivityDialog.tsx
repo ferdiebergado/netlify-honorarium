@@ -24,9 +24,11 @@ export default function ActivityDialog({
 }: ActivityDialogProps) {
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button>{btnTitle}</Button>
-      </DialogTrigger>
+      <div className="flex w-full justify-end mb-8">
+        <DialogTrigger asChild>
+          <Button className="bg-cyan-500">{btnTitle}</Button>
+        </DialogTrigger>
+      </div>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
