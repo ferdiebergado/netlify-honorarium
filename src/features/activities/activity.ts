@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import * as z from 'zod';
 
 export type Activity = {
@@ -45,6 +46,23 @@ export const useActivityForm = () =>
     },
   });
 
+async function createActivity(formData: ActivityFormdata) {
+  console.log('formData', formData);
+
+  const res = await fetch('/api/activities', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formData),
+  });
+
+  if (!res.ok) throw new Error('request failed');
+
+  const data = await res.json();
+  return data;
+}
+
 async function listActivities(): Promise<Activity[]> {
   const res = await fetch('/api/activities');
 
@@ -57,4 +75,15 @@ export const useActivityList = () =>
   useQuery({
     queryKey: ['activities'],
     queryFn: listActivities,
+  });
+
+export const useCreateActivity = (form: ReturnType<typeof useActivityForm>) =>
+  useMutation({
+    mutationFn: createActivity,
+    onSuccess: async (data, _variables, _onMutateResult, context) => {
+      await context.client.invalidateQueries({ queryKey: ['activities'] });
+      form.reset();
+      toast.success(data.message);
+    },
+    onError: err => toast.error(err.message),
   });
