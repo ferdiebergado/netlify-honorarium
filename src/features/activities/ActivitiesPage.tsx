@@ -21,9 +21,15 @@ export default function ActivitiesPage() {
 
   return (
     <>
-      <h1 className="text-3xl font-bold">Activities</h1>
-      <h2 className="text-muted-foreground">List of Activities</h2>
-      <CreateActivityForm />
+      <div className="flex mb-6">
+        <div className="flex flex-col px-3">
+          <h1 className="text-3xl font-bold">Activities</h1>
+          <h2 className="text-muted-foreground">List of Activities</h2>
+        </div>
+        <div className="flex flex-1 justify-end items-end px-3">
+          <CreateActivityForm />
+        </div>
+      </div>
       {isError && <p className="m-3 text-destructive">Error: {error.message}</p>}
       {isPending ? (
         <div className="flex m-3 gap-3 items-center">
