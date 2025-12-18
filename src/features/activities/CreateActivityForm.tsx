@@ -1,5 +1,14 @@
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { CirclePlus } from 'lucide-react';
 import { useActivityForm, useCreateActivity, type ActivityFormdata } from './activity';
-import ActivityDialog from './ActivityDialog';
 import ActivityForm from './ActivityForm';
 
 export default function CreateActivityForm() {
@@ -9,12 +18,19 @@ export default function CreateActivityForm() {
   const onSubmit = (data: ActivityFormdata) => mutate(data);
 
   return (
-    <ActivityDialog
-      title="New Activity"
-      description="Create a new activity"
-      btnTitle="New Activity"
-    >
-      <ActivityForm form={form} isLoading={isPending} onSubmit={onSubmit} />
-    </ActivityDialog>
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button size="lg" className="bg-cyan-500">
+          <CirclePlus /> New Activity
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>New Activity</DialogTitle>
+          <DialogDescription>Create a new activity.</DialogDescription>
+        </DialogHeader>
+        <ActivityForm form={form} isLoading={isPending} onSubmit={onSubmit} />
+      </DialogContent>
+    </Dialog>
   );
 }
