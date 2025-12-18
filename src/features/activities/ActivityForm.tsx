@@ -1,30 +1,31 @@
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { DialogClose, DialogFooter } from "@/components/ui/dialog";
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
+import { DialogClose, DialogFooter } from '@/components/ui/dialog';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupText,
   InputGroupTextarea,
-} from "@/components/ui/input-group";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Spinner } from "@/components/ui/spinner";
-import { ChevronDownIcon } from "lucide-react";
-import { useState } from "react";
-import { Controller } from "react-hook-form";
-import type { ActivityFormdata, useActivityForm } from "./activity";
+} from '@/components/ui/input-group';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Spinner } from '@/components/ui/spinner';
+import { useFocals } from '@/features/focals/focal';
+import { useVenues } from '@/features/venues/venue';
+import { cn } from '@/lib/utils';
+import { Check, ChevronDownIcon, ChevronsUpDown } from 'lucide-react';
+import { useState } from 'react';
+import { Controller } from 'react-hook-form';
+import { type ActivityFormdata, useActivityForm } from './activity';
 
 type ActivityFormProps = {
   form: ReturnType<typeof useActivityForm>;
@@ -32,13 +33,20 @@ type ActivityFormProps = {
   onSubmit: (data: ActivityFormdata) => void;
 };
 
-export default function ActivityForm({
-  form,
-  isLoading,
-  onSubmit,
-}: ActivityFormProps) {
-  const [startDateOpen, setStartDateOpen] = useState(false);
-  const [endDateOpen, setEndDateOpen] = useState(false);
+export default function ActivityForm({ form, isLoading, onSubmit }: ActivityFormProps) {
+  const [isStartDateOpen, setIsStartDateOpen] = useState(false);
+  const [isEndDateOpen, setIsEndDateOpen] = useState(false);
+  const [isVenueOpen, setIsVenueOpen] = useState(false);
+  const [isFocalOpen, setIsFocalOpen] = useState(false);
+
+  const { isPending, isError, error, isSuccess, data: venues } = useVenues();
+  const {
+    isPending: isPendingFocals,
+    isError: isErrorFocals,
+    error: errorFocals,
+    isSuccess: isSuccessFocals,
+    data: focals,
+  } = useFocals();
 
   return (
     <form id="activity-form" onSubmit={form.handleSubmit(onSubmit)}>
@@ -64,26 +72,71 @@ export default function ActivityForm({
                   </InputGroupText>
                 </InputGroupAddon>
               </InputGroup>
-              <FieldDescription>
-                Complete title of the activity
-              </FieldDescription>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
         <Controller
-          name="venue"
+          name="venueId"
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="venue">Venue</FieldLabel>
-              <Input
-                {...field}
-                id="venue"
-                aria-invalid={fieldState.invalid}
-                placeholder="Lime Hotel, Pasay City"
-                autoComplete="off"
-              />
+              {isPending && (
+                <div className="flex items-center gap-3">
+                  <Spinner />
+                  Loading venues...
+                </div>
+              )}
+
+              {isError && <FieldError errors={[{ message: error.message }]} />}
+
+              {isSuccess && (
+                <Popover open={isVenueOpen} onOpenChange={setIsVenueOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={isVenueOpen}
+                      className="w-[200px] justify-between"
+                    >
+                      {field.value
+                        ? venues.find(venue => venue.id === field.value)?.name
+                        : 'Select venue...'}
+                      <ChevronsUpDown className="opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0">
+                    <Command>
+                      <CommandInput id="venue" placeholder="Search venue..." className="h-9" />
+                      <CommandList>
+                        <CommandEmpty>No venues found.</CommandEmpty>
+                        <CommandGroup>
+                          {venues.map(venue => (
+                            <CommandItem
+                              key={venue.id}
+                              value={venue.name}
+                              onSelect={() => {
+                                field.onChange(venue.id);
+                                setIsVenueOpen(false);
+                              }}
+                            >
+                              {venue.name}
+                              <Check
+                                className={cn(
+                                  'ml-auto',
+                                  field.value === venue.id ? 'opacity-100' : 'opacity-0'
+                                )}
+                              />
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+              )}
+
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
@@ -94,33 +147,24 @@ export default function ActivityForm({
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="start-date">Start Date</FieldLabel>
-              <Popover open={startDateOpen} onOpenChange={setStartDateOpen}>
+              <Popover open={isStartDateOpen} onOpenChange={setIsStartDateOpen}>
                 <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    id="date"
-                    className="w-48 justify-between font-normal"
-                  >
-                    {field.value
-                      ? new Date(field.value).toLocaleDateString()
-                      : "Select date"}
+                  <Button variant="outline" id="date" className="w-48 justify-between font-normal">
+                    {field.value ? new Date(field.value).toLocaleDateString() : 'Select start date'}
                     <ChevronDownIcon />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent
-                  className="w-auto overflow-hidden p-0"
-                  align="start"
-                >
+                <PopoverContent className="w-auto overflow-hidden p-0" align="start">
                   <Calendar
                     id="start-date"
                     mode="single"
                     selected={new Date(field.value)}
                     captionLayout="dropdown"
-                    onSelect={(date) => {
+                    onSelect={date => {
                       if (!date) return;
 
                       field.onChange(date?.toISOString().slice(0, 10));
-                      setStartDateOpen(false);
+                      setIsStartDateOpen(false);
                     }}
                   />
                 </PopoverContent>
@@ -135,32 +179,23 @@ export default function ActivityForm({
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="end-date">End Date</FieldLabel>
-              <Popover open={endDateOpen} onOpenChange={setEndDateOpen}>
+              <Popover open={isEndDateOpen} onOpenChange={setIsEndDateOpen}>
                 <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    id="date"
-                    className="w-48 justify-between font-normal"
-                  >
-                    {field.value
-                      ? new Date(field.value).toLocaleDateString()
-                      : "Select date"}
+                  <Button variant="outline" id="date" className="w-48 justify-between font-normal">
+                    {field.value ? new Date(field.value).toLocaleDateString() : 'Select end date'}
                     <ChevronDownIcon />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent
-                  className="w-auto overflow-hidden p-0"
-                  align="start"
-                >
+                <PopoverContent className="w-auto overflow-hidden p-0" align="start">
                   <Calendar
                     id="end-date"
                     mode="single"
                     selected={new Date(field.value)}
                     captionLayout="dropdown"
-                    onSelect={(date) => {
+                    onSelect={date => {
                       if (!date) return;
                       field.onChange(date?.toISOString().slice(0, 10));
-                      setEndDateOpen(false);
+                      setIsEndDateOpen(false);
                     }}
                   />
                 </PopoverContent>
@@ -199,6 +234,71 @@ export default function ActivityForm({
                 placeholder="2025 BEC Current"
                 autoComplete="off"
               />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+        <Controller
+          name="focalId"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="focal">Focal Person</FieldLabel>
+              {isPendingFocals && (
+                <div className="flex items-center gap-3">
+                  <Spinner />
+                  Loading focal persons...
+                </div>
+              )}
+
+              {isErrorFocals && <FieldError errors={[{ message: errorFocals.message }]} />}
+
+              {isSuccessFocals && (
+                <Popover open={isFocalOpen} onOpenChange={setIsFocalOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={isFocalOpen}
+                      className="w-[200px] justify-between"
+                    >
+                      {field.value
+                        ? focals.find(focal => focal.id === field.value)?.name
+                        : 'Select focal person...'}
+                      <ChevronsUpDown className="opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0">
+                    <Command>
+                      <CommandInput id="focal" placeholder="Search focal..." className="h-9" />
+                      <CommandList>
+                        <CommandEmpty>No focals found.</CommandEmpty>
+                        <CommandGroup>
+                          {focals.map(focal => (
+                            <CommandItem
+                              key={focal.id}
+                              value={focal.name}
+                              onSelect={() => {
+                                field.onChange(focal.id);
+                                setIsFocalOpen(false);
+                              }}
+                            >
+                              {focal.name}
+                              <Check
+                                className={cn(
+                                  'ml-auto',
+                                  field.value === focal.id ? 'opacity-100' : 'opacity-0'
+                                )}
+                              />
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+              )}
+
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}

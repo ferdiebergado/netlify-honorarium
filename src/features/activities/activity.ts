@@ -6,11 +6,14 @@ import * as z from 'zod';
 export type Activity = {
   id: number;
   title: string;
+  venueId: number;
   venue: string;
   startDate: string;
   endDate: string;
   code: string;
   fund: string;
+  focalId: number;
+  focal: string;
 };
 
 export const formSchema = z.object({
@@ -18,14 +21,12 @@ export const formSchema = z.object({
     .string()
     .min(5, 'Title must be at least 5 characters.')
     .max(150, 'Title must be at most 150 characters.'),
-  venue: z
-    .string()
-    .min(20, 'Venue must be at least 20 characters.')
-    .max(100, 'Venue must be at most 100 characters.'),
+  venueId: z.number().min(1, 'Venue is required.'),
   startDate: z.iso.date(),
   endDate: z.iso.date(),
-  code: z.string(),
-  fund: z.string(),
+  code: z.string().min(17, 'Activity Code must be at least 17 characters.'),
+  fund: z.string().min(7, 'Fund Source must be at least 7 characters.'),
+  focalId: z.number().min(1, 'Focal Person is required.'),
 });
 
 export type ActivityFormdata = z.infer<typeof formSchema>;
@@ -35,30 +36,21 @@ export const useActivityForm = () =>
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: '',
-      venue: '',
+      venueId: 0,
       startDate: '',
       endDate: '',
       code: '',
       fund: '',
+      focalId: 0,
     },
   });
 
-async function listActivities() {
-  const res = await fetch('/list-activities');
+async function listActivities(): Promise<Activity[]> {
+  const res = await fetch('/api/activities');
 
   if (!res.ok) throw new Error('request failed');
 
-  const data = await res.json();
-  return data.data;
-}
-
-async function getActivity(id: number): Promise<Activity> {
-  const res = await fetch('/activity/' + id);
-
-  if (!res.ok) throw new Error('request failed');
-
-  const data = await res.json();
-  return data;
+  return await res.json();
 }
 
 export const useActivityList = () =>
@@ -66,10 +58,3 @@ export const useActivityList = () =>
     queryKey: ['activities'],
     queryFn: listActivities,
   });
-
-export const useActivity = (id: number) => {
-  return useQuery({
-    queryKey: ['activity'],
-    queryFn: () => getActivity(id),
-  });
-};

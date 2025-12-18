@@ -26,7 +26,7 @@ export default function ActivityDialog({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-cyan-500">
+        <Button size="lg" className="bg-cyan-500">
           <CirclePlus /> {btnTitle}
         </Button>
       </DialogTrigger>

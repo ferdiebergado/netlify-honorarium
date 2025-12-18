@@ -7,7 +7,13 @@ import ViewActivityDialog from './ViewActivityDialog';
 
 const columns: ColumnDef<Activity>[] = [
   { accessorKey: 'id', header: 'ID' },
-  { accessorKey: 'title', header: 'Title' },
+  {
+    accessorKey: 'title',
+    header: 'Title',
+    cell: ({ getValue }) => (
+      <div className="max-w-[300px] wrap-break-word whitespace-normal">{getValue<string>()}</div>
+    ),
+  },
   { accessorKey: 'venue', header: 'Venue' },
   { accessorKey: 'startDate', header: 'Start Date' },
   { accessorKey: 'endDate', header: 'End Date' },
@@ -17,7 +23,7 @@ const columns: ColumnDef<Activity>[] = [
 ];
 
 export default function ActivitiesPage() {
-  const { isPending, isError, error, data } = useActivityList();
+  const { isPending, isError, error, isSuccess, data: activities } = useActivityList();
 
   return (
     <>
@@ -30,14 +36,13 @@ export default function ActivitiesPage() {
           <CreateActivityForm />
         </div>
       </div>
-      {isError && <p className="m-3 text-destructive">Error: {error.message}</p>}
-      {isPending ? (
+      {isPending && (
         <div className="flex m-3 gap-3 items-center">
           <Spinner /> Fetching activities...
         </div>
-      ) : (
-        <ActivityList columns={columns} data={data} />
       )}
+      {isError && <p className="m-3 text-destructive">Error: {error.message}</p>}
+      {isSuccess && <ActivityList columns={columns} data={activities} />}
     </>
   );
 }

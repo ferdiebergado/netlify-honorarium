@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
-import { Calendar, Info, Landmark, MapPin, Tag } from 'lucide-react';
+import { Calendar, Info, Landmark, MapPin, Tag, UserStar } from 'lucide-react';
 import { type Activity } from './activity';
 
 type ViewActivityProps = {
@@ -16,7 +16,7 @@ type ViewActivityProps = {
 };
 
 export default function ViewActivityDialog({ activity }: ViewActivityProps) {
-  const { title, venue, startDate, endDate, code, fund } = activity;
+  const { title, venue, startDate, endDate, code, fund, focal } = activity;
 
   return (
     <Dialog>
@@ -76,6 +76,16 @@ export default function ViewActivityDialog({ activity }: ViewActivityProps) {
                 <span>Fund Source</span>
               </div>
               <span className="font-medium text-foreground">{fund}</span>
+            </div>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <UserStar className="h-4 w-4" />
+                <span>Focal Person</span>
+              </div>
+              <span className="font-medium text-foreground">{focal}</span>
             </div>
           </div>
         </div>
