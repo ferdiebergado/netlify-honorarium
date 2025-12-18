@@ -9,8 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "format": "pnpm exec prettier . --write",
-    "dump-db": "turso db shell honorarium .dump > init.sql",
-    "create-db": "rm -f local.db && cat init.sql | sqlite3 local.db"
+    "create-db": "rm -f local.db && turso db shell honorarium .dump | sqlite3 local.db"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
