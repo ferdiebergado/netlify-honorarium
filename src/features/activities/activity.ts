@@ -59,8 +59,7 @@ async function createActivity(formData: ActivityFormdata) {
 
   if (!res.ok) throw new Error('request failed');
 
-  const data = await res.json();
-  return data;
+  return (await res.json()) as { message: string };
 }
 
 async function listActivities(): Promise<Activity[]> {

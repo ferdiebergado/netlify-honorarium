@@ -23,7 +23,7 @@ export default function ActivityList({ columns, data }: ActivityDataTableProps) 
   });
 
   return (
-    <Card className="shadow-md rounded-2xl">
+    <Card className="rounded-2xl shadow-md">
       <CardContent>
         <Table>
           <TableHeader>
@@ -42,7 +42,7 @@ export default function ActivityList({ columns, data }: ActivityDataTableProps) 
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {table.getRowModel().rows.length ? (
               table.getRowModel().rows.map(row => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map(cell => (
