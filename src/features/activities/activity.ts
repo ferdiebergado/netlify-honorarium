@@ -53,6 +53,6 @@ async function listActivities() {
 
 export const useActivityList = () =>
   useQuery({
-    queryKey: ["list", "activities"],
+    queryKey: ["activities"],
     queryFn: listActivities,
   });

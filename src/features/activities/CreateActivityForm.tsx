@@ -26,7 +26,8 @@ export default function CreateActivityForm() {
 
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: createActivity,
-    onSuccess: (data) => {
+    onSuccess: async (data, _variables, _onMutateResult, context) => {
+      await context.client.invalidateQueries({ queryKey: ["activities"] });
       form.reset();
       toast.success(data.message);
     },
@@ -40,7 +41,7 @@ export default function CreateActivityForm() {
     <ActivityDialog
       title="New Activity"
       description="Create a new activity"
-      btnTitle="Create"
+      btnTitle="New Activity"
     >
       <ActivityForm form={form} isLoading={isPending} onSubmit={onSubmit} />
     </ActivityDialog>
