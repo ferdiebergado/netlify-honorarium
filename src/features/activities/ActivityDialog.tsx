@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -6,8 +6,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import type { ReactNode } from "react";
+} from '@/components/ui/dialog';
+import { CirclePlus } from 'lucide-react';
+import type { ReactNode } from 'react';
 
 type ActivityDialogProps = {
   btnTitle: string;
@@ -24,11 +25,11 @@ export default function ActivityDialog({
 }: ActivityDialogProps) {
   return (
     <Dialog>
-      <div className="flex w-full justify-end mb-8">
-        <DialogTrigger asChild>
-          <Button className="bg-cyan-500">{btnTitle}</Button>
-        </DialogTrigger>
-      </div>
+      <DialogTrigger asChild>
+        <Button className="bg-cyan-500">
+          <CirclePlus /> {btnTitle}
+        </Button>
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
