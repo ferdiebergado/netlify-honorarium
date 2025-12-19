@@ -23,23 +23,30 @@ import { useFocals } from '@/features/focals/focal';
 import { useVenues } from '@/features/venues/venue';
 import { cn } from '@/lib/utils';
 import { Check, ChevronDownIcon, ChevronsUpDown } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller } from 'react-hook-form';
-import { type ActivityFormdata, useActivityForm } from './activity';
+import { toast } from 'sonner';
+import { useActivityForm, useCreateActivity, type ActivityFormdata } from './activity';
 
 type ActivityFormProps = {
-  form: ReturnType<typeof useActivityForm>;
-  isLoading: boolean;
-  onSubmit: (data: ActivityFormdata) => void;
+  data: ActivityFormdata;
+  setIsDialogOpen: (open: boolean) => void;
 };
 
-export default function ActivityForm({ form, isLoading, onSubmit }: ActivityFormProps) {
+export default function ActivityForm({ data, setIsDialogOpen }: ActivityFormProps) {
   const [isStartDateOpen, setIsStartDateOpen] = useState(false);
   const [isEndDateOpen, setIsEndDateOpen] = useState(false);
   const [isVenueOpen, setIsVenueOpen] = useState(false);
   const [isFocalOpen, setIsFocalOpen] = useState(false);
 
-  const { isPending, isError, error, isSuccess, data: venues } = useVenues();
+  const {
+    isPending: isPendingVenues,
+    isError: isErrorVenues,
+    error: errorVenues,
+    isSuccess: isSuccessVenues,
+    data: venues,
+  } = useVenues();
+
   const {
     isPending: isPendingFocals,
     isError: isErrorFocals,
@@ -48,9 +55,35 @@ export default function ActivityForm({ form, isLoading, onSubmit }: ActivityForm
     data: focals,
   } = useFocals();
 
+  const form = useActivityForm(data);
+
+  const {
+    mutate,
+    isError: isErrorCreate,
+    error: errorCreate,
+    isSuccess: isSuccessCreate,
+    data: response,
+  } = useCreateActivity();
+
+  const handleSubmit = (data: ActivityFormdata) => {
+    mutate(data);
+  };
+
+  if (isErrorCreate) toast.error(errorCreate.message);
+
+  useEffect(() => {
+    if (isSuccessCreate) {
+      form.reset();
+      setIsDialogOpen(false);
+      toast.success(response.message);
+    }
+  }, [form, isSuccessCreate, response, setIsDialogOpen]);
+
   return (
-    <form id="activity-form" onSubmit={form.handleSubmit(onSubmit)}>
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    <form id="activity-form" onSubmit={form.handleSubmit(handleSubmit)}>
       <FieldGroup>
+        {/*  TITLE */}
         <Controller
           name="title"
           control={form.control}
@@ -76,29 +109,33 @@ export default function ActivityForm({ form, isLoading, onSubmit }: ActivityForm
             </Field>
           )}
         />
+        {/* END OF TITLE */}
+
+        {/* VENUE */}
         <Controller
           name="venueId"
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="venue">Venue</FieldLabel>
-              {isPending && (
+
+              {isPendingVenues && (
                 <div className="flex items-center gap-3">
                   <Spinner />
                   Loading venues...
                 </div>
               )}
 
-              {isError && <FieldError errors={[{ message: error.message }]} />}
+              {isErrorVenues && <FieldError errors={[{ message: errorVenues.message }]} />}
 
-              {isSuccess && (
+              {isSuccessVenues && (
                 <Popover open={isVenueOpen} onOpenChange={setIsVenueOpen}>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
                       role="combobox"
                       aria-expanded={isVenueOpen}
-                      className="w-[200px] justify-between"
+                      className="w-auto justify-between"
                     >
                       {field.value
                         ? venues.find(venue => venue.id === field.value)?.name
@@ -106,9 +143,14 @@ export default function ActivityForm({ form, isLoading, onSubmit }: ActivityForm
                       <ChevronsUpDown className="opacity-50" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0">
+                  <PopoverContent className="w-auto p-0">
                     <Command>
-                      <CommandInput id="venue" placeholder="Search venue..." className="h-9" />
+                      <CommandInput
+                        id="venue"
+                        placeholder="Search venue..."
+                        className="h-9"
+                        aria-invalid={fieldState.invalid}
+                      />
                       <CommandList>
                         <CommandEmpty>No venues found.</CommandEmpty>
                         <CommandGroup>
@@ -136,11 +178,13 @@ export default function ActivityForm({ form, isLoading, onSubmit }: ActivityForm
                   </PopoverContent>
                 </Popover>
               )}
-
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
+        {/* END OF VENUE */}
+
+        {/* START DATE */}
         <Controller
           name="startDate"
           control={form.control}
@@ -163,9 +207,10 @@ export default function ActivityForm({ form, isLoading, onSubmit }: ActivityForm
                     onSelect={date => {
                       if (!date) return;
 
-                      field.onChange(date?.toISOString().slice(0, 10));
+                      field.onChange(date.toISOString().slice(0, 10));
                       setIsStartDateOpen(false);
                     }}
+                    aria-invalid={fieldState.invalid}
                   />
                 </PopoverContent>
               </Popover>
@@ -173,6 +218,9 @@ export default function ActivityForm({ form, isLoading, onSubmit }: ActivityForm
             </Field>
           )}
         />
+        {/* END OF START DATE */}
+
+        {/* END DATE */}
         <Controller
           name="endDate"
           control={form.control}
@@ -194,9 +242,10 @@ export default function ActivityForm({ form, isLoading, onSubmit }: ActivityForm
                     captionLayout="dropdown"
                     onSelect={date => {
                       if (!date) return;
-                      field.onChange(date?.toISOString().slice(0, 10));
+                      field.onChange(date.toISOString().slice(0, 10));
                       setIsEndDateOpen(false);
                     }}
+                    aria-invalid={fieldState.invalid}
                   />
                 </PopoverContent>
               </Popover>
@@ -204,6 +253,9 @@ export default function ActivityForm({ form, isLoading, onSubmit }: ActivityForm
             </Field>
           )}
         />
+        {/* END OF END DATE */}
+
+        {/* CODE */}
         <Controller
           name="code"
           control={form.control}
@@ -238,12 +290,16 @@ export default function ActivityForm({ form, isLoading, onSubmit }: ActivityForm
             </Field>
           )}
         />
+        {/* END OF CODE */}
+
+        {/* FOCAL ID */}
         <Controller
           name="focalId"
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="focal">Focal Person</FieldLabel>
+
               {isPendingFocals && (
                 <div className="flex items-center gap-3">
                   <Spinner />
@@ -260,7 +316,7 @@ export default function ActivityForm({ form, isLoading, onSubmit }: ActivityForm
                       variant="outline"
                       role="combobox"
                       aria-expanded={isFocalOpen}
-                      className="w-[200px] justify-between"
+                      className="w-auto justify-between"
                     >
                       {field.value
                         ? focals.find(focal => focal.id === field.value)?.name
@@ -268,9 +324,14 @@ export default function ActivityForm({ form, isLoading, onSubmit }: ActivityForm
                       <ChevronsUpDown className="opacity-50" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0">
+                  <PopoverContent className="w-auto p-0">
                     <Command>
-                      <CommandInput id="focal" placeholder="Search focal..." className="h-9" />
+                      <CommandInput
+                        id="focal"
+                        placeholder="Search focal..."
+                        className="h-9"
+                        aria-invalid={fieldState.invalid}
+                      />
                       <CommandList>
                         <CommandEmpty>No focals found.</CommandEmpty>
                         <CommandGroup>
@@ -303,23 +364,25 @@ export default function ActivityForm({ form, isLoading, onSubmit }: ActivityForm
             </Field>
           )}
         />
+        {/* END OF FOCAL ID */}
+
         <DialogFooter>
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button type="button" variant="outline" onClick={() => form.reset()}>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => {
+              form.reset();
+            }}
+          >
             Reset
           </Button>
-          {isLoading ? (
-            <Button disabled>
-              <Spinner />
-              Submitting...
-            </Button>
-          ) : (
-            <Button type="submit" form="activity-form">
-              Submit
-            </Button>
-          )}
+
+          <Button type="submit" form="activity-form">
+            Submit
+          </Button>
         </DialogFooter>
       </FieldGroup>
     </form>

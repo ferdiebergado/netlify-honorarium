@@ -1,8 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import * as z from 'zod';
+
+const queryKey = 'activities';
 
 export type Activity = {
   id: number;
@@ -32,19 +33,13 @@ export const formSchema = z.object({
 
 export type ActivityFormdata = z.infer<typeof formSchema>;
 
-export const useActivityForm = () =>
+export const useActivityForm = (defaultValues: ActivityFormdata) =>
   useForm<ActivityFormdata>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: '',
-      venueId: 0,
-      startDate: '',
-      endDate: '',
-      code: '',
-      fund: '',
-      focalId: 0,
-    },
+    defaultValues,
   });
+
+export type ActivityForm = ReturnType<typeof useActivityForm>;
 
 async function createActivity(formData: ActivityFormdata) {
   console.log('formData', formData);
@@ -62,27 +57,38 @@ async function createActivity(formData: ActivityFormdata) {
   return (await res.json()) as { message: string };
 }
 
-async function listActivities(): Promise<Activity[]> {
+async function getActivities() {
   const res = await fetch('/api/activities');
 
   if (!res.ok) throw new Error('request failed');
 
-  return await res.json();
+  return (await res.json()) as Activity[];
 }
 
-export const useActivityList = () =>
+export const useActivities = () =>
   useQuery({
-    queryKey: ['activities'],
-    queryFn: listActivities,
+    queryKey: [queryKey],
+    queryFn: getActivities,
   });
 
-export const useCreateActivity = (form: ReturnType<typeof useActivityForm>) =>
+export const useCreateActivity = () =>
   useMutation({
     mutationFn: createActivity,
-    onSuccess: async (data, _variables, _onMutateResult, context) => {
-      await context.client.invalidateQueries({ queryKey: ['activities'] });
-      form.reset();
-      toast.success(data.message);
+
+    onMutate: async (newActivity, context) => {
+      await context.client.cancelQueries({ queryKey: [queryKey] });
+      const previousActivities = context.client.getQueryData([queryKey]);
+      context.client.setQueryData([queryKey], (old: Activity[]) => [...old, newActivity]);
+
+      return { previousActivities };
     },
-    onError: err => toast.error(err.message),
+
+    onError: (_err, _newTodo, onMutateResult, context) => {
+      context.client.setQueryData([queryKey], onMutateResult?.previousActivities);
+    },
+
+    onSettled: (_data, _error, _variables, _onMutateResult, context) =>
+      context.client.invalidateQueries({ queryKey: [queryKey] }),
+
+    mutationKey: ['createActivity'],
   });
