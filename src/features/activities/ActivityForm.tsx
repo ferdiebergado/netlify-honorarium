@@ -29,27 +29,21 @@ export default function ActivityForm({ data, setIsDialogOpen }: ActivityFormProp
 
   const form = useActivityForm(data);
 
-  const {
-    mutate,
-    isError: isErrorCreate,
-    error: errorCreate,
-    isSuccess: isSuccessCreate,
-    data: response,
-  } = useCreateActivity();
+  const { mutate, isError, error, isSuccess, data: response } = useCreateActivity();
 
   const handleSubmit = (data: ActivityFormdata) => {
     mutate(data);
   };
 
-  if (isErrorCreate) toast.error(errorCreate.message);
+  if (isError) toast.error(error.message);
 
   useEffect(() => {
-    if (isSuccessCreate) {
+    if (isSuccess) {
       form.reset();
       setIsDialogOpen(false);
       toast.success(response.message);
     }
-  }, [form, isSuccessCreate, response, setIsDialogOpen]);
+  }, [form, isSuccess, response, setIsDialogOpen]);
 
   return (
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -87,113 +81,127 @@ export default function ActivityForm({ data, setIsDialogOpen }: ActivityFormProp
         <VenueInput form={form} />
         {/* END OF VENUE */}
 
-        {/* START DATE */}
-        <Controller
-          name="startDate"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="start-date">Start Date</FieldLabel>
-              <Popover open={isStartDateOpen} onOpenChange={setIsStartDateOpen}>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" id="date" className="w-48 justify-between font-normal">
-                    {field.value ? new Date(field.value).toLocaleDateString() : 'Select start date'}
-                    <ChevronDownIcon />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto overflow-hidden p-0" align="start">
-                  <Calendar
-                    id="start-date"
-                    mode="single"
-                    selected={new Date(field.value)}
-                    captionLayout="dropdown"
-                    onSelect={date => {
-                      if (!date) return;
+        <Field orientation="horizontal">
+          {/* START DATE */}
+          <Controller
+            name="startDate"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="start-date">Start Date</FieldLabel>
+                <Popover open={isStartDateOpen} onOpenChange={setIsStartDateOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      id="date"
+                      className="w-48 justify-between font-normal"
+                    >
+                      {field.value
+                        ? new Date(field.value).toLocaleDateString()
+                        : 'Select start date'}
+                      <ChevronDownIcon />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                    <Calendar
+                      id="start-date"
+                      mode="single"
+                      selected={new Date(field.value)}
+                      captionLayout="dropdown"
+                      onSelect={date => {
+                        if (!date) return;
 
-                      field.onChange(date.toISOString().slice(0, 10));
-                      setIsStartDateOpen(false);
-                    }}
-                    aria-invalid={fieldState.invalid}
-                  />
-                </PopoverContent>
-              </Popover>
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-        {/* END OF START DATE */}
+                        field.onChange(date.toISOString().slice(0, 10));
+                        setIsStartDateOpen(false);
+                      }}
+                      aria-invalid={fieldState.invalid}
+                    />
+                  </PopoverContent>
+                </Popover>
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
+          {/* END OF START DATE */}
 
-        {/* END DATE */}
-        <Controller
-          name="endDate"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="end-date">End Date</FieldLabel>
-              <Popover open={isEndDateOpen} onOpenChange={setIsEndDateOpen}>
-                <PopoverTrigger asChild>
-                  <Button variant="outline" id="date" className="w-48 justify-between font-normal">
-                    {field.value ? new Date(field.value).toLocaleDateString() : 'Select end date'}
-                    <ChevronDownIcon />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto overflow-hidden p-0" align="start">
-                  <Calendar
-                    id="end-date"
-                    mode="single"
-                    selected={new Date(field.value)}
-                    captionLayout="dropdown"
-                    onSelect={date => {
-                      if (!date) return;
-                      field.onChange(date.toISOString().slice(0, 10));
-                      setIsEndDateOpen(false);
-                    }}
-                    aria-invalid={fieldState.invalid}
-                  />
-                </PopoverContent>
-              </Popover>
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-        {/* END OF END DATE */}
+          {/* END DATE */}
+          <Controller
+            name="endDate"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="end-date">End Date</FieldLabel>
+                <Popover open={isEndDateOpen} onOpenChange={setIsEndDateOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      id="date"
+                      className="w-48 justify-between font-normal"
+                    >
+                      {field.value ? new Date(field.value).toLocaleDateString() : 'Select end date'}
+                      <ChevronDownIcon />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                    <Calendar
+                      id="end-date"
+                      mode="single"
+                      selected={new Date(field.value)}
+                      captionLayout="dropdown"
+                      onSelect={date => {
+                        if (!date) return;
+                        field.onChange(date.toISOString().slice(0, 10));
+                        setIsEndDateOpen(false);
+                      }}
+                      aria-invalid={fieldState.invalid}
+                    />
+                  </PopoverContent>
+                </Popover>
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
+          {/* END OF END DATE */}
+        </Field>
 
-        {/* CODE */}
-        <Controller
-          name="code"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="code">Activity Code</FieldLabel>
-              <Input
-                {...field}
-                id="code"
-                aria-invalid={fieldState.invalid}
-                placeholder="AC-25-BLD-TLD-BEC-000"
-                autoComplete="off"
-              />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-        <Controller
-          name="fund"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="fund">Fund Source</FieldLabel>
-              <Input
-                {...field}
-                id="fund"
-                aria-invalid={fieldState.invalid}
-                placeholder="2025 BEC Current"
-                autoComplete="off"
-              />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-        {/* END OF CODE */}
+        <Field orientation="horizontal">
+          {/* CODE */}
+          <Controller
+            name="code"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="code">Activity Code</FieldLabel>
+                <Input
+                  {...field}
+                  id="code"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="AC-25-BLD-TLD-BEC-000"
+                  autoComplete="off"
+                />
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
+          <Controller
+            name="fund"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="fund">Fund Source</FieldLabel>
+                <Input
+                  {...field}
+                  id="fund"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="2025 BEC Current"
+                  autoComplete="off"
+                />
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
+          {/* END OF CODE */}
+        </Field>
 
         {/* FOCAL ID */}
         <FocalInput form={form} />
