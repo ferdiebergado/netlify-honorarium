@@ -7,7 +7,7 @@ export default function Layout() {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="mx-6">
+      <main className="mx-6 w-full">
         <SidebarTrigger className="my-3" />
         <Outlet />
         <Toaster position="top-right" expand richColors />
