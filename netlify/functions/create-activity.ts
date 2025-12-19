@@ -1,5 +1,5 @@
 import type { Config } from '@netlify/functions';
-import { Activity } from '../../src/features/activities/activity';
+import type { Activity } from '../../src/features/activities/activity';
 import { turso } from './db';
 
 export const config: Config = {

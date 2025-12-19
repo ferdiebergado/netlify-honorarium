@@ -1,4 +1,4 @@
-import { Config } from '@netlify/functions';
+import type { Config } from '@netlify/functions';
 import { turso } from './db';
 
 export const config: Config = {
