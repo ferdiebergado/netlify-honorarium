@@ -1,4 +1,4 @@
-import { Calendar1, Home, Settings } from 'lucide-react';
+import { Calendar1, Home, Settings, Users } from 'lucide-react';
 import type { FC } from 'react';
 import {
   Sidebar,
@@ -22,6 +22,11 @@ const items = [
     title: 'Activities',
     url: '/activities',
     icon: Calendar1,
+  },
+  {
+    title: 'Payees',
+    url: '/payees',
+    icon: Users,
   },
   {
     title: 'Settings',
