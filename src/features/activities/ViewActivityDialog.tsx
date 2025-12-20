@@ -25,7 +25,7 @@ export default function ViewActivityDialog({ activity }: ViewActivityProps) {
           <Info />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="pt-12 sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold">{title}</DialogTitle>
           <DialogDescription className="flex items-center gap-1 text-sm">
@@ -39,7 +39,7 @@ export default function ViewActivityDialog({ activity }: ViewActivityProps) {
           {/* Date Section */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+              <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
                 Start Date
               </p>
               <div className="flex items-center gap-2 text-sm">
@@ -48,7 +48,7 @@ export default function ViewActivityDialog({ activity }: ViewActivityProps) {
               </div>
             </div>
             <div className="space-y-1">
-              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+              <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
                 End Date
               </p>
               <div className="flex items-center gap-2 text-sm">
@@ -63,29 +63,29 @@ export default function ViewActivityDialog({ activity }: ViewActivityProps) {
           {/* Metadata Section */}
           <div className="space-y-3">
             <div className="flex items-center justify-between text-sm">
-              <div className="flex items-center gap-2 text-muted-foreground">
+              <div className="text-muted-foreground flex items-center gap-2">
                 <Tag className="h-4 w-4" />
                 <span>Activity Code</span>
               </div>
-              <span className="font-mono font-medium bg-muted px-2 py-0.5 rounded">{code}</span>
+              <span className="bg-muted rounded px-2 py-0.5 font-mono font-medium">{code}</span>
             </div>
 
             <div className="flex items-center justify-between text-sm">
-              <div className="flex items-center gap-2 text-muted-foreground">
+              <div className="text-muted-foreground flex items-center gap-2">
                 <Landmark className="h-4 w-4" />
                 <span>Fund Source</span>
               </div>
-              <span className="font-medium text-foreground">{fund}</span>
+              <span className="text-foreground font-medium">{fund}</span>
             </div>
           </div>
 
           <div>
             <div className="flex items-center justify-between text-sm">
-              <div className="flex items-center gap-2 text-muted-foreground">
+              <div className="text-muted-foreground flex items-center gap-2">
                 <UserStar className="h-4 w-4" />
                 <span>Focal Person</span>
               </div>
-              <span className="font-medium text-foreground">{focal}</span>
+              <span className="text-foreground font-medium">{focal}</span>
             </div>
           </div>
         </div>
