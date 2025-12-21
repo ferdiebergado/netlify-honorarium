@@ -75,19 +75,7 @@ export const useCreateActivity = () =>
   useMutation({
     mutationFn: createActivity,
 
-    onMutate: async (newActivity, context) => {
-      await context.client.cancelQueries({ queryKey: [queryKey] });
-      const previousActivities = context.client.getQueryData([queryKey]);
-      context.client.setQueryData([queryKey], (old: Activity[]) => [...old, newActivity]);
-
-      return { previousActivities };
-    },
-
-    onError: (_err, _newTodo, onMutateResult, context) => {
-      context.client.setQueryData([queryKey], onMutateResult?.previousActivities);
-    },
-
-    onSettled: (_data, _error, _variables, _onMutateResult, context) =>
+    onSuccess: (_data, _variables, _onMutateResult, context) =>
       context.client.invalidateQueries({ queryKey: [queryKey] }),
 
     mutationKey: ['createActivity'],

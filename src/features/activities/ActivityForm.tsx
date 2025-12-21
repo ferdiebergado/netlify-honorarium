@@ -13,7 +13,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import FocalInput from '@/features/focals/FocalInput';
 import VenueInput from '@/features/venues/VenueInput';
 import { ChevronDownIcon } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { toast } from 'sonner';
 import { useCreateActivity, type ActivityFormdata, type ActivityHookForm } from './activity';
@@ -28,10 +28,21 @@ export default function ActivityForm({ form, data, setIsDialogOpen }: ActivityFo
   const [isStartDateOpen, setIsStartDateOpen] = useState(false);
   const [isEndDateOpen, setIsEndDateOpen] = useState(false);
 
-  const { mutate, isError, error, isSuccess, data: response } = useCreateActivity();
+  const { mutateAsync } = useCreateActivity();
 
   const handleSubmit = (formData: ActivityFormdata) => {
-    mutate(formData);
+    setIsDialogOpen(false);
+    toast.promise(mutateAsync(formData), {
+      loading: 'Creating Activity...',
+      success: ({ message }) => {
+        form.reset();
+        return message;
+      },
+      error: (err: Error) => {
+        setIsDialogOpen(true);
+        return err.message;
+      },
+    });
   };
 
   const handleReset = () => {
@@ -42,18 +53,6 @@ export default function ActivityForm({ form, data, setIsDialogOpen }: ActivityFo
     form.reset(data);
     setIsDialogOpen(false);
   };
-
-  useEffect(() => {
-    if (isError) toast.error(error.message);
-  }, [error, isError]);
-
-  useEffect(() => {
-    if (isSuccess) {
-      form.reset();
-      setIsDialogOpen(false);
-      toast.success(response.message);
-    }
-  }, [form, isSuccess, response, setIsDialogOpen]);
 
   return (
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
