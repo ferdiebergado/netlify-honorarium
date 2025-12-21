@@ -1,7 +1,7 @@
 import type { Config } from '@netlify/functions';
 import { formSchema } from '../../src/features/payees/payee';
 import { turso } from './db';
-import { handleError, ValidationError } from './errors';
+import { respondWith, ValidationError } from './errors';
 
 export const config: Config = {
   method: 'POST',
@@ -15,21 +15,34 @@ export default async (req: Request) => {
 
     if (error) throw new ValidationError();
 
-    const { name, positionId, bank, bankBranch, accountNo, accountName, tin } = data;
+    const { name, salary, bankId, bankBranch, accountNo, accountName, tin } = data;
 
-    const sql = `
-INSERT INTO payees (name, positionId, bank, bank_branch, account_no, account_name, tin)
-VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    const payeeSql = `
+INSERT INTO payees (name) VALUES (?) RETURNING id`;
 
-    const args = [name, positionId, bank, bankBranch, accountNo, accountName, tin];
+    const accountSql = `
+INSERT INTO accounts (payee_id, salary, bank_id, bank_branch, account_no, account_name, tin)
+VALUES (last_insert_rowid(), ?, ?, ?, ?, ?, ?)`;
 
-    await turso.execute({
-      sql,
-      args,
-    });
+    const payeeArgs = [name];
+    const accountArgs = [salary, bankId, bankBranch, accountNo, accountName, tin];
+
+    await turso.batch(
+      [
+        {
+          sql: payeeSql,
+          args: payeeArgs,
+        },
+        {
+          sql: accountSql,
+          args: accountArgs,
+        },
+      ],
+      'write'
+    );
 
     return Response.json({ message: 'Payee created.' }, { status: 201 });
   } catch (error) {
-    handleError(error);
+    respondWith(error);
   }
 };
