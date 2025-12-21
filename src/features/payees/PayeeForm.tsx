@@ -6,18 +6,18 @@ import { type FC } from 'react';
 import { Controller } from 'react-hook-form';
 import { toast } from 'sonner';
 import BankInput from '../banks/BankInput';
-import { useCreatePayee, type PayeeFormData, type PayeeHookForm } from './payee';
+import { useCreatePayee, type CreatePayeeFormData, type PayeeHookForm } from './payee';
 
 type PayeeFormProps = {
   form: PayeeHookForm;
-  data: PayeeFormData;
+  data: CreatePayeeFormData;
   setIsDialogOpen: (open: boolean) => void;
 };
 
 const PayeeForm: FC<PayeeFormProps> = ({ data, form, setIsDialogOpen }) => {
   const { mutateAsync } = useCreatePayee();
 
-  const handleSubmit = (formData: PayeeFormData) => {
+  const handleSubmit = (formData: CreatePayeeFormData) => {
     setIsDialogOpen(false);
     toast.promise(mutateAsync(formData), {
       loading: 'Creating Payee...',
@@ -64,6 +64,46 @@ const PayeeForm: FC<PayeeFormProps> = ({ data, form, setIsDialogOpen }) => {
           )}
         />
         {/* END OF NAME */}
+
+        {/*  OFFICE */}
+        <Controller
+          name="office"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="office">Office</FieldLabel>
+              <Input
+                {...field}
+                id="office"
+                aria-invalid={fieldState.invalid}
+                placeholder="Tambunting University"
+                autoComplete="off"
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+        {/* END OF NAME */}
+
+        {/*  POSITION */}
+        <Controller
+          name="position"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="position">Position</FieldLabel>
+              <Input
+                {...field}
+                id="position"
+                aria-invalid={fieldState.invalid}
+                placeholder="Professor"
+                autoComplete="off"
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+        {/* END OF POSITION */}
 
         <FieldGroup className="@container/field-group flex flex-row">
           {/*  BASIC SALARY */}

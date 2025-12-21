@@ -8,13 +8,15 @@ import {
 } from '@/components/ui/dialog';
 import { CirclePlus } from 'lucide-react';
 import { useState } from 'react';
-import { usePayeeForm, type PayeeFormData } from './payee';
+import { usePayeeForm, type CreatePayeeFormData } from './payee';
 import PayeeForm from './PayeeForm';
 
 export default function CreatePayeeForm() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const formData: PayeeFormData = {
+  const formData: CreatePayeeFormData = {
     name: '',
+    office: '',
+    position: '',
     salary: 0,
     bankId: 0,
     bankBranch: '',

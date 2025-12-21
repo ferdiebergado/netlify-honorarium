@@ -12,6 +12,14 @@ const columns: ColumnDef<Payee>[] = [
     accessorKey: 'name',
     header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
   },
+  {
+    accessorKey: 'office',
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Office" />,
+  },
+  {
+    accessorKey: 'position',
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Position" />,
+  },
 ];
 
 export default function PayeeList() {

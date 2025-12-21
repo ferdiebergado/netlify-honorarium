@@ -8,10 +8,14 @@ const queryKey = 'payees';
 
 export type Payee = {
   name: string;
+  position: string;
+  office: string;
 };
 
-export const formSchema = z.object({
+export const createPayeeSchema = z.object({
   name: z.string().min(1, 'Name is required.'),
+  office: z.string(),
+  position: z.string(),
   salary: z.number().min(1, 'Basic salary is required.'),
   tin: z.string().min(1, 'TIN is required.'),
   bankId: z.number().min(1, 'Bank name is required.'),
@@ -20,17 +24,17 @@ export const formSchema = z.object({
   accountNo: z.string().min(1, 'Account number is required.'),
 });
 
-export type PayeeFormData = z.infer<typeof formSchema>;
+export type CreatePayeeFormData = z.infer<typeof createPayeeSchema>;
 
-export const usePayeeForm = (defaultValues: PayeeFormData) =>
-  useForm<PayeeFormData>({
-    resolver: zodResolver(formSchema),
+export const usePayeeForm = (defaultValues: CreatePayeeFormData) =>
+  useForm<CreatePayeeFormData>({
+    resolver: zodResolver(createPayeeSchema),
     defaultValues,
   });
 
 export type PayeeHookForm = ReturnType<typeof usePayeeForm>;
 
-async function createPayee(data: PayeeFormData) {
+async function createPayee(data: CreatePayeeFormData) {
   const res = await fetch('/api/payees', {
     method: 'POST',
     headers: {
