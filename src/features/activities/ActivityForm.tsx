@@ -110,8 +110,7 @@ export default function ActivityForm({ data, setIsDialogOpen }: ActivityFormProp
                       captionLayout="dropdown"
                       onSelect={date => {
                         if (!date) return;
-
-                        field.onChange(date.toLocaleDateString());
+                        field.onChange(date.toLocaleDateString('sv'));
                         setIsStartDateOpen(false);
                       }}
                       aria-invalid={fieldState.invalid}
@@ -150,7 +149,7 @@ export default function ActivityForm({ data, setIsDialogOpen }: ActivityFormProp
                       captionLayout="dropdown"
                       onSelect={date => {
                         if (!date) return;
-                        field.onChange(date.toLocaleDateString());
+                        field.onChange(date.toLocaleDateString('sv'));
                         setIsEndDateOpen(false);
                       }}
                       aria-invalid={fieldState.invalid}
