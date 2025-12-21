@@ -1,5 +1,6 @@
 import type { Config } from '@netlify/functions';
 import { turso } from './db';
+import { respondWith } from './errors';
 
 export const config: Config = {
   method: 'GET',
@@ -23,9 +24,8 @@ INNER JOIN venues v ON v.id = a.venue_id`;
       focalId: a.focal_id,
     }));
 
-    return Response.json(data);
+    return Response.json({ data });
   } catch (error) {
-    console.error(error);
-    throw error;
+    respondWith(error);
   }
 };

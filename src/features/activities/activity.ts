@@ -1,3 +1,4 @@
+import type { APIResponse } from '@/lib/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
@@ -52,17 +53,22 @@ async function createActivity(formData: ActivityFormdata) {
     body: JSON.stringify(formData),
   });
 
-  if (!res.ok) throw new Error('request failed');
+  const { message } = (await res.json()) as APIResponse;
 
-  return (await res.json()) as { message: string };
+  if (!res.ok) throw new Error(message);
+
+  return { message };
 }
 
 async function getActivities() {
   const res = await fetch('/api/activities');
 
-  if (!res.ok) throw new Error('request failed');
+  const { message, data } = (await res.json()) as APIResponse<Activity[]>;
+  if (!res.ok) throw new Error(message);
 
-  return (await res.json()) as Activity[];
+  if (data) return data;
+
+  return [];
 }
 
 export const useActivities = () =>
