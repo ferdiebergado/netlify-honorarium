@@ -17,10 +17,10 @@ export default async (req: Request) => {
 
     if (error) throw new ValidationError();
 
-    const { title, venueId, startDate, endDate, code, fund, focalId } = data;
+    const { title, venueId, startDate, endDate, code, focalId } = data;
     const query =
-      'INSERT INTO activities (title, venue_id, start_date, end_date, code, fund, focal_id) VALUES (?, ?, ?, ?, ?, ?, ?)';
-    await turso.execute(query, [title, venueId, startDate, endDate, code, fund, focalId]);
+      'INSERT INTO activities (title, venue_id, start_date, end_date, code, focal_id) VALUES (?, ?, ?, ?, ?, ?)';
+    await turso.execute(query, [title, venueId, startDate, endDate, code, focalId]);
 
     return Response.json({ message: 'Activity created.' });
   } catch (error) {

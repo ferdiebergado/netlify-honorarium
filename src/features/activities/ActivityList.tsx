@@ -36,10 +36,6 @@ const columns: ColumnDef<Activity>[] = [
     accessorKey: 'code',
     header: ({ column }) => <DataTableColumnHeader column={column} title="Activity Code" />,
   },
-  {
-    accessorKey: 'fund',
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Fund Source" />,
-  },
   { id: 'actions', cell: ({ row }) => <ViewActivityDialog activity={row.original} /> },
 ];
 

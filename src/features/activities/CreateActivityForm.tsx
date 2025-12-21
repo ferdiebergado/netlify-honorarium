@@ -19,9 +19,9 @@ export default function CreateActivityForm() {
     startDate: '',
     endDate: '',
     code: '',
-    fund: '',
     focalId: 0,
   };
+
   const form = useActivityForm(formData);
 
   const handleClick = () => {

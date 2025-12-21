@@ -18,11 +18,11 @@ import { Controller } from 'react-hook-form';
 import { toast } from 'sonner';
 import { useCreateActivity, type ActivityFormdata, type ActivityHookForm } from './activity';
 
-type ActivityFormProps = {
+interface ActivityFormProps {
   form: ActivityHookForm;
   data: ActivityFormdata;
   setIsDialogOpen: (open: boolean) => void;
-};
+}
 
 export default function ActivityForm({ form, data, setIsDialogOpen }: ActivityFormProps) {
   const [isStartDateOpen, setIsStartDateOpen] = useState(false);
@@ -172,48 +172,29 @@ export default function ActivityForm({ form, data, setIsDialogOpen }: ActivityFo
           {/* END OF END DATE */}
         </FieldGroup>
 
-        <FieldGroup className="@container/field-group flex flex-row">
-          {/* CODE */}
-          <Controller
-            name="code"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="code">Activity Code</FieldLabel>
-                <Input
-                  {...field}
-                  id="code"
-                  aria-invalid={fieldState.invalid}
-                  placeholder="AC-25-BLD-TLD-BEC-000"
-                  autoComplete="off"
-                />
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-              </Field>
-            )}
-          />
-          <Controller
-            name="fund"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="fund">Fund Source</FieldLabel>
-                <Input
-                  {...field}
-                  id="fund"
-                  aria-invalid={fieldState.invalid}
-                  placeholder="2025 BEC Current"
-                  autoComplete="off"
-                />
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-              </Field>
-            )}
-          />
-          {/* END OF CODE */}
-        </FieldGroup>
+        {/* ACTIVITY CODE */}
+        <Controller
+          name="code"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="code">Activity Code</FieldLabel>
+              <Input
+                {...field}
+                id="code"
+                aria-invalid={fieldState.invalid}
+                placeholder="AC-25-BLD-TLD-BEC-000"
+                autoComplete="off"
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+        {/* END OF ACTIVITY CODE */}
 
-        {/* FOCAL ID */}
+        {/* FOCAL */}
         <FocalInput form={form} />
-        {/* END OF FOCAL ID */}
+        {/* END OF FOCAL */}
 
         <DialogFooter>
           <Button type="button" variant="outline" onClick={handleCancel}>

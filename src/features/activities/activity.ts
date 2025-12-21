@@ -6,7 +6,7 @@ import * as z from 'zod';
 
 const queryKey = 'activities';
 
-export type Activity = {
+export interface Activity {
   id: number;
   title: string;
   venueId: number;
@@ -14,23 +14,26 @@ export type Activity = {
   startDate: string;
   endDate: string;
   code: string;
-  fund: string;
   focalId: number;
   focal: string;
-};
+}
 
-export const formSchema = z.object({
-  title: z
-    .string()
-    .min(5, 'Title must be at least 5 characters.')
-    .max(150, 'Title must be at most 150 characters.'),
-  venueId: z.number().min(1, 'Venue is required.'),
-  startDate: z.iso.date(),
-  endDate: z.iso.date(),
-  code: z.string().min(17, 'Activity Code must be at least 17 characters.'),
-  fund: z.string().min(7, 'Fund Source must be at least 7 characters.'),
-  focalId: z.number().min(1, 'Focal Person is required.'),
-});
+export const formSchema = z
+  .object({
+    title: z
+      .string()
+      .min(5, 'Title must be at least 5 characters.')
+      .max(150, 'Title must be at most 150 characters.'),
+    venueId: z.number().min(1, 'Venue is required.'),
+    startDate: z.iso.date(),
+    endDate: z.iso.date(),
+    code: z.string().min(17, 'Activity Code must be at least 17 characters.'),
+    focalId: z.number().min(1, 'Focal Person is required.'),
+  })
+  .refine(data => new Date(data.endDate) >= new Date(data.startDate), {
+    path: ['endDate'],
+    message: 'End date must be on or after start date',
+  });
 
 export type ActivityFormdata = z.infer<typeof formSchema>;
 
