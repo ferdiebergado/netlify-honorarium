@@ -1,34 +1,45 @@
 import { Button } from '@/components/ui/button';
-import { DialogClose, DialogFooter } from '@/components/ui/dialog';
+import { DialogFooter } from '@/components/ui/dialog';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { useEffect, type FC } from 'react';
+import { type FC } from 'react';
 import { Controller } from 'react-hook-form';
 import { toast } from 'sonner';
-import { useCreatePayee, usePayeeForm, type PayeeFormData } from './payee';
+import BankInput from '../banks/BankInput';
+import { useCreatePayee, type PayeeFormData, type PayeeHookForm } from './payee';
 
 type PayeeFormProps = {
+  form: PayeeHookForm;
   data: PayeeFormData;
   setIsDialogOpen: (open: boolean) => void;
 };
 
-const PayeeForm: FC<PayeeFormProps> = ({ data, setIsDialogOpen }) => {
-  const form = usePayeeForm(data);
-  const { mutate, isError, error, isSuccess, data: response } = useCreatePayee();
+const PayeeForm: FC<PayeeFormProps> = ({ data, form, setIsDialogOpen }) => {
+  const { mutateAsync } = useCreatePayee();
 
-  const handleSubmit = (data: PayeeFormData) => {
-    mutate(data);
+  const handleSubmit = (formData: PayeeFormData) => {
+    setIsDialogOpen(false);
+    toast.promise(mutateAsync(formData), {
+      loading: 'Creating Payee...',
+      success: ({ message }) => {
+        form.reset();
+        return message;
+      },
+      error: (err: Error) => {
+        setIsDialogOpen(true);
+        return err.message;
+      },
+    });
   };
 
-  if (isError) toast.error(error.message);
+  const handleReset = () => {
+    form.reset(data);
+  };
 
-  useEffect(() => {
-    if (isSuccess) {
-      form.reset();
-      setIsDialogOpen(false);
-      toast.success(response.message);
-    }
-  }, [form, isSuccess, response, setIsDialogOpen]);
+  const handleCancel = () => {
+    form.reset(data);
+    setIsDialogOpen(false);
+  };
 
   return (
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -54,66 +65,35 @@ const PayeeForm: FC<PayeeFormProps> = ({ data, setIsDialogOpen }) => {
         />
         {/* END OF NAME */}
 
-        {/*  BANK */}
-        <Controller
-          name="bank"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="bank">Bank</FieldLabel>
-              <Input
-                {...field}
-                id="bank"
-                aria-invalid={fieldState.invalid}
-                placeholder="LBP"
-                autoComplete="off"
-              />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-        {/* END OF BANK */}
-
-        {/*  BANK */}
-        <Controller
-          name="bankBranch"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="bank-branch">Bank Branch</FieldLabel>
-              <Input
-                {...field}
-                id="bank-branch"
-                aria-invalid={fieldState.invalid}
-                placeholder="Maragondon"
-                autoComplete="off"
-              />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-        {/* END OF BANK BRANCH */}
-
-        <Field orientation="horizontal">
-          {/*  ACCOUNT NO. */}
+        <FieldGroup className="@container/field-group flex flex-row">
+          {/*  BASIC SALARY */}
           <Controller
-            name="accountNo"
+            name="salary"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="account-no">Account Number</FieldLabel>
+                <FieldLabel htmlFor="salary">Basic Salary</FieldLabel>
                 <Input
                   {...field}
-                  id="account-no"
+                  id="salary"
                   aria-invalid={fieldState.invalid}
-                  placeholder="1234-5678-90"
+                  placeholder="98000"
                   autoComplete="off"
+                  type="number"
+                  onChange={e => {
+                    const value = e.target.value;
+                    if (value === '') {
+                      field.onChange(); // Handle empty input
+                    } else {
+                      field.onChange(Number(value)); // Parse to number
+                    }
+                  }}
                 />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}
           />
-          {/* END OF ACCOUNT NO. */}
+          {/* END OF BASIC SALARY */}
 
           {/*  TIN */}
           <Controller
@@ -134,20 +114,80 @@ const PayeeForm: FC<PayeeFormProps> = ({ data, setIsDialogOpen }) => {
             )}
           />
           {/* END OF TIN */}
-        </Field>
+        </FieldGroup>
+
+        {/*  BANK */}
+        <BankInput form={form} />
+        {/* END OF BANK */}
+
+        <FieldGroup className="@container/field-group flex flex-row">
+          {/*  BANK */}
+          <Controller
+            name="bankBranch"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="bank-branch">Bank Branch</FieldLabel>
+                <Input
+                  {...field}
+                  id="bank-branch"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="Baclaran"
+                  autoComplete="off"
+                />
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
+          {/* END OF BANK BRANCH */}
+
+          {/*  ACCOUNT NO. */}
+          <Controller
+            name="accountNo"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="account-no">Account Number</FieldLabel>
+                <Input
+                  {...field}
+                  id="account-no"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="1234-5678-90"
+                  autoComplete="off"
+                />
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
+          {/* END OF ACCOUNT NO. */}
+        </FieldGroup>
+
+        {/*  ACCOUNT NAME */}
+        <Controller
+          name="accountName"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="account-name">Account Name</FieldLabel>
+              <Input
+                {...field}
+                id="account-name"
+                aria-invalid={fieldState.invalid}
+                placeholder="Apolinario Mabini"
+                autoComplete="off"
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+        {/* END OF ACCOUNT NAME */}
 
         <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DialogClose>
+          <Button type="button" variant="outline" onClick={handleCancel}>
+            Cancel
+          </Button>
 
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => {
-              form.reset();
-            }}
-          >
+          <Button type="button" variant="outline" onClick={handleReset}>
             Reset
           </Button>
 
