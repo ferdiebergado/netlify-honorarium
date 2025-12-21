@@ -1,16 +1,18 @@
+import type { APIResponse } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
 
-export type Venue = {
+export interface Venue {
   id: number;
   name: string;
-};
+}
 
 export async function getVenues() {
   const res = await fetch('/api/venues');
+  const { message, data } = (await res.json()) as APIResponse<Venue[]>;
 
-  if (!res.ok) throw new Error('request failed');
+  if (!res.ok) throw new Error(message);
 
-  return (await res.json()) as Venue[];
+  return data;
 }
 
 export function useVenues() {
