@@ -1,7 +1,7 @@
 import type { Config } from '@netlify/functions';
 import { formSchema } from '../../src/features/activities/activity';
 import { turso } from './db';
-import { respondWith, ValidationError } from './errors';
+import { errorResponse, ValidationError } from './errors';
 
 export const config: Config = {
   method: 'POST',
@@ -24,6 +24,6 @@ export default async (req: Request) => {
 
     return Response.json({ message: 'Activity created.' });
   } catch (error) {
-    respondWith(error);
+    return errorResponse(error);
   }
 };

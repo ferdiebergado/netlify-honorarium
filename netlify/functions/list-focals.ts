@@ -1,5 +1,6 @@
 import type { Config } from '@netlify/functions';
 import { turso } from './db';
+import { errorResponse } from './errors';
 
 export const config: Config = {
   method: 'GET',
@@ -13,9 +14,8 @@ export default async () => {
     const query = 'SELECT * FROM focals ORDER BY name';
     const { rows } = await turso.execute(query);
 
-    return Response.json(rows);
+    return Response.json({ data: rows });
   } catch (error) {
-    console.error(error);
-    throw error;
+    return errorResponse(error);
   }
 };

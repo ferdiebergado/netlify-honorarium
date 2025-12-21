@@ -1,7 +1,7 @@
 import type { Config } from '@netlify/functions';
 import { createPayeeSchema } from '../../src/features/payees/payee';
 import { turso } from './db';
-import { respondWith, ValidationError } from './errors';
+import { errorResponse, ValidationError } from './errors';
 
 export const config: Config = {
   method: 'POST',
@@ -41,6 +41,6 @@ VALUES (last_insert_rowid(), ?, ?, ?, ?, ?, ?)`;
 
     return Response.json({ message: 'Payee created.' }, { status: 201 });
   } catch (error) {
-    respondWith(error);
+    return errorResponse(error);
   }
 };

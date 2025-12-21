@@ -1,7 +1,7 @@
 import type { Config } from '@netlify/functions';
 import type { Payee } from '../../src/features/payees/payee';
 import { turso } from './db';
-import { respondWith } from './errors';
+import { errorResponse } from './errors';
 
 export const config: Config = {
   method: 'GET',
@@ -36,7 +36,7 @@ JOIN banks b ON b.id = a.bank_id`;
 
     return Response.json({ data: payees });
   } catch (error) {
-    respondWith(error);
+    return errorResponse(error);
   }
 };
 
