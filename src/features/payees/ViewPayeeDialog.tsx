@@ -59,6 +59,14 @@ export default function ViewPayeeDialog({ payee }: ViewPayeeProps) {
 
           <Separator />
 
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
+                Bank Accounts
+              </p>
+            </div>
+          </div>
+
           {/* Accounts Section */}
           <div className="overflow-x-auto">
             <Table>
