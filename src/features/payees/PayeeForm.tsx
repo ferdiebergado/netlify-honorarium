@@ -8,11 +8,11 @@ import { toast } from 'sonner';
 import BankInput from '../banks/BankInput';
 import { useCreatePayee, type CreatePayeeFormData, type PayeeHookForm } from './payee';
 
-type PayeeFormProps = {
+interface PayeeFormProps {
   form: PayeeHookForm;
   data: CreatePayeeFormData;
   setIsDialogOpen: (open: boolean) => void;
-};
+}
 
 const PayeeForm: FC<PayeeFormProps> = ({ data, form, setIsDialogOpen }) => {
   const { mutateAsync } = useCreatePayee();

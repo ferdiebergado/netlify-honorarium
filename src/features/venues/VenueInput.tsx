@@ -17,9 +17,9 @@ import { Check, ChevronsUpDown } from 'lucide-react';
 import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 
-type VenueInputProps = {
+interface VenueInputProps {
   form: ActivityHookForm;
-};
+}
 
 export default function VenueInput({ form }: VenueInputProps) {
   const [isVenueOpen, setIsVenueOpen] = useState(false);
