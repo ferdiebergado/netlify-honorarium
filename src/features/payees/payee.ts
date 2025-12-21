@@ -1,3 +1,4 @@
+import type { Account } from '@/features/accounts/accounts';
 import type { APIResponse } from '@/lib/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -6,11 +7,13 @@ import * as z from 'zod';
 
 const queryKey = 'payees';
 
-export type Payee = {
+export interface Payee {
+  id: number;
   name: string;
   position: string;
   office: string;
-};
+  accounts: Omit<Account, 'payeeId'>[];
+}
 
 export const createPayeeSchema = z.object({
   name: z.string().min(1, 'Name is required.'),
@@ -76,5 +79,21 @@ export function usePayees() {
   return useQuery({
     queryKey: [queryKey],
     queryFn: getPayees,
+  });
+}
+
+async function getPayee(id: number) {
+  const res = await fetch('/api/payees/' + id.toString());
+  const { message, data } = (await res.json()) as APIResponse<Payee>;
+
+  if (!res.ok) throw new Error(message);
+
+  return data;
+}
+
+export function usePayee(id: number) {
+  return useQuery({
+    queryKey: [queryKey, id],
+    queryFn: () => getPayee(id),
   });
 }

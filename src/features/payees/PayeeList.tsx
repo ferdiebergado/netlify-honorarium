@@ -2,6 +2,7 @@ import { DataTable } from '@/components/DataTable';
 import { DataTableColumnHeader } from '@/components/DataTableColumnHeader';
 import type { ColumnDef } from '@tanstack/react-table';
 import { usePayees, type Payee } from './payee';
+import ViewPayeeDialog from './ViewPayeeDialog';
 
 const columns: ColumnDef<Payee>[] = [
   {
@@ -19,6 +20,10 @@ const columns: ColumnDef<Payee>[] = [
   {
     accessorKey: 'position',
     header: ({ column }) => <DataTableColumnHeader column={column} title="Position" />,
+  },
+  {
+    id: 'actions',
+    cell: ({ row }) => <ViewPayeeDialog payee={row.original} />,
   },
 ];
 
