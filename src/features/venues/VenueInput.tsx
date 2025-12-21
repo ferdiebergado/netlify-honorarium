@@ -10,7 +10,7 @@ import {
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Spinner } from '@/components/ui/spinner';
-import type { ActivityForm } from '@/features/activities/activity';
+import type { ActivityHookForm } from '@/features/activities/activity';
 import { useVenues } from '@/features/venues/venue';
 import { cn } from '@/lib/utils';
 import { Check, ChevronsUpDown } from 'lucide-react';
@@ -18,7 +18,7 @@ import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 
 type VenueInputProps = {
-  form: ActivityForm;
+  form: ActivityHookForm;
 };
 
 export default function VenueInput({ form }: VenueInputProps) {
@@ -35,7 +35,7 @@ export default function VenueInput({ form }: VenueInputProps) {
           <FieldLabel htmlFor="venue">Venue</FieldLabel>
 
           {isPending && (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 text-sm">
               <Spinner />
               Loading venues...
             </div>
