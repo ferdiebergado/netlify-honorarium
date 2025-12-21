@@ -1,6 +1,7 @@
 import type { Config } from '@netlify/functions';
-import type { Activity } from '../../src/features/activities/activity';
+import { formSchema } from '../../src/features/activities/activity';
 import { turso } from './db';
+import { respondWith, ValidationError } from './errors';
 
 export const config: Config = {
   method: 'POST',
@@ -11,16 +12,18 @@ export default async (req: Request) => {
   console.log('creating activity...');
 
   try {
-    const activity = (await req.json()) as Activity;
+    const body = await req.json();
+    const { error, data } = formSchema.safeParse(body);
 
-    const { title, venueId, startDate, endDate, code, fund, focalId } = activity;
+    if (error) throw new ValidationError();
+
+    const { title, venueId, startDate, endDate, code, fund, focalId } = data;
     const query =
       'INSERT INTO activities (title, venue_id, start_date, end_date, code, fund, focal_id) VALUES (?, ?, ?, ?, ?, ?, ?)';
     await turso.execute(query, [title, venueId, startDate, endDate, code, fund, focalId]);
 
-    return Response.json({ message: 'activity created' });
+    return Response.json({ message: 'Activity created.' });
   } catch (error) {
-    console.error(error);
-    throw error;
+    respondWith(error);
   }
 };
