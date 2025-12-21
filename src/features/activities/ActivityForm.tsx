@@ -81,7 +81,7 @@ export default function ActivityForm({ data, setIsDialogOpen }: ActivityFormProp
         <VenueInput form={form} />
         {/* END OF VENUE */}
 
-        <Field orientation="horizontal">
+        <FieldGroup className="@container/field-group flex flex-row">
           {/* START DATE */}
           <Controller
             name="startDate"
@@ -161,9 +161,9 @@ export default function ActivityForm({ data, setIsDialogOpen }: ActivityFormProp
             )}
           />
           {/* END OF END DATE */}
-        </Field>
+        </FieldGroup>
 
-        <Field orientation="horizontal">
+        <FieldGroup className="@container/field-group flex flex-row">
           {/* CODE */}
           <Controller
             name="code"
@@ -200,7 +200,7 @@ export default function ActivityForm({ data, setIsDialogOpen }: ActivityFormProp
             )}
           />
           {/* END OF CODE */}
-        </Field>
+        </FieldGroup>
 
         {/* FOCAL ID */}
         <FocalInput form={form} />
