@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import { DialogClose, DialogFooter } from '@/components/ui/dialog';
+import { DialogFooter } from '@/components/ui/dialog';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import {
@@ -16,26 +16,36 @@ import { ChevronDownIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { toast } from 'sonner';
-import { useActivityForm, useCreateActivity, type ActivityFormdata } from './activity';
+import { useCreateActivity, type ActivityFormdata, type ActivityHookForm } from './activity';
 
 type ActivityFormProps = {
+  form: ActivityHookForm;
   data: ActivityFormdata;
   setIsDialogOpen: (open: boolean) => void;
 };
 
-export default function ActivityForm({ data, setIsDialogOpen }: ActivityFormProps) {
+export default function ActivityForm({ form, data, setIsDialogOpen }: ActivityFormProps) {
   const [isStartDateOpen, setIsStartDateOpen] = useState(false);
   const [isEndDateOpen, setIsEndDateOpen] = useState(false);
 
-  const form = useActivityForm(data);
-
   const { mutate, isError, error, isSuccess, data: response } = useCreateActivity();
 
-  const handleSubmit = (data: ActivityFormdata) => {
-    mutate(data);
+  const handleSubmit = (formData: ActivityFormdata) => {
+    mutate(formData);
   };
 
-  if (isError) toast.error(error.message);
+  const handleReset = () => {
+    form.reset(data);
+  };
+
+  const handleCancel = () => {
+    form.reset(data);
+    setIsDialogOpen(false);
+  };
+
+  useEffect(() => {
+    if (isError) toast.error(error.message);
+  }, [error, isError]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -207,16 +217,10 @@ export default function ActivityForm({ data, setIsDialogOpen }: ActivityFormProp
         {/* END OF FOCAL ID */}
 
         <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DialogClose>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => {
-              form.reset();
-            }}
-          >
+          <Button type="button" variant="outline" onClick={handleCancel}>
+            Cancel
+          </Button>
+          <Button type="button" variant="outline" onClick={handleReset}>
             Reset
           </Button>
 

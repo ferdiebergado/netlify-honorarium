@@ -39,7 +39,7 @@ export const useActivityForm = (defaultValues: ActivityFormdata) =>
     defaultValues,
   });
 
-export type ActivityForm = ReturnType<typeof useActivityForm>;
+export type ActivityHookForm = ReturnType<typeof useActivityForm>;
 
 async function createActivity(formData: ActivityFormdata) {
   console.log('formData', formData);
