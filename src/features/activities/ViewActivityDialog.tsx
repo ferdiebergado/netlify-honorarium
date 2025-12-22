@@ -11,9 +11,9 @@ import { Separator } from '@/components/ui/separator';
 import { Calendar, Info, MapPin, Tag, UserStar } from 'lucide-react';
 import { type Activity } from './activity';
 
-interface ViewActivityProps {
+type ViewActivityProps = {
   activity: Activity;
-}
+};
 
 export default function ViewActivityDialog({ activity }: ViewActivityProps) {
   const { title, venue, startDate, endDate, code, focal } = activity;
@@ -21,7 +21,7 @@ export default function ViewActivityDialog({ activity }: ViewActivityProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size="icon" title="Info">
+        <Button type="button" size="icon" variant="outline" title="Info">
           <Info />
         </Button>
       </DialogTrigger>

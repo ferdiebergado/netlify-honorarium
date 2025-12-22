@@ -34,7 +34,13 @@ export default function DeleteActivityDialog({ activity }: DeleteActivityDialogP
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button type="button" variant="outline" size="icon-lg" title="Delete">
+        <Button
+          type="button"
+          variant="outline"
+          size="icon"
+          className="text-destructive"
+          title="Delete"
+        >
           <Trash2 />
         </Button>
       </AlertDialogTrigger>
@@ -45,7 +51,9 @@ export default function DeleteActivityDialog({ activity }: DeleteActivityDialogP
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleAction}>Continue</AlertDialogAction>
+          <AlertDialogAction className="bg-destructive" onClick={handleAction}>
+            Continue
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

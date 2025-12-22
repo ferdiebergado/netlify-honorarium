@@ -21,7 +21,7 @@ type EditActivityProps = {
   activity: Activity;
 };
 
-export default function EditActivityForm({ activity }: EditActivityProps) {
+export default function UpdateActivityForm({ activity }: EditActivityProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const form = useActivityForm(activity);
@@ -34,7 +34,7 @@ export default function EditActivityForm({ activity }: EditActivityProps) {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button size="icon" variant="outline" title="Edit">
+        <Button type="button" size="icon" variant="outline" title="Update">
           <FilePenLine />
         </Button>
       </DialogTrigger>
