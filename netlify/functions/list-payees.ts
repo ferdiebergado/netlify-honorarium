@@ -22,7 +22,6 @@ SELECT
   a.bank_branch,
   a.account_no,
   a.account_name,
-  a.tin,
 
   b.name          AS bank
 FROM payees p
@@ -53,7 +52,6 @@ interface PayeeAccountRow {
   bank_branch: string;
   account_no: string;
   account_name: string;
-  tin: string;
 }
 
 function mapRowsToPayees(rows: PayeeAccountRow[]): Payee[] {
@@ -82,7 +80,6 @@ function mapRowsToPayees(rows: PayeeAccountRow[]): Payee[] {
       bankBranch: row.bank_branch,
       accountNo: row.account_no,
       accountName: row.account_name,
-      tin: row.tin,
     });
   }
 
