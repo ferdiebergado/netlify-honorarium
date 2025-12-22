@@ -40,5 +40,5 @@ export default function PayeeList() {
 
   if (isError) return <p>Error: {error.message}</p>;
 
-  return <DataTable columns={columns} data={payees} />;
+  return <DataTable columns={columns} filterColumn="name" data={payees} />;
 }

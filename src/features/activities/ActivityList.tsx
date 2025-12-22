@@ -63,5 +63,5 @@ export default function ActivityList() {
 
   if (isError) return <p className="text-destructive m-3">Error: {error.message}</p>;
 
-  return <DataTable columns={columns} data={activities} />;
+  return <DataTable columns={columns} filterColumn="title" data={activities} />;
 }

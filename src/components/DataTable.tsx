@@ -8,20 +8,28 @@ import {
   type ColumnFiltersState,
   type SortingState,
 } from '@tanstack/react-table';
+import { SearchIcon } from 'lucide-react';
 import { useState } from 'react';
 import { DataTablePagination } from './DataTablePagination';
 import { DataTableViewOptions } from './DataTableViewOptions';
 import { Card, CardContent, CardFooter, CardHeader } from './ui/card';
+import { InputGroup, InputGroupAddon, InputGroupInput } from './ui/input-group';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 
 type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];
+  filterColumn: Extract<keyof TData, string>;
   data: TData[];
 };
 
-export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({
+  columns,
+  filterColumn,
+  data,
+}: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
@@ -40,7 +48,20 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   return (
     <Card>
       <CardHeader>
-        <DataTableViewOptions table={table} />
+        <div className="flex justify-between">
+          <InputGroup className="max-w-sm">
+            <InputGroupInput
+              placeholder="Search..."
+              value={(table.getColumn(filterColumn)?.getFilterValue() as string) || ''}
+              onChange={event => table.getColumn(filterColumn)?.setFilterValue(event.target.value)}
+            />
+            <InputGroupAddon>
+              <SearchIcon />
+            </InputGroupAddon>
+          </InputGroup>
+
+          <DataTableViewOptions table={table} />
+        </div>
       </CardHeader>
       <CardContent>
         <div className="overflow-hidden rounded-md border px-8 py-5">
