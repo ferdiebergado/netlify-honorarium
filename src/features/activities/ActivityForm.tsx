@@ -16,25 +16,32 @@ import { ChevronDownIcon } from 'lucide-react';
 import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { toast } from 'sonner';
-import { useCreateActivity, type ActivityFormdata, type ActivityHookForm } from './activity';
+import { type ActivityFormValues, type ActivityHookForm } from './activity';
 
-interface ActivityFormProps {
+type ActivityFormProps = {
   form: ActivityHookForm;
-  data: ActivityFormdata;
+  values: ActivityFormValues;
+  onSubmit: (data: ActivityFormValues) => Promise<{ message: string }>;
   setIsDialogOpen: (open: boolean) => void;
-}
+  loadingMsg: string;
+};
 
-export default function ActivityForm({ form, data, setIsDialogOpen }: ActivityFormProps) {
+export default function ActivityForm({
+  form,
+  values,
+  onSubmit,
+  setIsDialogOpen,
+  loadingMsg,
+}: ActivityFormProps) {
   const [isStartDateOpen, setIsStartDateOpen] = useState(false);
   const [isEndDateOpen, setIsEndDateOpen] = useState(false);
 
-  const { mutateAsync } = useCreateActivity();
-
-  const handleSubmit = (formData: ActivityFormdata) => {
+  const handleSubmit = (formData: ActivityFormValues) => {
     setIsDialogOpen(false);
-    toast.promise(mutateAsync(formData), {
-      loading: 'Creating Activity...',
-      success: ({ message }) => {
+
+    toast.promise(onSubmit(formData), {
+      loading: loadingMsg,
+      success: ({ message }: { message: string }) => {
         form.reset();
         return message;
       },
@@ -46,16 +53,15 @@ export default function ActivityForm({ form, data, setIsDialogOpen }: ActivityFo
   };
 
   const handleReset = () => {
-    form.reset(data);
+    form.reset(values);
   };
 
   const handleCancel = () => {
-    form.reset(data);
+    form.reset(values);
     setIsDialogOpen(false);
   };
 
   return (
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     <form id="activity-form" onSubmit={form.handleSubmit(handleSubmit)}>
       <FieldGroup>
         {/*  TITLE */}
@@ -200,6 +206,7 @@ export default function ActivityForm({ form, data, setIsDialogOpen }: ActivityFo
           <Button type="button" variant="outline" onClick={handleCancel}>
             Cancel
           </Button>
+
           <Button type="button" variant="outline" onClick={handleReset}>
             Reset
           </Button>

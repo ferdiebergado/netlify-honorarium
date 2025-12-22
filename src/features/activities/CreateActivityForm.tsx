@@ -8,12 +8,12 @@ import {
 } from '@/components/ui/dialog';
 import { CirclePlus } from 'lucide-react';
 import { useState } from 'react';
-import { useActivityForm, type ActivityFormdata } from './activity';
+import { useActivityForm, useCreateActivity, type ActivityFormValues } from './activity';
 import ActivityForm from './ActivityForm';
 
 export default function CreateActivityForm() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const formData: ActivityFormdata = {
+  const formValues: ActivityFormValues = {
     title: '',
     venueId: 0,
     startDate: '',
@@ -22,7 +22,8 @@ export default function CreateActivityForm() {
     focalId: 0,
   };
 
-  const form = useActivityForm(formData);
+  const form = useActivityForm(formValues);
+  const { mutateAsync: createActivity } = useCreateActivity();
 
   const handleClick = () => {
     setIsDialogOpen(true);
@@ -38,7 +39,13 @@ export default function CreateActivityForm() {
           <DialogTitle>New Activity</DialogTitle>
           <DialogDescription>Create a new activity.</DialogDescription>
         </DialogHeader>
-        <ActivityForm form={form} data={formData} setIsDialogOpen={setIsDialogOpen} />
+        <ActivityForm
+          form={form}
+          values={formValues}
+          onSubmit={createActivity}
+          setIsDialogOpen={setIsDialogOpen}
+          loadingMsg="Creating Activity..."
+        />
       </DialogContent>
     </Dialog>
   );
