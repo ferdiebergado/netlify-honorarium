@@ -3,6 +3,7 @@ import { DataTableColumnHeader } from '@/components/DataTableColumnHeader';
 import { Spinner } from '@/components/ui/spinner';
 import { type ColumnDef } from '@tanstack/react-table';
 import { useActivities, type Activity } from './activity';
+import EditActivityForm from './EditActivityForm';
 import ViewActivityDialog from './ViewActivityDialog';
 
 const columns: ColumnDef<Activity>[] = [
@@ -36,7 +37,8 @@ const columns: ColumnDef<Activity>[] = [
     accessorKey: 'code',
     header: ({ column }) => <DataTableColumnHeader column={column} title="Activity Code" />,
   },
-  { id: 'actions', cell: ({ row }) => <ViewActivityDialog activity={row.original} /> },
+  { id: 'view', cell: ({ row }) => <ViewActivityDialog activity={row.original} /> },
+  { id: 'edit', cell: ({ row }) => <EditActivityForm activity={row.original} /> },
 ];
 
 export default function ActivityList() {

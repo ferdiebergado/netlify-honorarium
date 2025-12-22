@@ -6,7 +6,7 @@ import * as z from 'zod';
 
 const queryKey = 'activities';
 
-export interface Activity {
+export type Activity = {
   id: number;
   title: string;
   venueId: number;
@@ -16,7 +16,7 @@ export interface Activity {
   code: string;
   focalId: number;
   focal: string;
-}
+};
 
 export const formSchema = z
   .object({
@@ -35,33 +35,15 @@ export const formSchema = z
     message: 'End date must be on or after start date',
   });
 
-export type ActivityFormdata = z.infer<typeof formSchema>;
+export type ActivityFormValues = z.infer<typeof formSchema>;
 
-export const useActivityForm = (defaultValues: ActivityFormdata) =>
-  useForm<ActivityFormdata>({
+export const useActivityForm = (defaultValues: ActivityFormValues) =>
+  useForm<ActivityFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues,
   });
 
 export type ActivityHookForm = ReturnType<typeof useActivityForm>;
-
-async function createActivity(formData: ActivityFormdata) {
-  console.log('formData', formData);
-
-  const res = await fetch('/api/activities', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(formData),
-  });
-
-  const { message } = (await res.json()) as APIResponse;
-
-  if (!res.ok) throw new Error(message);
-
-  return { message };
-}
 
 async function getActivities() {
   const res = await fetch('/api/activities');
@@ -80,12 +62,54 @@ export const useActivities = () =>
     queryFn: getActivities,
   });
 
+async function createActivity(formData: ActivityFormValues) {
+  console.debug('formData', formData);
+
+  const res = await fetch('/api/activities', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formData),
+  });
+
+  const { message } = (await res.json()) as APIResponse;
+
+  if (!res.ok) throw new Error(message);
+
+  return { message };
+}
+
 export const useCreateActivity = () =>
-  useMutation({
+  useMutation<{ message: string }, Error, ActivityFormValues>({
     mutationFn: createActivity,
 
     onSuccess: (_data, _variables, _onMutateResult, context) =>
       context.client.invalidateQueries({ queryKey: [queryKey] }),
-
-    mutationKey: ['createActivity'],
   });
+
+async function updateActivity(id: number, formData: ActivityFormValues) {
+  const res = await fetch('/api/activities/' + id.toString(), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formData),
+  });
+
+  const { message } = (await res.json()) as APIResponse;
+
+  if (!res.ok) throw new Error(message);
+
+  return { message };
+}
+
+export function useUpdateActivity() {
+  return useMutation({
+    mutationFn: ({ id, formData }: { id: number; formData: ActivityFormValues }) =>
+      updateActivity(id, formData),
+    onSuccess: (_data, _variables, _onMutateResult, context) => {
+      context.client.invalidateQueries({ queryKey: [queryKey] });
+    },
+  });
+}
