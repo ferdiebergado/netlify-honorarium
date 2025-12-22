@@ -80,6 +80,7 @@ export function ComboboxField<TFieldValues extends FieldValues>({
               <PopoverContent className="w-auto p-0">
                 <Command>
                   <CommandInput
+                    id={name}
                     placeholder={searchPlaceholder}
                     className="h-9"
                     aria-invalid={fieldState.invalid}
