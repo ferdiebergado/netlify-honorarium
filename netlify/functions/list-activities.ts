@@ -12,8 +12,9 @@ export default async () => {
     const query = `
 SELECT a.*, v.name as venue, f.name as focal 
 FROM activities a 
-INNER JOIN focals f ON f.id = a.focal_id 
-INNER JOIN venues v ON v.id = a.venue_id`;
+JOIN focals f ON f.id = a.focal_id 
+JOIN venues v ON v.id = a.venue_id
+WHERE a.deleted_at IS NULL`;
 
     const { rows } = await turso.execute(query);
     const data = rows.map(a => ({

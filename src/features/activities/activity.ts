@@ -90,7 +90,7 @@ export const useCreateActivity = () =>
 
 async function updateActivity(id: number, formData: ActivityFormValues) {
   const res = await fetch('/api/activities/' + id.toString(), {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -108,6 +108,30 @@ export function useUpdateActivity() {
   return useMutation({
     mutationFn: ({ id, formData }: { id: number; formData: ActivityFormValues }) =>
       updateActivity(id, formData),
+    onSuccess: (_data, _variables, _onMutateResult, context) => {
+      context.client.invalidateQueries({ queryKey: [queryKey] });
+    },
+  });
+}
+
+async function deleteActivity(id: number) {
+  const res = await fetch('/api/activities/' + id.toString(), {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const { message } = (await res.json()) as APIResponse;
+
+  if (!res.ok) throw new Error(message);
+
+  return { message };
+}
+
+export function useDeleteActivity() {
+  return useMutation({
+    mutationFn: (id: number) => deleteActivity(id),
     onSuccess: (_data, _variables, _onMutateResult, context) => {
       context.client.invalidateQueries({ queryKey: [queryKey] });
     },
