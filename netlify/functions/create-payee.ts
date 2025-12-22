@@ -1,5 +1,5 @@
 import type { Config } from '@netlify/functions';
-import { createPayeeSchema } from '../../src/features/payees/payee';
+import { createPayeeSchema, type Payee } from '../../src/features/payees/payee';
 import { turso } from './db';
 import { errorResponse, ValidationError } from './errors';
 
@@ -15,27 +15,51 @@ export default async (req: Request) => {
 
     if (error) throw new ValidationError();
 
-    const { name, office, position, salary, bankId, bankBranch, accountNo, accountName, tin } =
-      data;
+    const {
+      name,
+      office,
+      position,
+      salary,
+      bankId,
+      bankBranch,
+      accountNo,
+      accountName,
+      tin = null,
+    } = data;
 
-    const payeeSql = `
-INSERT INTO payees (name, office, position) VALUES (?, ?, ?) RETURNING id`;
+    const payeeSql = 'INSERT INTO payees (name, office, position) VALUES (?, ?, ?) RETURNING id';
+    const payeeArgs = [name, office, position];
+
+    const { rows } = await turso.execute({
+      sql: payeeSql,
+      args: payeeArgs,
+    });
+
+    const [payee] = rows as unknown as Payee[];
 
     const accountSql = `
-INSERT INTO accounts (payee_id, salary, bank_id, bank_branch, account_no, account_name, tin)
-VALUES (last_insert_rowid(), ?, ?, ?, ?, ?, ?)`;
+INSERT INTO accounts (payee_id, bank_id, bank_branch, account_no, account_name)
+VALUES (?, ?, ?, ?, ?)`;
+    const accountArgs = [payee.id, bankId, bankBranch, accountNo, accountName];
 
-    const payeeArgs = [name, office, position];
-    const accountArgs = [salary, bankId, bankBranch, accountNo, accountName, tin];
+    const salarySql = 'INSERT INTO salaries (payee_id, salary) VALUES (?, ?)';
+    const salaryArgs = [payee.id, salary];
+
+    const tinSql = 'INSERT INTO tins (payee_id, tin) VALUES (?, ?)';
+    const tinArgs = [payee.id, tin];
 
     await turso.batch([
       {
-        sql: payeeSql,
-        args: payeeArgs,
+        sql: salarySql,
+        args: salaryArgs,
       },
       {
         sql: accountSql,
         args: accountArgs,
+      },
+      {
+        sql: tinSql,
+        args: tinArgs,
       },
     ]);
 
