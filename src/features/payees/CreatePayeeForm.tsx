@@ -8,12 +8,12 @@ import {
 } from '@/components/ui/dialog';
 import { CirclePlus } from 'lucide-react';
 import { useState } from 'react';
-import { usePayeeForm, type CreatePayeeFormData } from './payee';
+import { useCreatePayee, usePayeeForm, type CreatePayeeFormValues } from './payee';
 import PayeeForm from './PayeeForm';
 
 export default function CreatePayeeForm() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const formData: CreatePayeeFormData = {
+  const formData: CreatePayeeFormValues = {
     name: '',
     office: '',
     position: '',
@@ -26,6 +26,7 @@ export default function CreatePayeeForm() {
   };
 
   const form = usePayeeForm(formData);
+  const { mutateAsync: createPayee } = useCreatePayee();
 
   const handleClick = () => {
     setIsDialogOpen(true);
@@ -41,7 +42,13 @@ export default function CreatePayeeForm() {
           <DialogTitle>New Payee</DialogTitle>
           <DialogDescription>Create a new payee.</DialogDescription>
         </DialogHeader>
-        <PayeeForm form={form} data={formData} setIsDialogOpen={setIsDialogOpen} />
+        <PayeeForm
+          form={form}
+          values={formData}
+          onSubmit={createPayee}
+          loadingMsg="Creating payee..."
+          setIsDialogOpen={setIsDialogOpen}
+        />
       </DialogContent>
     </Dialog>
   );

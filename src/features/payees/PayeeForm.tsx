@@ -2,26 +2,32 @@ import { Button } from '@/components/ui/button';
 import { DialogFooter } from '@/components/ui/dialog';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { type FC } from 'react';
+import BankInput from '@/features/banks/BankInput';
 import { Controller } from 'react-hook-form';
 import { toast } from 'sonner';
-import BankInput from '../banks/BankInput';
-import { useCreatePayee, type CreatePayeeFormData, type PayeeHookForm } from './payee';
+import { type CreatePayeeFormValues, type PayeeHookForm } from './payee';
 
-interface PayeeFormProps {
+type PayeeFormProps = {
   form: PayeeHookForm;
-  data: CreatePayeeFormData;
+  values: CreatePayeeFormValues;
+  onSubmit: (data: CreatePayeeFormValues) => Promise<{ message: string }>;
   setIsDialogOpen: (open: boolean) => void;
-}
+  loadingMsg: string;
+};
 
-const PayeeForm: FC<PayeeFormProps> = ({ data, form, setIsDialogOpen }) => {
-  const { mutateAsync } = useCreatePayee();
-
-  const handleSubmit = (formData: CreatePayeeFormData) => {
+export default function PayeeForm({
+  values,
+  form,
+  onSubmit,
+  loadingMsg,
+  setIsDialogOpen,
+}: PayeeFormProps) {
+  const handleSubmit = (formData: CreatePayeeFormValues) => {
     setIsDialogOpen(false);
-    toast.promise(mutateAsync(formData), {
-      loading: 'Creating Payee...',
-      success: ({ message }) => {
+
+    toast.promise(onSubmit(formData), {
+      loading: loadingMsg,
+      success: ({ message }: { message: string }) => {
         form.reset();
         return message;
       },
@@ -33,16 +39,15 @@ const PayeeForm: FC<PayeeFormProps> = ({ data, form, setIsDialogOpen }) => {
   };
 
   const handleReset = () => {
-    form.reset(data);
+    form.reset(values);
   };
 
   const handleCancel = () => {
-    form.reset(data);
+    form.reset(values);
     setIsDialogOpen(false);
   };
 
   return (
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     <form id="payee-form" onSubmit={form.handleSubmit(handleSubmit)}>
       <FieldGroup>
         {/*  NAME */}
@@ -238,6 +243,4 @@ const PayeeForm: FC<PayeeFormProps> = ({ data, form, setIsDialogOpen }) => {
       </FieldGroup>
     </form>
   );
-};
-
-export default PayeeForm;
+}
