@@ -11,10 +11,10 @@ import { DataTableViewOptions } from './DataTableViewOptions';
 import { Card, CardContent, CardHeader } from './ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 
-interface DataTableProps<TData, TValue> {
+type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-}
+};
 
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -37,7 +37,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
         <DataTableViewOptions table={table} />
       </CardHeader>
       <CardContent>
-        <div className="overflow-hidden rounded-md border">
+        <div className="overflow-hidden rounded-md border px-8 py-5">
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map(headerGroup => (
