@@ -4,7 +4,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { type ColumnDef } from '@tanstack/react-table';
 import { useActivities, type Activity } from './activity';
 import DeleteActivityDialog from './DeleteActivityDialog';
-import EditActivityForm from './EditActivityForm';
+import UpdateActivityForm from './UpdateActivityForm';
 import ViewActivityDialog from './ViewActivityDialog';
 
 const columns: ColumnDef<Activity>[] = [
@@ -38,9 +38,16 @@ const columns: ColumnDef<Activity>[] = [
     accessorKey: 'code',
     header: ({ column }) => <DataTableColumnHeader column={column} title="Activity Code" />,
   },
-  { id: 'view', cell: ({ row }) => <ViewActivityDialog activity={row.original} /> },
-  { id: 'edit', cell: ({ row }) => <EditActivityForm activity={row.original} /> },
-  { id: 'delete', cell: ({ row }) => <DeleteActivityDialog activity={row.original} /> },
+  {
+    id: 'actions',
+    cell: ({ row }) => (
+      <div className="flex gap-3">
+        <ViewActivityDialog activity={row.original} />
+        <UpdateActivityForm activity={row.original} />
+        <DeleteActivityDialog activity={row.original} />
+      </div>
+    ),
+  },
 ];
 
 export default function ActivityList() {
