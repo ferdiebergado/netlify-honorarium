@@ -20,24 +20,24 @@ export const createPayeeSchema = z.object({
   office: z.string(),
   position: z.string(),
   salary: z.number().min(1, 'Basic salary is required.'),
-  tin: z.string().min(1, 'TIN is required.'),
+  tin: z.string().optional(),
   bankId: z.number().min(1, 'Bank name is required.'),
   bankBranch: z.string().min(1, 'Bank branch is required.'),
   accountName: z.string().min(1, 'Account name is required.'),
   accountNo: z.string().min(1, 'Account number is required.'),
 });
 
-export type CreatePayeeFormData = z.infer<typeof createPayeeSchema>;
+export type CreatePayeeFormValues = z.infer<typeof createPayeeSchema>;
 
-export const usePayeeForm = (defaultValues: CreatePayeeFormData) =>
-  useForm<CreatePayeeFormData>({
+export const usePayeeForm = (defaultValues: CreatePayeeFormValues) =>
+  useForm<CreatePayeeFormValues>({
     resolver: zodResolver(createPayeeSchema),
     defaultValues,
   });
 
 export type PayeeHookForm = ReturnType<typeof usePayeeForm>;
 
-async function createPayee(data: CreatePayeeFormData) {
+async function createPayee(data: CreatePayeeFormValues) {
   const res = await fetch('/api/payees', {
     method: 'POST',
     headers: {
@@ -62,13 +62,11 @@ export const useCreatePayee = () =>
 async function getPayees() {
   const res = await fetch('/api/payees');
 
-  const { message, data } = (await res.json()) as APIResponse<Payee[]>;
+  const { message, data = [] } = (await res.json()) as APIResponse<Payee[]>;
 
   if (!res.ok) throw new Error(message);
 
-  if (data) return data;
-
-  return [];
+  return data;
 }
 
 export function usePayees() {
