@@ -4,7 +4,7 @@ import { turso } from './db';
 import { errorResponse, NotFoundError, ValidationError } from './errors';
 
 export const config: Config = {
-  method: 'POST',
+  method: 'PUT',
   path: '/api/activities/:id',
 };
 
@@ -15,8 +15,8 @@ export default async (req: Request, ctx: Context) => {
 
     if (error) throw new ValidationError();
 
-    const { id } = ctx.params;
     const { title, venueId, startDate, endDate, code, focalId } = data;
+    const { id } = ctx.params;
 
     const sql = `
 UPDATE activities 
