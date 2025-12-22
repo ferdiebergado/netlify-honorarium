@@ -83,9 +83,7 @@ async function createActivity(formData: ActivityFormValues) {
 export const useCreateActivity = () =>
   useMutation<{ message: string }, Error, ActivityFormValues>({
     mutationFn: createActivity,
-
-    onSuccess: (_data, _variables, _onMutateResult, context) =>
-      context.client.invalidateQueries({ queryKey: [queryKey] }),
+    mutationKey: [queryKey],
   });
 
 async function updateActivity(id: number, formData: ActivityFormValues) {
@@ -108,9 +106,7 @@ export function useUpdateActivity() {
   return useMutation({
     mutationFn: ({ id, formData }: { id: number; formData: ActivityFormValues }) =>
       updateActivity(id, formData),
-    onSuccess: (_data, _variables, _onMutateResult, context) => {
-      context.client.invalidateQueries({ queryKey: [queryKey] });
-    },
+    mutationKey: [queryKey],
   });
 }
 
@@ -132,8 +128,6 @@ async function deleteActivity(id: number) {
 export function useDeleteActivity() {
   return useMutation({
     mutationFn: (id: number) => deleteActivity(id),
-    onSuccess: (_data, _variables, _onMutateResult, context) => {
-      context.client.invalidateQueries({ queryKey: [queryKey] });
-    },
+    mutationKey: [queryKey],
   });
 }

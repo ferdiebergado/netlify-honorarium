@@ -7,13 +7,13 @@ import * as z from 'zod';
 
 const queryKey = 'payees';
 
-export interface Payee {
+export type Payee = {
   id: number;
   name: string;
   position: string;
   office: string;
   accounts: Omit<Account, 'payeeId'>[];
-}
+};
 
 export const createPayeeSchema = z.object({
   name: z.string().min(1, 'Name is required.'),
@@ -56,11 +56,7 @@ async function createPayee(data: CreatePayeeFormData) {
 export const useCreatePayee = () =>
   useMutation({
     mutationFn: createPayee,
-
-    onSuccess: (_data, _error, _onMutateResult, context) =>
-      context.client.invalidateQueries({ queryKey: [queryKey] }),
-
-    mutationKey: ['createPayee'],
+    mutationKey: [queryKey],
   });
 
 async function getPayees() {
