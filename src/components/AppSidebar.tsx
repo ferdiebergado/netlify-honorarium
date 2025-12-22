@@ -1,4 +1,4 @@
-import { Calendar1, Home, Settings, Users } from 'lucide-react';
+import { Calendar1, Home, PhilippinePeso, Settings, Users } from 'lucide-react';
 import type { FC } from 'react';
 import {
   Sidebar,
@@ -27,6 +27,11 @@ const items = [
     title: 'Payees',
     url: '/payees',
     icon: Users,
+  },
+  {
+    title: 'Payments',
+    url: '/payments',
+    icon: PhilippinePeso,
   },
   {
     title: 'Settings',

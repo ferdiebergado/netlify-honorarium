@@ -1,0 +1,142 @@
+import { Button } from '@/components/ui/button';
+import { DialogFooter } from '@/components/ui/dialog';
+import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
+import ActivityInput from '@/features/activities/ActivityInput';
+import PayeeInput from '@/features/payees/PayeeInput';
+import RoleInput from '@/features/roles/RoleInput';
+import SalaryInput from '@/features/salaries/SalaryInput';
+import { Controller } from 'react-hook-form';
+import { toast } from 'sonner';
+import AccountInput from '../accounts/AccountInput';
+import { type PaymentFormValues, type PaymentHookForm } from './payments';
+
+type PaymentFormProps = {
+  form: PaymentHookForm;
+  values: PaymentFormValues;
+  onSubmit: (data: PaymentFormValues) => Promise<{ message: string }>;
+  setIsDialogOpen: (open: boolean) => void;
+  loadingMsg: string;
+};
+
+export default function PayeeForm({
+  values,
+  form,
+  onSubmit,
+  loadingMsg,
+  setIsDialogOpen,
+}: PaymentFormProps) {
+  const handleSubmit = (formData: PaymentFormValues) => {
+    setIsDialogOpen(false);
+    toast.promise(onSubmit(formData), {
+      loading: loadingMsg,
+      success: ({ message }: { message: string }) => {
+        form.reset();
+        return message;
+      },
+      error: (err: Error) => {
+        setIsDialogOpen(true);
+        return err.message;
+      },
+    });
+  };
+
+  const handleReset = () => {
+    form.reset(values);
+  };
+
+  const handleCancel = () => {
+    form.reset(values);
+    setIsDialogOpen(false);
+  };
+
+  return (
+    <form id="payment-form" onSubmit={form.handleSubmit(handleSubmit)}>
+      <FieldGroup>
+        <ActivityInput form={form} />
+        <PayeeInput form={form} />
+        <RoleInput form={form} />
+
+        <FieldGroup className="@container/field-group flex flex-row">
+          <SalaryInput form={form} />
+
+          {/*  HONORARIUM */}
+          <Controller
+            name="honorarium"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="honorarium">Honorarium</FieldLabel>
+                <Input
+                  {...field}
+                  id="honorarium"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="30000"
+                  autoComplete="off"
+                  type="number"
+                  onChange={e => {
+                    const value = e.target.value;
+                    if (value === '') {
+                      field.onChange();
+                    } else {
+                      field.onChange(Number(value));
+                    }
+                  }}
+                />
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
+          {/* END OF HONORARIUM */}
+        </FieldGroup>
+
+        <FieldGroup className="@container/field-group flex flex-row">
+          {/*  TAX RATE */}
+          <Controller
+            name="taxRate"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid} className="w-1/2 pr-2">
+                <FieldLabel htmlFor="tax">Withholding tax rate</FieldLabel>
+                <Input
+                  {...field}
+                  id="position"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="10"
+                  autoComplete="off"
+                  type="number"
+                  onChange={e => {
+                    const value = e.target.value;
+                    if (value === '') {
+                      field.onChange();
+                    } else {
+                      field.onChange(Number(value));
+                    }
+                  }}
+                />
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
+          {/* END OF TAX RATE */}
+        </FieldGroup>
+
+        <AccountInput form={form} />
+
+        <DialogFooter>
+          <Button type="button" variant="outline" onClick={handleCancel}>
+            Cancel
+          </Button>
+
+          <Button type="button" variant="outline" onClick={handleReset}>
+            Reset
+          </Button>
+
+          <Button type="submit" form="payment-form">
+            Submit
+          </Button>
+        </DialogFooter>
+      </FieldGroup>
+    </form>
+  );
+}
