@@ -1,3 +1,4 @@
+import Cert from './Cert';
 import CreatePaymentForm from './CreatePaymentForm';
 import PaymentList from './PaymentList';
 
@@ -11,6 +12,7 @@ export default function PaymentsPage() {
         </div>
         <div className="flex flex-1 items-end justify-end px-3">
           <CreatePaymentForm />
+          <Cert />
         </div>
       </div>
       <PaymentList />
