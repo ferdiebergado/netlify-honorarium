@@ -94,10 +94,15 @@ export const useCreateActivity = () =>
     mutationKey: [queryKey],
   });
 
-async function updateActivity(id: number, formData: ActivityFormValues) {
+export type UpdateActivityData = {
+  activityId: number;
+  formData: ActivityFormValues;
+};
+
+async function updateActivity({ activityId, formData }: UpdateActivityData) {
   console.debug('formData', formData);
 
-  const res = await fetch('/api/activities/' + id.toString(), {
+  const res = await fetch('/api/activities/' + activityId.toString(), {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -112,10 +117,10 @@ async function updateActivity(id: number, formData: ActivityFormValues) {
   return { message };
 }
 
-export function useUpdateActivity(activityId: number) {
+export function useUpdateActivity() {
   return useMutation({
-    mutationFn: (formData: ActivityFormValues) => updateActivity(activityId, formData),
-    mutationKey: [queryKey, activityId],
+    mutationFn: updateActivity,
+    mutationKey: [queryKey],
   });
 }
 
@@ -134,9 +139,9 @@ async function deleteActivity(id: number) {
   return { message };
 }
 
-export function useDeleteActivity(activityId: number) {
+export function useDeleteActivity() {
   return useMutation({
-    mutationFn: () => deleteActivity(activityId),
-    mutationKey: [queryKey, activityId],
+    mutationFn: deleteActivity,
+    mutationKey: [queryKey],
   });
 }
