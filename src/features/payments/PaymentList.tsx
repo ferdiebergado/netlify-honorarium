@@ -67,7 +67,7 @@ export default function PaymentList() {
       </div>
     );
 
-  if (isError) return <p>Error: {error.message}</p>;
+  if (isError) return <p className="text-destructive">Error: {error.message}</p>;
 
   return <DataTable columns={columns} filterColumn="payee" data={payments} />;
 }
