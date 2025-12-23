@@ -7,6 +7,7 @@ import ActivityInput from '@/features/activities/ActivityInput';
 import PayeeInput from '@/features/payees/PayeeInput';
 import RoleInput from '@/features/roles/RoleInput';
 import SalaryInput from '@/features/salaries/SalaryInput';
+import { useEffect } from 'react';
 import { Controller } from 'react-hook-form';
 import { toast } from 'sonner';
 import { type PaymentFormValues, type PaymentHookForm } from './payments';
@@ -49,6 +50,10 @@ export default function PayeeForm({
     form.reset(values);
     setIsDialogOpen(false);
   };
+
+  useEffect(() => {
+    form.reset(values);
+  }, [values, form]);
 
   return (
     <form id="payment-form" onSubmit={form.handleSubmit(handleSubmit)}>
