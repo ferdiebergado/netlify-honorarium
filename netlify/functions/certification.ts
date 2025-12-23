@@ -1,5 +1,6 @@
 import type { Config, Context } from '@netlify/functions';
 import { errorResponse, NotFoundError } from './errors';
+import { formatDate, toDateRange } from './lib';
 import { getPayments, type PaymentTags } from './payments';
 import { patchDoc } from './word';
 
@@ -27,12 +28,12 @@ export default async (_req: Request, ctx: Context) => {
       role: payment.role,
       activity: payment.activity,
       venue: payment.venue,
-      end_date: payment.endDate,
+      end_date: formatDate(payment.endDate),
       amount: payment.honorarium.toString(),
       tax: payment.taxRate.toString(),
       focal: payment.focal,
       position: payment.position,
-      date: '',
+      date: toDateRange(payment.startDate, payment.endDate),
       amount_words: '',
     };
 
