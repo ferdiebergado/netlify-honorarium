@@ -10,11 +10,8 @@ export const config: Config = {
 export default async (_req: Request, ctx: Context) => {
   try {
     const { id } = ctx.params;
-    const sql = 'UPDATE activities SET deleted_at = CURRENT_TIMESTAMP WHERE id=?';
-    const { rowsAffected } = await turso.execute({
-      sql,
-      args: [id],
-    });
+    const sql = 'UPDATE activities SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?';
+    const { rowsAffected } = await turso.execute(sql, [id]);
 
     if (rowsAffected === 0) throw new NotFoundError();
 
