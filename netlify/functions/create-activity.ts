@@ -1,5 +1,5 @@
 import type { Config } from '@netlify/functions';
-import { formSchema } from '../../src/features/activities/activity';
+import { schema } from './activity';
 import { turso } from './db';
 import { errorResponse, ValidationError } from './errors';
 
@@ -13,7 +13,7 @@ export default async (req: Request) => {
 
   try {
     const body = await req.json();
-    const { error, data } = formSchema.safeParse(body);
+    const { error, data } = schema.safeParse(body);
 
     if (error) throw new ValidationError();
 

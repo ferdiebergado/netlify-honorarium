@@ -1,5 +1,5 @@
 import type { Config, Context } from '@netlify/functions';
-import { formSchema } from '../../src/features/activities/activity';
+import { schema } from './activity';
 import { turso } from './db';
 import { errorResponse, NotFoundError, ValidationError } from './errors';
 
@@ -9,9 +9,11 @@ export const config: Config = {
 };
 
 export default async (req: Request, ctx: Context) => {
+  console.log('Updating activity...');
+
   try {
     const body = await req.json();
-    const { error, data } = formSchema.safeParse(body);
+    const { error, data } = schema.safeParse(body);
 
     if (error) throw new ValidationError();
 
