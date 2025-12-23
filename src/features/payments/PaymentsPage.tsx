@@ -1,4 +1,5 @@
 import CreatePaymentForm from './CreatePaymentForm';
+import PaymentList from './PaymentList';
 
 export default function PaymentsPage() {
   return (
@@ -12,6 +13,7 @@ export default function PaymentsPage() {
           <CreatePaymentForm />
         </div>
       </div>
+      <PaymentList />
     </>
   );
 }

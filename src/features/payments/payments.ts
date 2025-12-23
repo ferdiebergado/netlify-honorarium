@@ -1,7 +1,8 @@
 import type { APIResponse } from '@/lib/api';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
+import { useSearchParams } from 'react-router';
 import * as z from 'zod';
 
 const queryKey = 'payments';
@@ -9,8 +10,11 @@ const queryKey = 'payments';
 export type Payment = {
   id: number;
   activityId: number;
+  activity: string;
   payeeId: number;
+  payee: string;
   roleId: number;
+  role: string;
   honorarium: number;
   hoursRendered: number;
   actualHonorarium: number;
@@ -19,6 +23,9 @@ export type Payment = {
   salaryId: number;
   bankId: number;
   tinId?: number;
+  createdAt: string;
+  updatedAt: string;
+  activityCode: string;
 };
 
 export const formSchema = z.object({
@@ -63,5 +70,27 @@ export function useCreatePayment() {
   return useMutation({
     mutationFn: createPayment,
     mutationKey: [queryKey],
+  });
+}
+
+async function getPayments(activityId: string | null) {
+  let url = '/api/payments';
+  if (activityId) url += '/' + activityId;
+
+  const res = await fetch(url);
+  const { message, data = [] } = (await res.json()) as APIResponse<Payment[]>;
+
+  if (!res.ok) throw new Error(message);
+
+  return data;
+}
+
+export function usePayments() {
+  const [searchParams] = useSearchParams();
+  const activityId = searchParams.get('activityId');
+
+  return useQuery({
+    queryKey: [queryKey, activityId],
+    queryFn: () => getPayments(activityId),
   });
 }

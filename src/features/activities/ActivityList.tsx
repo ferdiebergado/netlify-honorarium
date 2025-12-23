@@ -1,7 +1,10 @@
 import { DataTable } from '@/components/DataTable';
 import { DataTableColumnHeader } from '@/components/DataTableColumnHeader';
+import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { type ColumnDef } from '@tanstack/react-table';
+import { PhilippinePeso } from 'lucide-react';
+import { Link } from 'react-router';
 import { useActivities, type Activity } from './activity';
 import DeleteActivityDialog from './DeleteActivityDialog';
 import UpdateActivityForm from './UpdateActivityForm';
@@ -42,6 +45,11 @@ const columns: ColumnDef<Activity>[] = [
     id: 'actions',
     cell: ({ row }) => (
       <div className="flex gap-3">
+        <Button variant="outline" size="icon" title="Payments" asChild>
+          <Link to={'/payments/?activityId=' + row.getValue<string>('id')}>
+            <PhilippinePeso />
+          </Link>
+        </Button>
         <ViewActivityDialog activity={row.original} />
         <UpdateActivityForm activity={row.original} />
         <DeleteActivityDialog activity={row.original} />
