@@ -24,9 +24,7 @@ export default function DeleteActivityDialog({ activity }: DeleteActivityDialogP
   const handleAction = () => {
     toast.promise(deleteActivity(activity.id), {
       loading: 'Deleting Activity...',
-      success: ({ message }: { message: string }) => {
-        return message;
-      },
+      success: ({ message }: { message: string }) => message,
       error: (err: Error) => err.message,
     });
   };
