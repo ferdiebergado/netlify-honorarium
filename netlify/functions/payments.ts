@@ -12,6 +12,7 @@ type PaymentRow = {
   net_honorarium: number;
   activity_code: string;
   tax_rate: number;
+  start_date: string;
   end_date: string;
   venue: string;
   focal: string;
@@ -31,6 +32,7 @@ type Payment = {
   activityCode: string;
   taxRate: number;
   venue: string;
+  startDate: string;
   endDate: string;
   focal: string;
   position: string;
@@ -63,9 +65,10 @@ SELECT
     p.name          AS payee, 
     a.title         AS activity, 
     a.code          AS activity_code,
+    a.start_date,
+    a.end_date,     
     r.name          AS role,
     v.name          AS venue,
-    a.end_date,     
     f.name          AS focal,
     pos.name        AS position
 FROM payments pay
@@ -89,6 +92,7 @@ JOIN positions pos ON pos.id = f.position_id
     netHonorarium: payment.net_honorarium,
     activityCode: payment.activity_code,
     taxRate: payment.tax_rate,
+    startDate: payment.start_date,
     endDate: payment.end_date,
   }));
 
