@@ -1,23 +1,32 @@
-import type { Config } from '@netlify/functions';
+import type { Config, Context } from '@netlify/functions';
 import { turso } from './db';
 import { errorResponse } from './errors';
 
 export const config: Config = {
   method: 'GET',
-  path: '/api/activities',
+  path: ['/api/activities', '/api/activities/:activity_id'],
 };
 
-export default async () => {
+export default async (_req: Request, ctx: Context) => {
   try {
-    const query = `
-SELECT a.*, v.name as venue, f.name as focal 
+    let sql = `
+SELECT a.*, v.id AS venue_id, v.name as venue, f.id AS focal_id, f.name as focal 
 FROM activities a 
 JOIN focals f ON f.id = a.focal_id 
 JOIN venues v ON v.id = a.venue_id
-WHERE a.deleted_at IS NULL
-ORDER BY a.start_date DESC`;
+WHERE a.deleted_at IS NULL`;
 
-    const { rows } = await turso.execute(query);
+    const { activity_id } = ctx.params;
+
+    let args;
+    if (activity_id) {
+      sql += ' AND a.id = ?';
+      args = [activity_id];
+    }
+
+    sql += ' ORDER BY a.created_at DESC';
+
+    const { rows } = await turso.execute({ sql, args });
     const data = rows.map(a => ({
       ...a,
       venueId: a.venue_id,

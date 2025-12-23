@@ -2,8 +2,10 @@ import type { APIResponse } from '@/lib/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
+import { useSearchParams } from 'react-router';
 import * as z from 'zod';
 
+// TODO: const url = '/api/activities'
 const queryKey = 'activities';
 
 export type Activity = {
@@ -45,22 +47,28 @@ export const useActivityForm = (defaultValues: ActivityFormValues) =>
 
 export type ActivityHookForm = ReturnType<typeof useActivityForm>;
 
-async function getActivities() {
-  const res = await fetch('/api/activities');
+async function getActivities(activityId: string | null) {
+  let url = '/api/activities';
+  if (activityId) url += '/' + activityId;
 
-  const { message, data } = (await res.json()) as APIResponse<Activity[]>;
+  const res = await fetch(url);
+
+  const { message, data = [] } = (await res.json()) as APIResponse<Activity[]>;
+
   if (!res.ok) throw new Error(message);
 
-  if (data) return data;
-
-  return [];
+  return data;
 }
 
-export const useActivities = () =>
-  useQuery({
-    queryKey: [queryKey],
-    queryFn: getActivities,
+export const useActivities = () => {
+  const [searchParams] = useSearchParams();
+  const activityId = searchParams.get('activityId');
+
+  return useQuery({
+    queryKey: [queryKey, activityId],
+    queryFn: () => getActivities(activityId),
   });
+};
 
 async function createActivity(formData: ActivityFormValues) {
   console.debug('formData', formData);
@@ -87,6 +95,8 @@ export const useCreateActivity = () =>
   });
 
 async function updateActivity(id: number, formData: ActivityFormValues) {
+  console.debug('formData', formData);
+
   const res = await fetch('/api/activities/' + id.toString(), {
     method: 'PUT',
     headers: {
@@ -102,11 +112,10 @@ async function updateActivity(id: number, formData: ActivityFormValues) {
   return { message };
 }
 
-export function useUpdateActivity() {
+export function useUpdateActivity(activityId: number) {
   return useMutation({
-    mutationFn: ({ id, formData }: { id: number; formData: ActivityFormValues }) =>
-      updateActivity(id, formData),
-    mutationKey: [queryKey],
+    mutationFn: (formData: ActivityFormValues) => updateActivity(activityId, formData),
+    mutationKey: [queryKey, activityId],
   });
 }
 
@@ -125,9 +134,9 @@ async function deleteActivity(id: number) {
   return { message };
 }
 
-export function useDeleteActivity() {
+export function useDeleteActivity(activityId: number) {
   return useMutation({
-    mutationFn: (id: number) => deleteActivity(id),
-    mutationKey: [queryKey],
+    mutationFn: () => deleteActivity(activityId),
+    mutationKey: [queryKey, activityId],
   });
 }
