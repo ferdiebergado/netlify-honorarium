@@ -1,10 +1,10 @@
 import type { APIResponse } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
 
-export interface Focal {
+export type Focal = {
   id: number;
   name: string;
-}
+};
 
 export async function getFocals() {
   const res = await fetch('/api/focals');

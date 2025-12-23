@@ -1,10 +1,10 @@
 import type { APIResponse } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
 
-export interface Venue {
+export type Venue = {
   id: number;
   name: string;
-}
+};
 
 export async function getVenues() {
   const res = await fetch('/api/venues');

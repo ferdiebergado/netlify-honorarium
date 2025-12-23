@@ -19,9 +19,9 @@ import {
 import { Briefcase, Building2, Info } from 'lucide-react';
 import type { Payee } from './payee';
 
-interface ViewPayeeProps {
+type ViewPayeeProps = {
   payee: Payee;
-}
+};
 
 export default function ViewPayeeDialog({ payee }: ViewPayeeProps) {
   const { name, position, office, accounts } = payee;

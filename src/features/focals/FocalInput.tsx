@@ -18,9 +18,9 @@ import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { useFocals } from './focal';
 
-interface FocalInputProps {
+type FocalInputProps = {
   form: ActivityHookForm;
-}
+};
 
 const FocalInput: FC<FocalInputProps> = ({ form }) => {
   const [isOpen, setIsOpen] = useState(false);
