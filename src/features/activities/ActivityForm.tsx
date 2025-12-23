@@ -13,7 +13,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import FocalInput from '@/features/focals/FocalInput';
 import VenueInput from '@/features/venues/VenueInput';
 import { ChevronDownIcon } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { toast } from 'sonner';
 import { type ActivityFormValues, type ActivityHookForm } from './activity';
@@ -42,7 +42,7 @@ export default function ActivityForm({
     toast.promise(onSubmit(formData), {
       loading: loadingMsg,
       success: ({ message }: { message: string }) => {
-        form.reset();
+        form.reset(values);
         return message;
       },
       error: (err: Error) => {
@@ -60,10 +60,6 @@ export default function ActivityForm({
     form.reset(values);
     setIsDialogOpen(false);
   };
-
-  useEffect(() => {
-    form.reset(values);
-  }, [values, form]);
 
   return (
     <form id="activity-form" onSubmit={form.handleSubmit(handleSubmit)}>

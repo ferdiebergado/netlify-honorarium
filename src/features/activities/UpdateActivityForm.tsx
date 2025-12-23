@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { FilePenLine } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   useActivityForm,
   useUpdateActivity,
@@ -17,19 +17,22 @@ import {
 } from './activity';
 import ActivityForm from './ActivityForm';
 
-type EditActivityProps = {
+type UpdateActivityProps = {
   activity: Activity;
 };
 
-export default function UpdateActivityForm({ activity }: EditActivityProps) {
+export default function UpdateActivityForm({ activity }: UpdateActivityProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const form = useActivityForm(activity);
   const { mutateAsync: updateActivity } = useUpdateActivity();
 
-  const handleSubmit = (formData: ActivityFormValues) => {
-    return updateActivity({ id: activity.id, formData });
-  };
+  const handleSubmit = (formData: ActivityFormValues) =>
+    updateActivity({ activityId: activity.id, formData });
+
+  useEffect(() => {
+    form.reset(activity);
+  }, [activity, form]);
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
