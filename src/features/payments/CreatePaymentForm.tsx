@@ -7,21 +7,24 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { CirclePlus } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PaymentForm from './PaymentForm';
 import { useCreatePayment, usePaymentForm, type PaymentFormValues } from './payments';
 
 export default function CreatePaymentForm() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const formValues: PaymentFormValues = {
-    activityId: 0,
-    payeeId: 0,
-    roleId: 0,
-    honorarium: 0,
-    salaryId: 0,
-    taxRate: 10,
-    bankId: 0,
-  };
+  const formValues: PaymentFormValues = useMemo(
+    () => ({
+      activityId: 0,
+      payeeId: 0,
+      roleId: 0,
+      honorarium: 0,
+      salaryId: 0,
+      taxRate: 10,
+      bankId: 0,
+    }),
+    []
+  );
 
   const form = usePaymentForm(formValues);
   const { mutateAsync: createPayment } = useCreatePayment();
@@ -29,6 +32,10 @@ export default function CreatePaymentForm() {
   const handleClick = () => {
     setIsDialogOpen(true);
   };
+
+  useEffect(() => {
+    form.reset(formValues);
+  }, [formValues, form]);
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
