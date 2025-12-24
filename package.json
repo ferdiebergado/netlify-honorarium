@@ -9,7 +9,9 @@
     "lint": "eslint . --cache --cache-location .eslintcache",
     "preview": "vite preview",
     "format": "pnpm exec prettier . --write",
-    "create-db": "rm -f local.db && turso db shell honorarium .dump | sqlite3 local.db"
+    "create-db": "rm -f local.db && turso db shell honorarium .dump | sqlite3 local.db",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@benedicte/docx-merge": "^0.1.3",
@@ -56,6 +58,7 @@
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
+    "@vitest/coverage-v8": "4.0.16",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react-dom": "^2.3.13",
