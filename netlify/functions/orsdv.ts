@@ -95,7 +95,9 @@ async function createORS(payments: ORSPayment[]) {
 
   let payee = payments[0].payee.toLocaleUpperCase();
   const numPayees = payments.length;
-  if (numPayees > 1) payee += ` AND ${(numPayees - 1).toString()} OTHERS`;
+  let other = 'OTHER';
+  if (numPayees > 2) other += 'S';
+  if (numPayees > 1) payee += ` AND ${(numPayees - 1).toString()} ${other}`;
 
   orsSheet.getCell('E7').value = payee;
   dvSheet.getCell('F11').value = payee;
