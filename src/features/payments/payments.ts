@@ -4,6 +4,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router';
 import * as z from 'zod';
+import { formSchema } from './form-schema';
 
 const queryKey = 'payments';
 
@@ -29,17 +30,6 @@ export type Payment = {
   activityCode: string;
 };
 
-export const formSchema = z.object({
-  activityId: z.number().min(1, 'Activity is required.'),
-  payeeId: z.number().min(1, 'Payee is required.'),
-  roleId: z.number().min(1, 'Role is required.'),
-  honorarium: z.number().min(1, 'Honorarium is required.'),
-  salaryId: z.number().min(1, 'Basic salary is required.'),
-  taxRate: z.number().min(1, 'Withholding tax rate is required.'),
-  tinId: z.number().optional(),
-  bankId: z.number().min(1, 'Bank account is required.'),
-});
-
 export type PaymentFormValues = z.infer<typeof formSchema>;
 
 export function usePaymentForm(defaultValues: PaymentFormValues) {
@@ -52,6 +42,8 @@ export function usePaymentForm(defaultValues: PaymentFormValues) {
 export type PaymentHookForm = ReturnType<typeof usePaymentForm>;
 
 async function createPayment(formData: PaymentFormValues) {
+  console.debug('formData:', formData);
+
   const res = await fetch('/api/payments', {
     method: 'POST',
     headers: {
@@ -71,6 +63,9 @@ export function useCreatePayment() {
   return useMutation({
     mutationFn: createPayment,
     mutationKey: [queryKey],
+    onError: err => {
+      console.error(err);
+    },
   });
 }
 

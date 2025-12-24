@@ -1,5 +1,5 @@
 import type { Config } from '@netlify/functions';
-import { formSchema } from '../../src/features/payments/payments';
+import { formSchema } from '../../src/features/payments/form-schema';
 import { roundMoney } from '../../src/lib/utils';
 import { turso } from './db';
 import { errorResponse, NotFoundError, ValidationError } from './errors';
@@ -29,10 +29,7 @@ export default async (req: Request) => {
 
     const salarySql = 'SELECT salary FROM salaries WHERE payee_id = ?';
 
-    const { rows } = await turso.execute({
-      sql: salarySql,
-      args: [payeeId],
-    });
+    const { rows } = await turso.execute(salarySql, [payeeId]);
 
     if (rows.length === 0) throw new NotFoundError();
 
@@ -42,7 +39,20 @@ export default async (req: Request) => {
     const { actualHonorarium, hoursRendered } = computeHonorarium(honorarium, salary);
 
     const sql = `
-INSERT INTO payments (honorarium, salary_id, role_id, payee_id, activity_id, tax_rate, bank_id, tin_id, net_honorarium, actual_honorarium, hours_rendered)
+INSERT INTO payments 
+(
+  honorarium, 
+  salary_id, 
+  role_id, 
+  payee_id, 
+  activity_id, 
+  tax_rate, 
+  bank_id, 
+  tin_id, 
+  net_honorarium, 
+  actual_honorarium, 
+  hours_rendered
+)
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
     const args = [
@@ -59,10 +69,7 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
       hoursRendered,
     ];
 
-    await turso.execute({
-      sql,
-      args,
-    });
+    await turso.execute(sql, args);
 
     return Response.json({ message: 'Payment created.' }, { status: 201 });
   } catch (error) {
