@@ -1,4 +1,5 @@
 import type { APIResponse } from '@/lib/api';
+import { startDownload } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
@@ -105,19 +106,7 @@ async function genCert(activityId: string | null) {
     throw new Error(message);
   }
 
-  const blob = await res.blob();
-
-  // Create a temporary link and trigger download
-  const url = window.URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `certification-ac-${activityId}.docx`;
-  document.body.appendChild(a);
-  a.click();
-
-  // Cleanup
-  document.body.removeChild(a);
-  window.URL.revokeObjectURL(url);
+  startDownload(res, `certification-${activityId}.docx`);
 
   return { message: 'Certification generated.' };
 }
@@ -146,19 +135,7 @@ async function genComp(activityId: string | null) {
     throw new Error(message);
   }
 
-  const blob = await res.blob();
-
-  // Create a temporary link and trigger download
-  const url = window.URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `computation-ac-${activityId}.docx`;
-  document.body.appendChild(a);
-  a.click();
-
-  // Cleanup
-  document.body.removeChild(a);
-  window.URL.revokeObjectURL(url);
+  startDownload(res, `computation-${activityId}.docx`);
 
   return { message: 'Computation generated.' };
 }
