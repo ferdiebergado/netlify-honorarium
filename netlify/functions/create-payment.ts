@@ -4,6 +4,8 @@ import { roundMoney } from '../../src/lib/utils';
 import { turso } from './db';
 import { errorResponse, NotFoundError, ValidationError } from './errors';
 
+const SG29 = 180492;
+
 export const config: Config = {
   method: 'POST',
   path: '/api/payments',
@@ -35,8 +37,12 @@ export default async (req: Request) => {
 
     const [{ salary }] = rows as unknown as { salary: number }[];
 
+    let maxSalary = salary;
+
+    if (salary > SG29) maxSalary = SG29;
+
+    const { actualHonorarium, hoursRendered } = computeHonorarium(honorarium, maxSalary);
     const netHonorarium = honorarium - honorarium * (taxRate / 100);
-    const { actualHonorarium, hoursRendered } = computeHonorarium(honorarium, salary);
 
     const sql = `
 INSERT INTO payments 
