@@ -7,6 +7,7 @@ import ActivityInput from '@/features/activities/ActivityInput';
 import PayeeInput from '@/features/payees/PayeeInput';
 import RoleInput from '@/features/roles/RoleInput';
 import SalaryInput from '@/features/salaries/SalaryInput';
+import TinInput from '@/features/tins/TinInput';
 import { Controller } from 'react-hook-form';
 import { toast } from 'sonner';
 import { type PaymentFormValues, type PaymentHookForm } from './payments';
@@ -119,6 +120,8 @@ export default function PaymentForm({
             )}
           />
           {/* END OF TAX RATE */}
+
+          <TinInput form={form} />
         </FieldGroup>
 
         <AccountInput form={form} />
