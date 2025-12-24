@@ -16,8 +16,10 @@ export default function PaymentsPage() {
         </div>
       </div>
       <PaymentList />
-      <Cert />
-      <Comp />
+      <div className="flex items-baseline gap-1">
+        <Cert />
+        <Comp />
+      </div>
     </>
   );
 }
