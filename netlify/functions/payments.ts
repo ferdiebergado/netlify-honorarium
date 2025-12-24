@@ -78,16 +78,16 @@ SELECT
     b.name          AS bank,
     s.salary
 FROM payments pay
-LEFT JOIN payees p ON p.id = pay.payee_id
-LEFT JOIN activities a ON a.id = pay.activity_id
-LEFT JOIN roles r ON r.id = pay.role_id
-LEFT JOIN venues v ON v.id = a.venue_id
-LEFT JOIN focals f ON f.id = a.focal_id
-LEFT JOIN positions pos ON pos.id = f.position_id
-LEFT JOIN tins t ON t.id = pay.tin_id
-LEFT JOIN accounts acc ON acc.payee_id = p.id
-LEFT JOIN banks b ON b.id = acc.bank_id
-LEFT JOIN salaries s ON s.id = pay.salary_id
+JOIN payees p ON p.id = pay.payee_id
+JOIN activities a ON a.id = pay.activity_id
+JOIN roles r ON r.id = pay.role_id
+JOIN venues v ON v.id = a.venue_id
+JOIN focals f ON f.id = a.focal_id
+JOIN positions pos ON pos.id = f.position_id
+JOIN tins t ON t.id = pay.tin_id
+JOIN accounts acc ON acc.payee_id = p.id
+JOIN banks b ON b.id = acc.bank_id
+JOIN salaries s ON s.id = pay.salary_id
 `;
 
   if (activityId) sql += ' WHERE pay.activity_id = ?';

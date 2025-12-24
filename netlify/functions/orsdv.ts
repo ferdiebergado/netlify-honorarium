@@ -47,9 +47,9 @@ a.code,
 pay.name        AS payee,
 v.name          AS venue
 FROM payments p
-LEFT JOIN activities a ON a.id = p.activity_id
-LEFT JOIN payees pay ON pay.id = p.payee_id
-LEFT JOIN venues v ON v.id = a.venue_id 
+JOIN activities a ON a.id = p.activity_id
+JOIN payees pay ON pay.id = p.payee_id
+JOIN venues v ON v.id = a.venue_id 
 WHERE p.activity_id = ?
 `;
 
