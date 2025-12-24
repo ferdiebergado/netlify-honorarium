@@ -1,9 +1,8 @@
 import { patchDocument, PatchType, TextRun, type IPatch } from 'docx';
-import { cert } from './cert';
 
-export const patchDoc = async (tags: Record<string, string>) => {
+export const patchDoc = async (template: string, tags: Record<string, string>) => {
   try {
-    const data = Buffer.from(cert, 'base64');
+    const data = Buffer.from(template, 'base64');
 
     const patches = Object.fromEntries(
       Object.entries(tags).map(([tag, text]) => {

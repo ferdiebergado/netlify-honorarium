@@ -1,5 +1,6 @@
 import { mergeDocx } from '@benedicte/docx-merge';
 import type { Config, Context } from '@netlify/functions';
+import { cert } from './cert';
 import { errorResponse, NotFoundError } from './errors';
 import { amountToWords, formatDate, formatToPhp, toDateRange } from './lib';
 import { getPayments, type PaymentTags } from './payments';
@@ -39,7 +40,7 @@ export default async (_req: Request, ctx: Context) => {
       amount_words: amountToWords(firstPayment.honorarium),
     };
 
-    const firstCert = await patchDoc(tags);
+    const firstCert = await patchDoc(cert, tags);
 
     if (!firstCert) throw new Error('failed to patch document');
 
@@ -60,7 +61,7 @@ export default async (_req: Request, ctx: Context) => {
         amount_words: amountToWords(payment.honorarium),
       };
 
-      const patched = await patchDoc(tags);
+      const patched = await patchDoc(cert, tags);
       if (!patched) throw new Error('failed to patch document');
       return patched;
     });
