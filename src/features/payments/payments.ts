@@ -164,7 +164,7 @@ async function genORS(activityId: string | null) {
     throw new Error(message);
   }
 
-  startDownload(res, `ORS-${activityId}.docx`);
+  startDownload(res, `ORS-${activityId}.xlsx`);
 
   return { message: 'Computation generated.' };
 }
