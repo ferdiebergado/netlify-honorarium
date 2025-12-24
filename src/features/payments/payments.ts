@@ -166,7 +166,7 @@ async function genORS(activityId: string | null) {
 
   startDownload(res, `ORS-${activityId}.xlsx`);
 
-  return { message: 'Computation generated.' };
+  return { message: 'ORS generated.' };
 }
 
 export function useORS() {
