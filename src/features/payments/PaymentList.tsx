@@ -1,6 +1,6 @@
 import { DataTable } from '@/components/DataTable';
 import { DataTableColumnHeader } from '@/components/DataTableColumnHeader';
-import { Spinner } from '@/components/ui/spinner';
+import SkeletonCard from '@/components/SkeletonCard';
 import { formatMoney } from '@/lib/utils';
 import type { ColumnDef } from '@tanstack/react-table';
 import { usePayments, type Payment } from './payments';
@@ -60,12 +60,7 @@ const columns: ColumnDef<Payment>[] = [
 export default function PaymentList() {
   const { isPending, isError, error, data: payments } = usePayments();
 
-  if (isPending)
-    return (
-      <div className="m-3 flex items-center gap-3">
-        <Spinner /> Loading payments...
-      </div>
-    );
+  if (isPending) return <SkeletonCard />;
 
   if (isError) return <p className="text-destructive">Error: {error.message}</p>;
 

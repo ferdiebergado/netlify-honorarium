@@ -1,7 +1,7 @@
 import { DataTable } from '@/components/DataTable';
 import { DataTableColumnHeader } from '@/components/DataTableColumnHeader';
+import SkeletonCard from '@/components/SkeletonCard';
 import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
 import { type ColumnDef } from '@tanstack/react-table';
 import { PhilippinePeso } from 'lucide-react';
 import { Link } from 'react-router';
@@ -61,13 +61,7 @@ const columns: ColumnDef<Activity>[] = [
 export default function ActivityList() {
   const { isPending, isError, error, data: activities } = useActivities();
 
-  if (isPending) {
-    return (
-      <div className="m-3 flex items-center gap-3">
-        <Spinner /> Fetching activities...
-      </div>
-    );
-  }
+  if (isPending) return <SkeletonCard />;
 
   if (isError) return <p className="text-destructive m-3">Error: {error.message}</p>;
 
