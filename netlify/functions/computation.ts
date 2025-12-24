@@ -2,11 +2,11 @@ import { mergeDocx } from '@benedicte/docx-merge';
 import type { Config, Context } from '@netlify/functions';
 import { comp } from './comp';
 import { errorResponse, NotFoundError } from './errors';
-import { formatToPhp, toDateRange } from './lib';
+import { docxResponse, formatToPhp, toDateRange } from './lib';
 import { getPayments, SG29, type Payment } from './payments';
 import { patchDoc } from './word';
 
-type ComputationTags = {
+type ComputationPatches = {
   payee: string;
   role: string;
   activity: string;
@@ -45,14 +45,16 @@ export default async (_req: Request, ctx: Context) => {
     const firstPayment = payments[0];
     const activityCode = firstPayment.activityCode;
 
-    const firstCert = await patchTemplate(comp, firstPayment);
+    const patches = createPatches(firstPayment);
+    const firstCert = await patchDoc(comp, patches);
 
     if (!firstCert) throw new Error('failed to patch document');
 
     if (payments.length === 1) return docxResponse(firstCert, activityCode);
 
     const patchDocs = payments.slice(1).map(async payment => {
-      const patched = await patchTemplate(comp, payment);
+      const patches = createPatches(payment);
+      const patched = await patchDoc(comp, patches);
       if (!patched) throw new Error('failed to patch document');
       return patched;
     });
@@ -71,10 +73,10 @@ export default async (_req: Request, ctx: Context) => {
   }
 };
 
-function createTags(payment: Payment): ComputationTags {
+function createPatches(payment: Payment): ComputationPatches {
   const salary = payment.salary > SG29 ? SG29 : payment.salary;
 
-  const tags: ComputationTags = {
+  const tags: ComputationPatches = {
     payee: payment.payee,
     role: payment.role,
     activity: payment.activity,
@@ -94,19 +96,4 @@ function createTags(payment: Payment): ComputationTags {
   };
 
   return tags;
-}
-
-// TODO: move everything below to libs
-async function patchTemplate(template: string, payment: Payment) {
-  const tags = createTags(payment);
-  return await patchDoc(template, tags);
-}
-
-function docxResponse(body: Buffer, suffix: string) {
-  return new Response(body, {
-    headers: {
-      'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'Content-Disposition': `attachment; filename="certification-ac-${suffix}.docx"`,
-    },
-  });
 }

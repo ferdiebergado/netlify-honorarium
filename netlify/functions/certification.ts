@@ -2,9 +2,23 @@ import { mergeDocx } from '@benedicte/docx-merge';
 import type { Config, Context } from '@netlify/functions';
 import { cert } from './cert';
 import { errorResponse, NotFoundError } from './errors';
-import { amountToWords, formatDate, formatToPhp, toDateRange } from './lib';
-import { getPayments, type Payment, type PaymentTags } from './payments';
+import { amountToWords, docxResponse, formatDate, formatToPhp, toDateRange } from './lib';
+import { getPayments, type Payment } from './payments';
 import { patchDoc } from './word';
+
+type CertificationPatches = {
+  payee: string;
+  role: string;
+  activity: string;
+  venue: string;
+  date: string;
+  end_date: string;
+  amount_words: string;
+  amount: string;
+  tax: string;
+  focal: string;
+  position: string;
+};
 
 export const config: Config = {
   method: 'POST',
@@ -26,14 +40,17 @@ export default async (_req: Request, ctx: Context) => {
     const firstPayment = payments[0];
     const activityCode = firstPayment.activityCode;
 
-    const firstCert = await patchTemplate(cert, firstPayment);
+    const patches = createPatches(firstPayment);
+    const firstCert = await patchDoc(cert, patches);
 
     if (!firstCert) throw new Error('failed to patch document');
 
     if (payments.length === 1) return docxResponse(firstCert, activityCode);
 
     const patchDocs = payments.slice(1).map(async payment => {
-      const patched = await patchTemplate(cert, payment);
+      const patches = createPatches(payment);
+      const patched = await patchDoc(cert, patches);
+
       if (!patched) throw new Error('failed to patch document');
       return patched;
     });
@@ -52,8 +69,8 @@ export default async (_req: Request, ctx: Context) => {
   }
 };
 
-function createTags(payment: Payment): PaymentTags {
-  const tags: PaymentTags = {
+function createPatches(payment: Payment): CertificationPatches {
+  const tags: CertificationPatches = {
     payee: payment.payee,
     role: payment.role,
     activity: payment.activity,
@@ -68,18 +85,4 @@ function createTags(payment: Payment): PaymentTags {
   };
 
   return tags;
-}
-
-async function patchTemplate(template: string, payment: Payment) {
-  const tags = createTags(payment);
-  return await patchDoc(template, tags);
-}
-
-function docxResponse(body: Buffer, suffix: string) {
-  return new Response(body, {
-    headers: {
-      'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'Content-Disposition': `attachment; filename="certification-ac-${suffix}.docx"`,
-    },
-  });
 }

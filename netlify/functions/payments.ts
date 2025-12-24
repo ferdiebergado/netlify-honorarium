@@ -24,7 +24,7 @@ type PaymentRow = {
   bank_branch: string;
   account_name: string;
   account_no: string;
-  salary: string;
+  salary: number;
 };
 
 export type Payment = {
@@ -50,21 +50,6 @@ export type Payment = {
   accountName: string;
   accountNo: string;
   salary: number;
-};
-
-// TODO: Rename to CertificationTags then move to certification
-export type PaymentTags = {
-  payee: string;
-  role: string;
-  activity: string;
-  venue: string;
-  date: string;
-  end_date: string;
-  amount_words: string;
-  amount: string;
-  tax: string;
-  focal: string;
-  position: string;
 };
 
 export async function getPayments(activityId: number | null): Promise<Payment[]> {
