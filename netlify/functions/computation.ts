@@ -44,13 +44,14 @@ export default async (_req: Request, ctx: Context) => {
 
     const firstPayment = payments[0];
     const activityCode = firstPayment.activityCode;
+    const filename = 'computation-' + activityCode;
 
     const patches = createPatches(firstPayment);
     const firstCert = await patchDoc(comp, patches);
 
     if (!firstCert) throw new Error('failed to patch document');
 
-    if (payments.length === 1) return docxResponse(firstCert, activityCode);
+    if (payments.length === 1) return docxResponse(firstCert, filename);
 
     const patchDocs = payments.slice(1).map(async payment => {
       const patches = createPatches(payment);
@@ -67,7 +68,7 @@ export default async (_req: Request, ctx: Context) => {
       return merged;
     }, firstCert);
 
-    return docxResponse(merged, activityCode);
+    return docxResponse(merged, filename);
   } catch (error) {
     return errorResponse(error);
   }

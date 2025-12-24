@@ -68,12 +68,10 @@ WHERE p.activity_id = ?
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
 
-    // 2. Return the Response
-    // A standard Web Response natively accepts a Blob.
     return new Response(blob, {
       status: 200,
       headers: {
-        'Content-Disposition': 'attachment; filename="ORS-test.xlsx"',
+        'Content-Disposition': `attachment; filename="ORS-${payments[0].activityCode}.xlsx"`,
       },
     });
   } catch (error) {
