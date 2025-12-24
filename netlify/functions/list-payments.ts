@@ -1,6 +1,6 @@
 import type { Config, Context } from '@netlify/functions';
-import { parseId } from './db';
 import { errorResponse } from './errors';
+import { parseId } from './lib';
 import { getPayments } from './payments';
 
 export const config: Config = {
