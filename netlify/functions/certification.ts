@@ -1,7 +1,6 @@
 import type { Config, Context } from '@netlify/functions';
-import { ToWords } from 'to-words';
 import { errorResponse, NotFoundError } from './errors';
-import { formatDate, toDateRange } from './lib';
+import { amountToWords, formatDate, formatToPhp, toDateRange } from './lib';
 import { getPayments, type PaymentTags } from './payments';
 import { patchDoc } from './word';
 
@@ -30,15 +29,12 @@ export default async (_req: Request, ctx: Context) => {
       activity: payment.activity,
       venue: payment.venue,
       end_date: formatDate(payment.endDate),
-      amount: payment.honorarium.toString(),
+      amount: formatToPhp(payment.honorarium),
       tax: payment.taxRate.toString(),
-      focal: payment.focal,
+      focal: payment.focal.toLocaleUpperCase(),
       position: payment.position,
       date: toDateRange(payment.startDate, payment.endDate),
-      amount_words: new ToWords({ localeCode: 'en-PH' }).convert(payment.honorarium, {
-        currency: true,
-        doNotAddOnly: true,
-      }),
+      amount_words: amountToWords(payment.honorarium),
     };
 
     const cert = await patchDoc(tags);
