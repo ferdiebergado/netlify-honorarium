@@ -149,3 +149,32 @@ export function useComp() {
     mutationFn: () => genComp(activityId),
   });
 }
+
+async function genORS(activityId: string | null) {
+  console.log('generating ORS...');
+
+  if (!activityId) return;
+
+  const res = await fetch('/api/ors/' + activityId, {
+    method: 'POST',
+  });
+
+  if (!res.ok) {
+    const { message } = (await res.json()) as APIResponse;
+    throw new Error(message);
+  }
+
+  startDownload(res, `ORS-${activityId}.docx`);
+
+  return { message: 'Computation generated.' };
+}
+
+export function useORS() {
+  const [searchParams] = useSearchParams();
+  const activityId = searchParams.get('activityId');
+
+  return useMutation({
+    mutationKey: ['computation', activityId],
+    mutationFn: () => genORS(activityId),
+  });
+}

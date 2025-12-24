@@ -75,11 +75,21 @@ export function amountToWords(amount: number): string {
   });
 }
 
+// TODO: Specify filename
 export function docxResponse(body: Buffer, suffix: string) {
   return new Response(body, {
     headers: {
       'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       'Content-Disposition': `attachment; filename="certification-ac-${suffix}.docx"`,
+    },
+  });
+}
+
+export function xlsxResponse(body: Buffer, filename: string) {
+  return new Response(body, {
+    headers: {
+      'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'Content-Disposition': `attachment; filename="${filename}.docx"`,
     },
   });
 }

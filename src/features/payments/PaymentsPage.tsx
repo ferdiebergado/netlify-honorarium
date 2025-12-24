@@ -1,6 +1,7 @@
 import Cert from './Cert';
 import Comp from './Comp';
 import CreatePaymentForm from './CreatePaymentForm';
+import ORS from './ORS';
 import PaymentList from './PaymentList';
 
 export default function PaymentsPage() {
@@ -19,6 +20,7 @@ export default function PaymentsPage() {
       <div className="flex items-baseline gap-1">
         <Cert />
         <Comp />
+        <ORS />
       </div>
     </>
   );
