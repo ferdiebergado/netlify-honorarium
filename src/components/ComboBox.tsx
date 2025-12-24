@@ -70,14 +70,14 @@ export function ComboboxField<TFieldValues extends FieldValues>({
                   variant="outline"
                   role="combobox"
                   aria-expanded={isOpen}
-                  className="w-auto justify-between"
+                  className="w-auto justify-between text-left wrap-break-word whitespace-break-spaces"
                 >
                   {field.value ? options.find(o => o.id === field.value)?.label : placeholder}
                   <ChevronsUpDown className="opacity-50" />
                 </Button>
               </PopoverTrigger>
 
-              <PopoverContent className="w-auto p-0">
+              <PopoverContent className="p-0">
                 <Command>
                   <CommandInput
                     id={name}
@@ -96,6 +96,7 @@ export function ComboboxField<TFieldValues extends FieldValues>({
                             field.onChange(option.id);
                             setIsOpen(false);
                           }}
+                          className="wrap-break-word whitespace-break-spaces"
                         >
                           {option.label}
                           <Check
