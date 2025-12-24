@@ -1,3 +1,5 @@
+import { ToWords } from 'to-words';
+
 const months = [
   'January',
   'February',
@@ -47,18 +49,28 @@ export function toDateRange(startDate: string, endDate: string): string {
 }
 
 export function formatDate(date: string): string {
-  // 1. Create a Date object from the string.
-  // Note: JavaScript parses "YYYY-MM-DD" strings as UTC by default.
-  const dateObject: Date = new Date(date + 'T00:00:00'); // Add T00:00:00 for consistent parsing in local timezone
+  const dateObject: Date = new Date(date + 'T00:00:00');
 
-  // 2. Define the formatting options.
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   };
 
-  // 3. Format the date using Intl.DateTimeFormat.
-  // 'en-US' specifies the locale (English, United States).
   return new Intl.DateTimeFormat('en-US', options).format(dateObject);
+}
+
+export function formatToPhp(amount: number): string {
+  return new Intl.NumberFormat('en-PH', {
+    style: 'currency',
+    currency: 'PHP',
+    currencyDisplay: 'code',
+  }).format(amount);
+}
+
+export function amountToWords(amount: number): string {
+  return new ToWords({ localeCode: 'en-PH' }).convert(amount, {
+    currency: true,
+    doNotAddOnly: true,
+  });
 }
