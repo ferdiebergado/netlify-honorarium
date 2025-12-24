@@ -3,7 +3,7 @@ import { toast } from 'sonner';
 import { useCert } from './payments';
 
 export default function Cert() {
-  const { mutateAsync: genCert } = useCert();
+  const { isPending, mutateAsync: genCert } = useCert();
 
   const handleClick = () => {
     toast.promise(genCert(), {
@@ -15,7 +15,12 @@ export default function Cert() {
 
   return (
     <div className="flex gap-3">
-      <Button title="Certification" className="mx-3 mt-6" onClick={handleClick}>
+      <Button
+        title="Certification"
+        className="mx-3 mt-6"
+        onClick={handleClick}
+        disabled={isPending}
+      >
         Certification
       </Button>
     </div>

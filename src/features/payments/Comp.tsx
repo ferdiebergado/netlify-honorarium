@@ -3,7 +3,7 @@ import { toast } from 'sonner';
 import { useComp } from './payments';
 
 export default function Comp() {
-  const { mutateAsync: genComp } = useComp();
+  const { isPending, mutateAsync: genComp } = useComp();
 
   const handleClick = () => {
     toast.promise(genComp(), {
@@ -15,7 +15,7 @@ export default function Comp() {
 
   return (
     <div className="flex gap-3">
-      <Button title="Computation" className="mx-3 mt-6" onClick={handleClick}>
+      <Button title="Computation" className="mx-3 mt-6" onClick={handleClick} disabled={isPending}>
         Computation
       </Button>
     </div>
