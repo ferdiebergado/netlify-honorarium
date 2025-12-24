@@ -19,7 +19,7 @@ type PaymentRow = {
   position: string;
 };
 
-type Payment = {
+export type Payment = {
   id: number;
   payee: string;
   activity: string;
