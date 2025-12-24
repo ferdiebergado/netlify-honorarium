@@ -131,3 +131,44 @@ export function useCert() {
     mutationFn: () => genCert(activityId),
   });
 }
+
+async function genComp(activityId: string | null) {
+  console.log('generating comp...');
+
+  if (!activityId) return;
+
+  const res = await fetch('/api/computations/' + activityId, {
+    method: 'POST',
+  });
+
+  if (!res.ok) {
+    const { message } = (await res.json()) as APIResponse;
+    throw new Error(message);
+  }
+
+  const blob = await res.blob();
+
+  // Create a temporary link and trigger download
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `computation-ac-${activityId}.docx`;
+  document.body.appendChild(a);
+  a.click();
+
+  // Cleanup
+  document.body.removeChild(a);
+  window.URL.revokeObjectURL(url);
+
+  return { message: 'Computation generated.' };
+}
+
+export function useComp() {
+  const [searchParams] = useSearchParams();
+  const activityId = searchParams.get('activityId');
+
+  return useMutation({
+    mutationKey: ['computation', activityId],
+    mutationFn: () => genComp(activityId),
+  });
+}

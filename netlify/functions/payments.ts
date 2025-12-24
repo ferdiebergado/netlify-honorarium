@@ -1,5 +1,7 @@
 import { turso } from './db';
 
+export const SG29 = 180492;
+
 type PaymentRow = {
   id: number;
   updated_at: string;
@@ -17,6 +19,12 @@ type PaymentRow = {
   venue: string;
   focal: string;
   position: string;
+  tin: string;
+  bank: string;
+  bank_branch: string;
+  account_name: string;
+  account_no: string;
+  salary: string;
 };
 
 export type Payment = {
@@ -36,8 +44,15 @@ export type Payment = {
   endDate: string;
   focal: string;
   position: string;
+  tin: string;
+  bank: string;
+  bankBranch: string;
+  accountName: string;
+  accountNo: string;
+  salary: number;
 };
 
+// TODO: Rename to CertificationTags then move to certification
 export type PaymentTags = {
   payee: string;
   role: string;
@@ -70,14 +85,24 @@ SELECT
     r.name          AS role,
     v.name          AS venue,
     f.name          AS focal,
-    pos.name        AS position
+    pos.name        AS position,
+    t.tin,
+    acc.bank_branch,
+    acc.account_no,
+    acc.account_name,
+    b.name          AS bank,
+    s.salary
 FROM payments pay
-JOIN payees p ON p.id = pay.payee_id
-JOIN activities a ON a.id = pay.activity_id
-JOIN roles r ON r.id = pay.role_id
-JOIN venues v ON v.id = a.venue_id
-JOIN focals f ON f.id = a.focal_id
-JOIN positions pos ON pos.id = f.position_id
+LEFT JOIN payees p ON p.id = pay.payee_id
+LEFT JOIN activities a ON a.id = pay.activity_id
+LEFT JOIN roles r ON r.id = pay.role_id
+LEFT JOIN venues v ON v.id = a.venue_id
+LEFT JOIN focals f ON f.id = a.focal_id
+LEFT JOIN positions pos ON pos.id = f.position_id
+LEFT JOIN tins t ON t.id = pay.tin_id
+LEFT JOIN accounts acc ON acc.payee_id = p.id
+LEFT JOIN banks b ON b.id = acc.bank_id
+LEFT JOIN salaries s ON s.id = pay.salary_id
 `;
 
   if (activityId) sql += ' WHERE pay.activity_id = ?';
@@ -94,7 +119,12 @@ JOIN positions pos ON pos.id = f.position_id
     taxRate: payment.tax_rate,
     startDate: payment.start_date,
     endDate: payment.end_date,
+    bankBranch: payment.bank_branch,
+    accountName: payment.account_name,
+    accountNo: payment.account_no,
   }));
+
+  console.log('data:', data);
 
   return data;
 }

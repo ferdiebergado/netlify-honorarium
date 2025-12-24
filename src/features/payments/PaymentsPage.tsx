@@ -1,4 +1,5 @@
 import Cert from './Cert';
+import Comp from './Comp';
 import CreatePaymentForm from './CreatePaymentForm';
 import PaymentList from './PaymentList';
 
@@ -16,6 +17,7 @@ export default function PaymentsPage() {
       </div>
       <PaymentList />
       <Cert />
+      <Comp />
     </>
   );
 }
