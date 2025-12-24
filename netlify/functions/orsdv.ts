@@ -1,5 +1,6 @@
 import type { Config, Context } from '@netlify/functions';
 import Excel from 'exceljs';
+import { parseActivityCode } from './activity';
 import { turso } from './db';
 import { errorResponse, NotFoundError } from './errors';
 import { toDateRange } from './lib';
@@ -108,6 +109,7 @@ async function createORS(payments: ORSPayment[]) {
   dvSheet.getCell('AC17').value = amount;
 
   orsSheet.getCell('E34').value = payments[0].activityCode;
+  orsSheet.getCell('K16').value = parseActivityCode(payments[0].activityCode).mfoCode;
 
   return await workbook.xlsx.writeBuffer();
 }
