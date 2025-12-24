@@ -1,5 +1,6 @@
 import { Calendar1, Home, PhilippinePeso, Settings, Users } from 'lucide-react';
 import type { FC } from 'react';
+import { Link } from 'react-router';
 import {
   Sidebar,
   SidebarContent,
@@ -51,10 +52,10 @@ const AppSidebar: FC = () => {
               {items.map(item => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <Link to={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
