@@ -3,8 +3,7 @@ import { formSchema } from '../../src/features/payments/form-schema';
 import { roundMoney } from '../../src/lib/utils';
 import { turso } from './db';
 import { errorResponse, NotFoundError, ValidationError } from './errors';
-
-const SG29 = 180492;
+import { SG29 } from './payments';
 
 export const config: Config = {
   method: 'POST',
