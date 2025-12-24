@@ -74,3 +74,12 @@ export function amountToWords(amount: number): string {
     doNotAddOnly: true,
   });
 }
+
+export function docxResponse(body: Buffer, suffix: string) {
+  return new Response(body, {
+    headers: {
+      'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'Content-Disposition': `attachment; filename="certification-ac-${suffix}.docx"`,
+    },
+  });
+}
