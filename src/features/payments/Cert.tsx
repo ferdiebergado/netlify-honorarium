@@ -15,7 +15,7 @@ export default function Cert() {
 
   return (
     <div className="flex gap-3">
-      <Button title="Certification" size="lg" className="mx-3 mt-6" onClick={handleClick}>
+      <Button title="Certification" className="mx-3 mt-6" onClick={handleClick}>
         Certification
       </Button>
     </div>

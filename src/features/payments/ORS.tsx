@@ -15,7 +15,7 @@ export default function ORS() {
 
   return (
     <div className="flex gap-3">
-      <Button title="ORS/DV" size="lg" className="mx-3 mt-6" onClick={handleClick}>
+      <Button title="ORS/DV" className="mx-3 mt-6" onClick={handleClick}>
         ORS/DV
       </Button>
     </div>

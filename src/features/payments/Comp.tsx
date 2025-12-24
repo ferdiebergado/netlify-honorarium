@@ -15,7 +15,7 @@ export default function Comp() {
 
   return (
     <div className="flex gap-3">
-      <Button title="Computation" size="lg" className="mx-3 mt-6" onClick={handleClick}>
+      <Button title="Computation" className="mx-3 mt-6" onClick={handleClick}>
         Computation
       </Button>
     </div>
