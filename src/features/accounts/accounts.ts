@@ -12,7 +12,7 @@ export type Account = {
 async function getAccounts() {
   const res = await fetch('/api/accounts');
 
-  const { message, data = [] } = (await res.json()) as APIResponse<Account[]>;
+  const { message, data } = (await res.json()) as APIResponse<Account[]>;
 
   if (!res.ok) throw new Error(message);
 

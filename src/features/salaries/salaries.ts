@@ -15,9 +15,7 @@ async function getSalaries() {
 
   if (!res.ok) throw new Error(message);
 
-  if (data) return data;
-
-  return [];
+  return data;
 }
 
 export function useSalaries() {

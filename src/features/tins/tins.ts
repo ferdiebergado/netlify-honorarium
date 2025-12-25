@@ -15,9 +15,7 @@ async function getTins() {
 
   if (!res.ok) throw new Error(message);
 
-  if (data) return data;
-
-  return [];
+  return data;
 }
 
 export function useTins() {

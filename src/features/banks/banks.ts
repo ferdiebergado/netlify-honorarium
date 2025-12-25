@@ -9,7 +9,7 @@ export type Bank = {
 async function getBanks() {
   const res = await fetch('/api/banks');
 
-  const { message, data = [] } = (await res.json()) as APIResponse<Bank[]>;
+  const { message, data } = (await res.json()) as APIResponse<Bank[]>;
 
   if (!res.ok) throw new Error(message);
 

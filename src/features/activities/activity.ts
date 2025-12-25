@@ -53,7 +53,7 @@ async function getActivities(activityId: string | null) {
 
   const res = await fetch(url);
 
-  const { message, data = [] } = (await res.json()) as APIResponse<Activity[]>;
+  const { message, data } = (await res.json()) as APIResponse<Activity[]>;
 
   if (!res.ok) throw new Error(message);
 

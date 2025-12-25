@@ -75,7 +75,7 @@ async function getPayments(activityId: string | null) {
   if (activityId) url += '/' + activityId;
 
   const res = await fetch(url);
-  const { message, data = [] } = (await res.json()) as APIResponse<Payment[]>;
+  const { message, data } = (await res.json()) as APIResponse<Payment[]>;
 
   if (!res.ok) throw new Error(message);
 
