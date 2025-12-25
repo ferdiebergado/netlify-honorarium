@@ -21,7 +21,7 @@ export default function CreatePaymentForm() {
       honorarium: 0,
       salaryId: 0,
       taxRate: 10,
-      bankId: 0,
+      accountId: 0,
     }),
     []
   );

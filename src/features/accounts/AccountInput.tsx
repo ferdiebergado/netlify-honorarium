@@ -22,13 +22,13 @@ export default function AccountInput({ form }: AccountInputProps) {
   );
 
   useEffect(() => {
-    form.setValue('bankId', 0);
+    form.setValue('accountId', 0);
   }, [form, payeeId]);
 
   return (
     <ComboboxField
       form={form}
-      name="bankId"
+      name="accountId"
       label="Bank Account"
       placeholder="Select bank account..."
       searchPlaceholder="Search bank account..."

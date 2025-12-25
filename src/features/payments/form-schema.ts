@@ -8,5 +8,5 @@ export const formSchema = z.object({
   salaryId: z.number().min(1, 'Basic salary is required.'),
   taxRate: z.number().min(1, 'Withholding tax rate is required.'),
   tinId: z.number().optional(),
-  bankId: z.number().min(1, 'Bank account is required.'),
+  accountId: z.number().min(1, 'Bank account is required.'),
 });

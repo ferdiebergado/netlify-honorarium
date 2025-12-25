@@ -24,13 +24,13 @@ export default async (req: Request) => {
       payeeId,
       activityId,
       taxRate,
-      bankId,
+      accountId,
       tinId = null,
     } = payment;
 
-    const salarySql = 'SELECT salary FROM salaries WHERE payee_id = ?';
+    const salarySql = 'SELECT salary FROM salaries WHERE id = ?';
 
-    const { rows } = await turso.execute(salarySql, [payeeId]);
+    const { rows } = await turso.execute(salarySql, [salaryId]);
 
     if (rows.length === 0) throw new NotFoundError();
 
@@ -52,7 +52,7 @@ INSERT INTO payments
   payee_id, 
   activity_id, 
   tax_rate, 
-  bank_id, 
+  account_id, 
   tin_id, 
   net_honorarium, 
   actual_honorarium, 
@@ -67,7 +67,7 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
       payeeId,
       activityId,
       taxRate,
-      bankId,
+      accountId,
       tinId,
       netHonorarium,
       actualHonorarium,
