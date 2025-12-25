@@ -24,7 +24,7 @@ export type Payment = {
   taxRate: number;
   netHonorarium: number;
   salaryId: number;
-  bankId: number;
+  accountId: number;
   tinId?: number;
   createdAt: string;
   updatedAt: string;
@@ -174,7 +174,36 @@ export function useORS() {
   const activityId = searchParams.get('activityId');
 
   return useMutation({
-    mutationKey: ['computation', activityId],
+    mutationKey: ['ors', activityId],
     mutationFn: () => genORS(activityId),
+  });
+}
+
+async function genPayroll(activityId: string | null) {
+  console.log('generating Payroll...');
+
+  if (!activityId) return;
+
+  const res = await fetch('/api/payrolls/' + activityId, {
+    method: 'POST',
+  });
+
+  if (!res.ok) {
+    const { message } = (await res.json()) as APIResponse;
+    throw new Error(message);
+  }
+
+  startDownload(res, `Payroll-${activityId}.xlsx`);
+
+  return { message: 'Payroll generated.' };
+}
+
+export function usePayroll() {
+  const [searchParams] = useSearchParams();
+  const activityId = searchParams.get('activityId');
+
+  return useMutation({
+    mutationKey: ['payroll', activityId],
+    mutationFn: () => genPayroll(activityId),
   });
 }

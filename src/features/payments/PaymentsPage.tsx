@@ -3,6 +3,7 @@ import Comp from './Comp';
 import CreatePaymentForm from './CreatePaymentForm';
 import ORS from './ORS';
 import PaymentList from './PaymentList';
+import Payroll from './Payroll';
 
 export default function PaymentsPage() {
   return (
@@ -21,6 +22,7 @@ export default function PaymentsPage() {
         <Cert />
         <Comp />
         <ORS />
+        <Payroll />
       </div>
     </>
   );
