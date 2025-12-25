@@ -49,4 +49,16 @@ describe('parseActivityCode', () => {
     };
     expect(got).toEqual(want);
   });
+
+  it('parses alternative activity code format correctly', () => {
+    const activityCode = 'AC-24-LDB-LDT-BEC-2-001';
+    const got = parseActivityCode(activityCode);
+    const want: FundSource = {
+      year: 2024,
+      appropriationType: 'current',
+      program: 'BEC',
+      mfoCode: '310100100003000',
+    };
+    expect(got).toEqual(want);
+  });
 });
