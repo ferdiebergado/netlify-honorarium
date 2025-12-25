@@ -1,9 +1,8 @@
 import type { Config } from '@netlify/functions';
 import { formSchema } from '../../src/features/payments/form-schema';
-import { roundMoney } from '../../src/lib/utils';
 import { turso } from './db';
 import { errorResponse, NotFoundError, ValidationError } from './errors';
-import { SG29 } from './payments';
+import { computeHonorarium } from './payments';
 
 export const config: Config = {
   method: 'POST',
@@ -36,11 +35,7 @@ export default async (req: Request) => {
 
     const [{ salary }] = rows as unknown as { salary: number }[];
 
-    let maxSalary = salary;
-
-    if (salary > SG29) maxSalary = SG29;
-
-    const { actualHonorarium, hoursRendered } = computeHonorarium(honorarium, maxSalary);
+    const { actualHonorarium, hoursRendered } = computeHonorarium(honorarium, salary);
     const netHonorarium = honorarium - honorarium * (taxRate / 100);
 
     const sql = `
@@ -81,24 +76,3 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
     return errorResponse(error);
   }
 };
-
-function computeHonorarium(
-  honorarium: number,
-  salary: number
-): { hoursRendered: number; actualHonorarium: number } {
-  let hoursRendered = 1;
-  let actualHonorarium = 0;
-
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  while (true) {
-    actualHonorarium = 0.023 * salary * hoursRendered;
-
-    if (actualHonorarium >= honorarium) break;
-    hoursRendered++;
-  }
-
-  return {
-    hoursRendered,
-    actualHonorarium: roundMoney(actualHonorarium),
-  };
-}

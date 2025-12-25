@@ -1,3 +1,4 @@
+import { roundMoney } from '../../src/lib/utils';
 import { turso } from './db';
 
 export const SG29 = 180492;
@@ -112,4 +113,33 @@ JOIN salaries s ON s.id = pay.salary_id
   console.log('data:', data);
 
   return data;
+}
+
+export type Honorarium = {
+  hoursRendered: number;
+  actualHonorarium: number;
+};
+
+export function getMaxSalary(salary: number) {
+  return salary > SG29 ? SG29 : salary;
+}
+
+export function computeHonorarium(honorarium: number, salary: number): Honorarium {
+  const maxSalary = getMaxSalary(salary);
+
+  let hoursRendered = 1;
+  let actualHonorarium = 0;
+
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  while (true) {
+    actualHonorarium = 0.023 * maxSalary * hoursRendered;
+
+    if (actualHonorarium >= honorarium) break;
+    hoursRendered++;
+  }
+
+  return {
+    hoursRendered,
+    actualHonorarium: roundMoney(actualHonorarium),
+  };
 }

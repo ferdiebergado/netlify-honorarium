@@ -3,7 +3,7 @@ import type { Config, Context } from '@netlify/functions';
 import { comp } from './comp';
 import { errorResponse, NotFoundError } from './errors';
 import { docxResponse, formatToPhp, toDateRange } from './lib';
-import { getPayments, SG29, type Payment } from './payments';
+import { getMaxSalary, getPayments, type Payment } from './payments';
 import { patchDoc } from './word';
 
 type ComputationPatches = {
@@ -75,21 +75,16 @@ export default async (_req: Request, ctx: Context) => {
 };
 
 function createPatches(payment: Payment): ComputationPatches {
-  const salary = payment.salary > SG29 ? SG29 : payment.salary;
+  const salary = getMaxSalary(payment.salary);
 
   const tags: ComputationPatches = {
-    payee: payment.payee,
-    role: payment.role,
-    activity: payment.activity,
+    ...payment,
     honorarium: formatToPhp(payment.honorarium),
-    tin: payment.tin,
     focal: payment.focal.toLocaleUpperCase(),
-    position: payment.position,
     date: toDateRange(payment.startDate, payment.endDate),
     bank_branch: payment.bankBranch,
     account_name: payment.accountName,
     account_no: payment.accountNo,
-    bank: payment.bank,
     actual_honorarium: formatToPhp(payment.actualHonorarium),
     net_honorarium: formatToPhp(payment.netHonorarium),
     salary: formatToPhp(salary),
