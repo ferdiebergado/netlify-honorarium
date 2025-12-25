@@ -1,33 +1,10 @@
-import type { Account } from '@/features/accounts/accounts';
 import type { APIResponse } from '@/lib/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
-import * as z from 'zod';
+import { createPayeeSchema, type CreatePayeeFormValues, type Payee } from './form-schema';
 
 const queryKey = 'payees';
-
-export type Payee = {
-  id: number;
-  name: string;
-  position: string;
-  office: string;
-  accounts: Omit<Account, 'payeeId'>[];
-};
-
-export const createPayeeSchema = z.object({
-  name: z.string().min(1, 'Name is required.'),
-  office: z.string(),
-  position: z.string(),
-  salary: z.number().min(1, 'Basic salary is required.'),
-  tin: z.string().optional(),
-  bankId: z.number().min(1, 'Bank name is required.'),
-  bankBranch: z.string().min(1, 'Bank branch is required.'),
-  accountName: z.string().min(1, 'Account name is required.'),
-  accountNo: z.string().min(1, 'Account number is required.'),
-});
-
-export type CreatePayeeFormValues = z.infer<typeof createPayeeSchema>;
 
 export const usePayeeForm = (defaultValues: CreatePayeeFormValues) =>
   useForm<CreatePayeeFormValues>({
@@ -62,7 +39,7 @@ export const useCreatePayee = () =>
 async function getPayees() {
   const res = await fetch('/api/payees');
 
-  const { message, data = [] } = (await res.json()) as APIResponse<Payee[]>;
+  const { message, data } = (await res.json()) as APIResponse<Payee[]>;
 
   if (!res.ok) throw new Error(message);
 
@@ -76,7 +53,7 @@ export function usePayees() {
   });
 }
 
-async function getPayee(id: number) {
+async function getPayee(id: number): Promise<Payee> {
   const res = await fetch('/api/payees/' + id.toString());
   const { message, data } = (await res.json()) as APIResponse<Payee>;
 

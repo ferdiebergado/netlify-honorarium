@@ -75,6 +75,10 @@ export function amountToWords(amount: number): string {
   });
 }
 
+export function roundMoney(value: number): number {
+  return Math.round((value + Number.EPSILON) * 100) / 100;
+}
+
 export function docxResponse(body: Buffer, filename: string) {
   return new Response(body, {
     headers: {

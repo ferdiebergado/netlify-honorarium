@@ -1,5 +1,5 @@
 import type { Config } from '@netlify/functions';
-import type { Payee } from '../../src/features/payees/payee';
+import type { Payee } from '../../src/features/payees/form-schema';
 import { turso } from './db';
 import { errorResponse } from './errors';
 

@@ -7,6 +7,7 @@ export type Account = {
   accountNo: string;
   bank: string;
   bankBranch: string;
+  accountName: string;
 };
 
 async function getAccounts() {
