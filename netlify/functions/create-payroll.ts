@@ -20,6 +20,7 @@ type PayrollRow = {
   account_no: string;
   position: string;
   tin: string;
+  tax_rate: number;
 };
 
 interface PayrollPayment extends Record<string, string | number> {
@@ -36,6 +37,7 @@ interface PayrollPayment extends Record<string, string | number> {
   accountNo: string;
   position: string;
   tin: string;
+  taxRate: number;
 }
 
 export const config: Config = {
@@ -52,6 +54,7 @@ export default async (_req: Request, ctx: Context) => {
     const sql = `
 SELECT 
 p.honorarium,
+p.tax_rate,
 a.title         AS activity,
 a.start_date,
 a.end_date,
@@ -83,6 +86,7 @@ WHERE p.activity_id = ?
       accountName: payment.account_name,
       bankBranch: payment.bank_branch,
       accountNo: payment.account_no,
+      taxRate: payment.tax_rate,
     }));
 
     if (rows.length === 0) throw new NotFoundError();
@@ -164,7 +168,7 @@ async function createPayroll(payments: PayrollPayment[]) {
       },
       {
         cell: 'K',
-        value: { formula: `J${currentRow.toString()}*0.1` },
+        value: { formula: `J${currentRow.toString()}*${(payment.taxRate / 100).toString()}` },
       },
       {
         cell: 'L',
