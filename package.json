@@ -9,7 +9,10 @@
     "lint": "eslint . --cache --cache-location .eslintcache",
     "preview": "vite preview",
     "format": "pnpm exec prettier . --write",
-    "create-db": "rm -f local.db && turso db shell honorarium .dump | sqlite3 local.db",
+    "turso-dump": "turso db shell honorarium .dump > dump.sql",
+    "turso-migrate": "turso db shell honorarium < init.sql",
+    "create-db": "sqlite3 local.db '.read init.sql'",
+    "db": "sqlite3 local.db",
     "test": "vitest",
     "coverage": "vitest run --coverage"
   },
