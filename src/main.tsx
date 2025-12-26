@@ -2,16 +2,19 @@ import { MutationCache, QueryClient, QueryClientProvider } from '@tanstack/react
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router';
+import { toast } from 'sonner';
 import App from './App';
 import './index.css';
 
 const queryClient = new QueryClient({
   mutationCache: new MutationCache({
-    onSuccess: (_data, _variables, _context, mutation) => {
+    onSuccess: (data, _variables, _context, mutation) => {
+      toast.success((data as { message: string }).message);
       queryClient.invalidateQueries({
         queryKey: mutation.options.mutationKey,
       });
     },
+    onError: (err: Error) => toast.error(err.message),
   }),
 });
 
