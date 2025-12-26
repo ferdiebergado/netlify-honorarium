@@ -1,9 +1,9 @@
-import Cert from './Cert';
-import Comp from './Comp';
+import CertificationButton from './CertificationButton';
+import ComputationButton from './ComputationButton';
 import CreatePaymentForm from './CreatePaymentForm';
-import ORS from './ORS';
+import ORSButton from './ORSButton';
 import PaymentList from './PaymentList';
-import Payroll from './Payroll';
+import PayrollButton from './PayrollButton';
 
 export default function PaymentsPage() {
   return (
@@ -18,11 +18,11 @@ export default function PaymentsPage() {
         </div>
       </div>
       <PaymentList />
-      <div className="flex items-baseline gap-1">
-        <Cert />
-        <Comp />
-        <ORS />
-        <Payroll />
+      <div className="flex items-center gap-1">
+        <CertificationButton />
+        <ComputationButton />
+        <ORSButton />
+        <PayrollButton />
       </div>
     </>
   );
