@@ -72,7 +72,7 @@ export default async (_req: Request, ctx: Context) => {
 
 function createPatches(payment: Payment): CertificationPatches {
   const tags: CertificationPatches = {
-    payee: payment.payee,
+    payee: payment.payee.toLocaleUpperCase(),
     role: payment.role,
     activity: payment.activity,
     venue: payment.venue,

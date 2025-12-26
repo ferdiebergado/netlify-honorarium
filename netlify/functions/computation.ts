@@ -79,6 +79,7 @@ function createPatches(payment: Payment): ComputationPatches {
 
   const tags: ComputationPatches = {
     ...payment,
+    payee: payment.payee.toLocaleUpperCase(),
     honorarium: formatToPhp(payment.honorarium),
     focal: payment.focal.toLocaleUpperCase(),
     date: toDateRange(payment.startDate, payment.endDate),
