@@ -1,8 +1,7 @@
-import type { Payment } from '../../src/lib/schema';
-import { deserializeDetails } from './accounts';
+import type { Payment } from '../../src/shared/schema';
 import { turso } from './db';
 import { roundMoney } from './lib';
-import type { AccountDetails } from './list-accounts';
+import { deserializeDetails, type AccountDetails } from './list-accounts';
 export const SG29 = 180492;
 
 type PaymentRow = {
