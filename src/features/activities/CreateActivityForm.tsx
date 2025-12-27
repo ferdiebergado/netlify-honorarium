@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/dialog';
 import { CirclePlus } from 'lucide-react';
 import { useState } from 'react';
-import type { ActivityFormValues } from '../../lib/schema';
+import type { ActivityFormValues } from '../../shared/schema';
 import { useActivityForm, useCreateActivity } from './activity';
 import ActivityForm from './ActivityForm';
 

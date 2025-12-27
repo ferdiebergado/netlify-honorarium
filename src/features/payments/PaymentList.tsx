@@ -2,8 +2,8 @@ import { DataTable } from '@/components/DataTable';
 import { DataTableColumnHeader } from '@/components/DataTableColumnHeader';
 import SkeletonCard from '@/components/SkeletonCard';
 import type { ColumnDef } from '@tanstack/react-table';
-import type { Payment } from '../../lib/schema';
 import { formatMoney } from '../../lib/utils';
+import type { Payment } from '../../shared/schema';
 import { usePayments } from './payments';
 
 const columns: ColumnDef<Payment>[] = [

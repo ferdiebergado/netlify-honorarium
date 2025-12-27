@@ -3,7 +3,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router';
 import type { APIResponse } from '../../lib/api';
-import { activitySchema, type Activity, type ActivityFormValues } from '../../lib/schema';
+import { activitySchema, type Activity, type ActivityFormValues } from '../../shared/schema';
 
 // TODO: const url = '/api/activities'
 const queryKey = 'activities';

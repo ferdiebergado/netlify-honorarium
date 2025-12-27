@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 import { Calendar, Info, MapPin, Tag, UserStar } from 'lucide-react';
-import { type Activity } from '../../lib/schema';
+import { type Activity } from '../../shared/schema';
 
 type ViewActivityProps = {
   activity: Activity;

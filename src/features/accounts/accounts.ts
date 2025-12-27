@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import type { APIResponse } from '../../lib/api';
-import type { Account } from '../../lib/schema';
+import type { Account } from '../../shared/schema';
 
 async function getAccounts() {
   const res = await fetch('/api/accounts');

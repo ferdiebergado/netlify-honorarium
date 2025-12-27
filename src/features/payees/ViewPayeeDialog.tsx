@@ -17,7 +17,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Briefcase, Building2, Info } from 'lucide-react';
-import type { Payee } from '../../lib/schema.ts';
+import type { Payee } from '../../shared/schema.ts';
 
 type ViewPayeeProps = {
   payee: Payee;

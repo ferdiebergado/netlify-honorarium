@@ -10,7 +10,7 @@ import PayeeInput from '../../features/payees/PayeeInput';
 import RoleInput from '../../features/roles/RoleInput';
 import SalaryInput from '../../features/salaries/SalaryInput';
 import TinInput from '../../features/tins/TinInput';
-import type { PaymentFormValues } from '../../lib/schema';
+import type { PaymentFormValues } from '../../shared/schema';
 import { type PaymentHookForm } from './payments';
 
 type PaymentFormProps = {

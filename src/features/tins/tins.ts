@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import type { APIResponse } from '../../lib/api';
-import type { Tin } from '../../lib/schema';
+import type { Tin } from '../../shared/schema';
 
 const queryKey = 'tins';
 

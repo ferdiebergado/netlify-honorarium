@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import type { APIResponse } from '../../lib/api';
-import type { Role } from '../../lib/schema';
+import type { Role } from '../../shared/schema';
 
 const queryKey = 'roles';
 

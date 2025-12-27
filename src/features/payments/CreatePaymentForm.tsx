@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/dialog';
 import { CirclePlus } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import type { PaymentFormValues } from '../../lib/schema';
+import type { PaymentFormValues } from '../../shared/schema';
 import PaymentForm from './PaymentForm';
 import { useCreatePayment, usePaymentForm } from './payments';
 

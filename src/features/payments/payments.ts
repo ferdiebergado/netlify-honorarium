@@ -3,9 +3,9 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router';
 import type { APIResponse } from '../../lib/api';
-import type { PaymentFormValues } from '../../lib/schema';
-import { paymentSchema, type Payment } from '../../lib/schema';
 import { startDownload } from '../../lib/utils';
+import type { PaymentFormValues } from '../../shared/schema';
+import { paymentSchema, type Payment } from '../../shared/schema';
 
 const queryKey = 'payments';
 

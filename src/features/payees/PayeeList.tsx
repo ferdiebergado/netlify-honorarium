@@ -2,7 +2,7 @@ import { DataTable } from '@/components/DataTable';
 import { DataTableColumnHeader } from '@/components/DataTableColumnHeader';
 import SkeletonCard from '@/components/SkeletonCard';
 import type { ColumnDef } from '@tanstack/react-table';
-import type { Payee } from '../../lib/schema';
+import type { Payee } from '../../shared/schema';
 import { usePayees } from './payee';
 import ViewPayeeDialog from './ViewPayeeDialog';
 

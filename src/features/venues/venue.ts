@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import type { APIResponse } from '../../lib/api';
-import type { Venue } from '../../lib/schema';
+import type { Venue } from '../../shared/schema';
 
 export async function getVenues() {
   const res = await fetch('/api/venues');

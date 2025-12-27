@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import type { APIResponse } from '../../lib/api';
-import type { Focal } from '../../lib/schema';
+import type { Focal } from '../../shared/schema';
 
 export async function getFocals() {
   const res = await fetch('/api/focals');

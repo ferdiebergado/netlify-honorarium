@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { type ColumnDef } from '@tanstack/react-table';
 import { PhilippinePeso } from 'lucide-react';
 import { Link } from 'react-router';
-import { type Activity } from '../../lib/schema.ts';
+import { type Activity } from '../../shared/schema.ts';
 import DeleteActivityDialog from './DeleteActivityDialog';
 import UpdateActivityForm from './UpdateActivityForm';
 import ViewActivityDialog from './ViewActivityDialog';

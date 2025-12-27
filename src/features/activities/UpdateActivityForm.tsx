@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import { FilePenLine } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import type { Activity, ActivityFormValues } from '../../lib/schema';
+import type { Activity, ActivityFormValues } from '../../shared/schema';
 import { useActivityForm, useUpdateActivity } from './activity';
 import ActivityForm from './ActivityForm';
 

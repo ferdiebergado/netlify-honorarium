@@ -12,7 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
-import type { Activity } from '../../lib/schema';
+import type { Activity } from '../../shared/schema';
 import { useDeleteActivity } from './activity';
 
 type DeleteActivityDialogProps = {

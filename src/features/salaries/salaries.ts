@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import type { APIResponse } from '../../lib/api';
-import type { Salary } from '../../lib/schema';
+import type { Salary } from '../../shared/schema';
 
 const queryKey = 'salaries';
 

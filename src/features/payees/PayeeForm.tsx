@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Controller } from 'react-hook-form';
 import { toast } from 'sonner';
 import BankInput from '../../features/banks/BankInput';
-import type { CreatePayeeFormValues } from '../../lib/schema';
+import type { CreatePayeeFormValues } from '../../shared/schema';
 import { type PayeeHookForm } from './payee';
 
 type PayeeFormProps = {
