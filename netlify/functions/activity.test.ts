@@ -7,7 +7,7 @@ describe('parseActivityCode', () => {
     const got = parseActivityCode(activityCode);
     const want: FundCluster = {
       year: 2024,
-      appropriationType: 'current',
+      appropriationType: 'Current',
       program: 'FLO',
       mfoCode: '310300100003000',
     };
@@ -19,19 +19,19 @@ describe('parseActivityCode', () => {
     const got = parseActivityCode(activityCode);
     const want: FundCluster = {
       year: 2025,
-      appropriationType: 'continuing',
+      appropriationType: 'Continuing',
       program: 'FLO',
       mfoCode: '310300100003000',
     };
     expect(got).toEqual(want);
   });
 
-  it('parses current funds correctly', () => {
+  it('parses Current funds correctly', () => {
     const activityCode = 'AC-25-LDB-LDT-FLO-091';
     const got = parseActivityCode(activityCode);
     const want: FundCluster = {
       year: 2025,
-      appropriationType: 'current',
+      appropriationType: 'Current',
       program: 'FLO',
       mfoCode: '310300100003000',
     };
@@ -43,7 +43,7 @@ describe('parseActivityCode', () => {
     const got = parseActivityCode(activityCode);
     const want: FundCluster = {
       year: 2024,
-      appropriationType: 'current',
+      appropriationType: 'Current',
       program: 'BEC',
       mfoCode: '310100100003000',
     };
@@ -55,7 +55,7 @@ describe('parseActivityCode', () => {
     const got = parseActivityCode(activityCode);
     const want: FundCluster = {
       year: 2024,
-      appropriationType: 'current',
+      appropriationType: 'Current',
       program: 'BEC',
       mfoCode: '310100100003000',
     };
