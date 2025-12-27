@@ -1,6 +1,6 @@
 import { ComboboxField } from '@/components/ComboBox';
-import { useActivities } from '@/features/activities/activity';
-import type { PaymentHookForm } from '@/features/payments/payments';
+import { useActivities } from '../../features/activities/activity';
+import type { PaymentHookForm } from '../../features/payments/payments';
 
 type ActivityInputProps = {
   form: PaymentHookForm;

@@ -1,5 +1,5 @@
 import { ComboboxField } from '@/components/ComboBox';
-import type { PayeeHookForm } from '@/features/payees/payee';
+import type { PayeeHookForm } from '../../features/payees/payee';
 import { useBanks } from './banks';
 
 type BankInputProps = {

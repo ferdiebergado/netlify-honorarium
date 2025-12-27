@@ -1,7 +1,7 @@
 import { ComboboxField } from '@/components/ComboBox';
-import type { PaymentHookForm } from '@/features/payments/payments';
 import { useEffect, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
+import type { PaymentHookForm } from '../../features/payments/payments';
 import { useAccounts } from './accounts';
 
 type AccountInputProps = {

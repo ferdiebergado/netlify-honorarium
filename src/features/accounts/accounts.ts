@@ -1,14 +1,6 @@
-import type { APIResponse } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
-
-export type Account = {
-  id: number;
-  payeeId: number;
-  accountNo: string;
-  bank: string;
-  bankBranch: string;
-  accountName: string;
-};
+import type { APIResponse } from '../../lib/api';
+import type { Account } from '../../lib/schema';
 
 async function getAccounts() {
   const res = await fetch('/api/accounts');

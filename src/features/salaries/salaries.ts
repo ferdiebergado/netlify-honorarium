@@ -1,13 +1,8 @@
-import type { APIResponse } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
+import type { APIResponse } from '../../lib/api';
+import type { Salary } from '../../lib/schema';
 
 const queryKey = 'salaries';
-
-export type Salary = {
-  id: number;
-  salary: number;
-  payeeId: number;
-};
 
 async function getSalaries() {
   const res = await fetch('/api/salaries');

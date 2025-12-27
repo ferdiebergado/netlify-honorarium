@@ -1,5 +1,5 @@
 import { ComboboxField } from '@/components/ComboBox';
-import type { PaymentHookForm } from '@/features/payments/payments';
+import type { PaymentHookForm } from '../../features/payments/payments';
 import { useRoles } from './roles';
 
 type RoleInputProps = {

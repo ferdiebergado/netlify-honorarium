@@ -12,7 +12,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { useDeleteActivity, type Activity } from './activity';
+import type { Activity } from '../../lib/schema';
+import { useDeleteActivity } from './activity';
 
 type DeleteActivityDialogProps = {
   activity: Activity;

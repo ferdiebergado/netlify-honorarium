@@ -1,9 +1,10 @@
 import { mergeDocx } from '@benedicte/docx-merge';
 import type { Config, Context } from '@netlify/functions';
+import type { Payment } from '../../src/lib/schema';
 import { cert } from './cert';
 import { errorResponse, NotFoundError } from './errors';
 import { amountToWords, docxResponse, formatDate, formatToPhp, toDateRange } from './lib';
-import { getPayments, type Payment } from './payments';
+import { getPayments } from './payments';
 import { patchDoc } from './word';
 
 type CertificationPatches = {

@@ -1,41 +1,17 @@
-import type { APIResponse } from '@/lib/api';
-import { startDownload } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router';
-import * as z from 'zod';
-import { formSchema } from './form-schema';
+import type { APIResponse } from '../../lib/api';
+import type { PaymentFormValues } from '../../lib/schema';
+import { paymentSchema, type Payment } from '../../lib/schema';
+import { startDownload } from '../../lib/utils';
 
 const queryKey = 'payments';
 
-// TODO: embed objects
-export type Payment = {
-  id: number;
-  activityId: number;
-  activity: string;
-  payeeId: number;
-  payee: string;
-  roleId: number;
-  role: string;
-  honorarium: number;
-  hoursRendered: number;
-  actualHonorarium: number;
-  taxRate: number;
-  netHonorarium: number;
-  salaryId: number;
-  accountId: number;
-  tinId?: number;
-  createdAt: string;
-  updatedAt: string;
-  activityCode: string;
-};
-
-export type PaymentFormValues = z.infer<typeof formSchema>;
-
 export function usePaymentForm(defaultValues: PaymentFormValues) {
   return useForm<PaymentFormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(paymentSchema),
     defaultValues,
   });
 }

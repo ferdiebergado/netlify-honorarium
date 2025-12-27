@@ -2,7 +2,8 @@ import { DataTable } from '@/components/DataTable';
 import { DataTableColumnHeader } from '@/components/DataTableColumnHeader';
 import SkeletonCard from '@/components/SkeletonCard';
 import type { ColumnDef } from '@tanstack/react-table';
-import { usePayees, type Payee } from './payee';
+import type { Payee } from '../../lib/schema';
+import { usePayees } from './payee';
 import ViewPayeeDialog from './ViewPayeeDialog';
 
 const columns: ColumnDef<Payee>[] = [

@@ -1,5 +1,5 @@
 import type { Config } from '@netlify/functions';
-import { formSchema } from '../../src/features/payments/form-schema';
+import { paymentSchema } from '../../src/lib/schema';
 import { turso } from './db';
 import { errorResponse, NotFoundError, ValidationError } from './errors';
 import { computeHonorarium } from './payments';
@@ -12,7 +12,7 @@ export const config: Config = {
 export default async (req: Request) => {
   try {
     const body = await req.json();
-    const { error, data: payment } = formSchema.safeParse(body);
+    const { error, data: payment } = paymentSchema.safeParse(body);
 
     if (error) throw new ValidationError();
 

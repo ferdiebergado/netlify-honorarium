@@ -1,22 +1,10 @@
-import * as z from 'zod';
-
-// TODO: validate range and length
-export const schema = z.object({
-  title: z.string().min(1),
-  venueId: z.number().min(1),
-  startDate: z.string().min(1),
-  endDate: z.string().min(1),
-  code: z.string().min(1),
-  focalId: z.number().min(1),
-});
-
 const mfoCodes = {
   BEC: '310100100003000',
   ELLN: '310100100007000',
   FLO: '310300100003000',
 } as const satisfies Record<string, string>;
 
-type Appropriation = 'current' | 'continuing';
+type Appropriation = 'Current' | 'Continuing';
 type Program = keyof typeof mfoCodes;
 
 export type FundCluster = {
@@ -32,7 +20,7 @@ export function parseActivityCode(activityCode: string): FundCluster {
 
   const program = pap as Program;
   const mfoCode = mfoCodes[program];
-  const appropriationType: Appropriation = code.startsWith('P') ? 'continuing' : 'current';
+  const appropriationType: Appropriation = code.startsWith('P') ? 'Continuing' : 'Current';
   return {
     year: parseInt(year) + 2000,
     appropriationType,

@@ -1,13 +1,8 @@
-import type { APIResponse } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
+import type { APIResponse } from '../../lib/api';
+import type { Tin } from '../../lib/schema';
 
 const queryKey = 'tins';
-
-export type Tin = {
-  id: number;
-  tin: string;
-  payeeId: number;
-};
 
 async function getTins() {
   const res = await fetch('/api/tins');

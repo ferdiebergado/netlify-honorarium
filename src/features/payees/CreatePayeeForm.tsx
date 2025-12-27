@@ -8,7 +8,8 @@ import {
 } from '@/components/ui/dialog';
 import { CirclePlus } from 'lucide-react';
 import { useState } from 'react';
-import { useCreatePayee, usePayeeForm, type CreatePayeeFormValues } from './payee';
+import type { CreatePayeeFormValues } from '../../lib/schema';
+import { useCreatePayee, usePayeeForm } from './payee';
 import PayeeForm from './PayeeForm';
 
 export default function CreatePayeeForm() {

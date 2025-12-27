@@ -1,3 +1,4 @@
+import type { Payment } from '../../src/lib/schema';
 import { turso } from './db';
 import { roundMoney } from './lib';
 
@@ -25,31 +26,6 @@ type PaymentRow = {
   bank_branch: string;
   account_name: string;
   account_no: string;
-  salary: number;
-};
-
-export type Payment = {
-  id: number;
-  payee: string;
-  activity: string;
-  role: string;
-  honorarium: number;
-  updatedAt: string;
-  hoursRendered: number;
-  actualHonorarium: number;
-  netHonorarium: number;
-  activityCode: string;
-  taxRate: number;
-  venue: string;
-  startDate: string;
-  endDate: string;
-  focal: string;
-  position: string;
-  tin: string;
-  bank: string;
-  bankBranch: string;
-  accountName: string;
-  accountNo: string;
   salary: number;
 };
 
@@ -109,8 +85,6 @@ JOIN salaries s ON s.id = pay.salary_id
     accountName: payment.account_name,
     accountNo: payment.account_no,
   }));
-
-  console.log('data:', data);
 
   return data;
 }

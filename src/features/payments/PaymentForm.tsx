@@ -2,14 +2,14 @@ import { Button } from '@/components/ui/button';
 import { DialogFooter } from '@/components/ui/dialog';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import AccountInput from '@/features/accounts/AccountInput';
-import ActivityInput from '@/features/activities/ActivityInput';
-import PayeeInput from '@/features/payees/PayeeInput';
-import RoleInput from '@/features/roles/RoleInput';
-import SalaryInput from '@/features/salaries/SalaryInput';
-import TinInput from '@/features/tins/TinInput';
 import { Controller } from 'react-hook-form';
 import { toast } from 'sonner';
+import AccountInput from '../../features/accounts/AccountInput';
+import ActivityInput from '../../features/activities/ActivityInput';
+import PayeeInput from '../../features/payees/PayeeInput';
+import RoleInput from '../../features/roles/RoleInput';
+import SalaryInput from '../../features/salaries/SalaryInput';
+import TinInput from '../../features/tins/TinInput';
 import { type PaymentFormValues, type PaymentHookForm } from './payments';
 
 type PaymentFormProps = {

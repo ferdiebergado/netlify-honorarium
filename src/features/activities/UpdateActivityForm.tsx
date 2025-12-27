@@ -9,12 +9,8 @@ import {
 } from '@/components/ui/dialog';
 import { FilePenLine } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import {
-  useActivityForm,
-  useUpdateActivity,
-  type Activity,
-  type ActivityFormValues,
-} from './activity';
+import type { Activity, ActivityFormValues } from '../../lib/schema';
+import { useActivityForm, useUpdateActivity } from './activity';
 import ActivityForm from './ActivityForm';
 
 type UpdateActivityProps = {

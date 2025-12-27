@@ -1,12 +1,8 @@
-import type { APIResponse } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
+import type { APIResponse } from '../../lib/api';
+import type { Role } from '../../lib/schema';
 
 const queryKey = 'roles';
-
-export type Role = {
-  id: number;
-  name: string;
-};
 
 export async function getRoles() {
   const res = await fetch('/api/roles');

@@ -1,10 +1,6 @@
-import type { APIResponse } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
-
-export type Venue = {
-  id: number;
-  name: string;
-};
+import type { APIResponse } from '../../lib/api';
+import type { Venue } from '../../lib/schema';
 
 export async function getVenues() {
   const res = await fetch('/api/venues');

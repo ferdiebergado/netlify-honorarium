@@ -1,8 +1,8 @@
-import type { APIResponse } from '@/lib/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
-import { createPayeeSchema, type CreatePayeeFormValues, type Payee } from './form-schema';
+import { createPayeeSchema, type CreatePayeeFormValues, type Payee } from '../../lib/schema';
+import type { APIResponse } from '../lib/api';
 
 const queryKey = 'payees';
 

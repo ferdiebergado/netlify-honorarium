@@ -5,10 +5,11 @@ import { Button } from '@/components/ui/button';
 import { type ColumnDef } from '@tanstack/react-table';
 import { PhilippinePeso } from 'lucide-react';
 import { Link } from 'react-router';
-import { useActivities, type Activity } from './activity';
+import { type Activity } from '../../lib/schema.ts';
 import DeleteActivityDialog from './DeleteActivityDialog';
 import UpdateActivityForm from './UpdateActivityForm';
 import ViewActivityDialog from './ViewActivityDialog';
+import { useActivities } from './activity.ts';
 
 const columns: ColumnDef<Activity>[] = [
   {

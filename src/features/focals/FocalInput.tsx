@@ -10,12 +10,12 @@ import {
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Spinner } from '@/components/ui/spinner';
-import type { ActivityHookForm } from '@/features/activities/activity';
-import { cn } from '@/lib/utils';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import type { FC } from 'react';
 import { useState } from 'react';
 import { Controller } from 'react-hook-form';
+import type { ActivityHookForm } from '../../features/activities/activity';
+import { cn } from '../../lib/utils';
 import { useFocals } from './focal';
 
 type FocalInputProps = {
