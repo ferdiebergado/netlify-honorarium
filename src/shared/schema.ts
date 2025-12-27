@@ -35,6 +35,7 @@ export type ActivityFormValues = z.infer<typeof activitySchema>;
 export type Account = {
   id: number;
   payeeId: number;
+  payee: string;
   accountNo: string;
   bank: string;
   bankBranch: string;
