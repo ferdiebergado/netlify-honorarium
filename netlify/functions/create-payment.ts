@@ -1,5 +1,5 @@
 import type { Config } from '@netlify/functions';
-import { paymentSchema } from '../../src/lib/schema';
+import { paymentSchema } from '../../src/shared/schema';
 import { turso } from './db';
 import { errorResponse, NotFoundError, ValidationError } from './errors';
 import { computeHonorarium } from './payments';

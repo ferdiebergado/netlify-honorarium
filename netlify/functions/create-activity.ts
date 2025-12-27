@@ -1,5 +1,5 @@
 import type { Config } from '@netlify/functions';
-import { activitySchema } from '../../src/lib/schema';
+import { activitySchema } from '../../src/shared/schema';
 import { turso } from './db';
 import { errorResponse, ValidationError } from './errors';
 

@@ -1,5 +1,5 @@
 import type { Config } from '@netlify/functions';
-import type { Payee } from '../../src/lib/schema';
+import type { Payee } from '../../src/shared/schema';
 import { deserializeDetails } from './accounts';
 import { turso } from './db';
 import { errorResponse } from './errors';

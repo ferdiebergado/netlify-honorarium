@@ -1,5 +1,5 @@
 import type { Config } from '@netlify/functions';
-import type { Account } from '../../src/lib/schema';
+import type { Account } from '../../src/shared/schema';
 import { deserializeDetails } from './accounts';
 import { turso } from './db';
 import { errorResponse } from './errors';
