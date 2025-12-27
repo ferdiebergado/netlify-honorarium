@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { useComp } from './payments';
 
 export default function ComputationButton() {
+  const title = 'Computation';
   const { isPending, mutate: genComp } = useComp();
 
   const handleClick = () => {
@@ -11,12 +12,12 @@ export default function ComputationButton() {
 
   return (
     <Button
-      title="Computation"
-      className="mx-3 mt-6 flex w-36 items-center"
+      title={title}
+      className="mx-3 mt-6 flex w-36 shrink-0"
       onClick={handleClick}
       disabled={isPending}
     >
-      {isPending ? <Loader text="Generating..." /> : 'Computation'}
+      {isPending ? <Loader text="Generating..." /> : title}
     </Button>
   );
 }
