@@ -16,7 +16,8 @@ import { Controller } from 'react-hook-form';
 import { toast } from 'sonner';
 import FocalInput from '../../features/focals/FocalInput';
 import VenueInput from '../../features/venues/VenueInput';
-import { type ActivityFormValues, type ActivityHookForm } from './activity';
+import type { ActivityFormValues } from '../../lib/schema';
+import { type ActivityHookForm } from './activity';
 
 type ActivityFormProps = {
   form: ActivityHookForm;

@@ -8,8 +8,9 @@ import {
 } from '@/components/ui/dialog';
 import { CirclePlus } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
+import type { PaymentFormValues } from '../../lib/schema';
 import PaymentForm from './PaymentForm';
-import { useCreatePayment, usePaymentForm, type PaymentFormValues } from './payments';
+import { useCreatePayment, usePaymentForm } from './payments';
 
 export default function CreatePaymentForm() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
