@@ -1,6 +1,23 @@
 import type { Config } from '@netlify/functions';
+import type { Account } from '../../src/lib/schema';
+import { deserializeDetails } from './accounts';
 import { turso } from './db';
 import { errorResponse } from './errors';
+
+type AccountRow = {
+  id: number;
+  details: Buffer;
+  payee_id: number;
+  payee_name: string;
+  bank_id: number;
+  bank_name: string;
+};
+
+export type AccountDetails = {
+  bankBranch: string;
+  accountNo: string;
+  accountName: string;
+};
 
 export const config: Config = {
   method: 'GET',
@@ -12,9 +29,7 @@ export default async () => {
     const sql = `
   SELECT 
   a.id,
-  a.bank_branch,
-  a.account_no,
-  a.account_name, 
+  a.details,
   p.id AS payee_id, 
   p.name AS payee_name,
   b.id AS bank_id,
@@ -26,29 +41,23 @@ export default async () => {
 
     const { rows } = await turso.execute(sql);
 
-    const data = (rows as unknown as AccountRow[]).map(account => ({
+    const accounts = (rows as unknown as AccountRow[]).map(account => ({
       ...account,
-      bankBranch: account.bank_branch,
-      accountNo: account.account_no,
-      accountName: account.account_name,
       payeeId: account.payee_id,
       payee: account.payee_name,
       bank: account.bank_name,
     }));
 
+    const data: Account[] = accounts.map(account => {
+      const details = deserializeDetails(account.details);
+      return {
+        ...account,
+        ...details,
+      };
+    });
+
     return Response.json({ data });
   } catch (error) {
     return errorResponse(error);
   }
-};
-
-type AccountRow = {
-  id: number;
-  bank_branch: string;
-  account_no: string;
-  account_name: string;
-  payee_id: number;
-  payee_name: string;
-  bank_id: number;
-  bank_name: string;
 };

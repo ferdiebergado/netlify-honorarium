@@ -1,7 +1,8 @@
 import type { Payment } from '../../src/lib/schema';
+import { deserializeDetails } from './accounts';
 import { turso } from './db';
 import { roundMoney } from './lib';
-
+import type { AccountDetails } from './list-accounts';
 export const SG29 = 180492;
 
 type PaymentRow = {
@@ -23,9 +24,7 @@ type PaymentRow = {
   position: string;
   tin: string;
   bank: string;
-  bank_branch: string;
-  account_name: string;
-  account_no: string;
+  account_details: Buffer;
   salary: number;
 };
 
@@ -49,9 +48,7 @@ SELECT
     f.name          AS focal,
     pos.name        AS position,
     t.tin,
-    acc.bank_branch,
-    acc.account_no,
-    acc.account_name,
+    acc.details     AS account_details,
     b.name          AS bank,
     s.salary
 FROM payments pay
@@ -62,31 +59,40 @@ JOIN venues v ON v.id = a.venue_id
 JOIN focals f ON f.id = a.focal_id
 JOIN positions pos ON pos.id = f.position_id
 JOIN tins t ON t.id = pay.tin_id
-JOIN accounts acc ON acc.payee_id = p.id
+JOIN accounts acc ON acc.id = pay.account_id
 JOIN banks b ON b.id = acc.bank_id
 JOIN salaries s ON s.id = pay.salary_id
 `;
 
   if (activityId) sql += ' WHERE pay.activity_id = ?';
 
-  const { rows: payments } = await turso.execute(sql, [activityId]);
+  const { rows } = await turso.execute(sql, [activityId]);
 
-  const data: Payment[] = (payments as unknown as PaymentRow[]).map(payment => ({
-    ...payment,
-    updatedAt: payment.updated_at,
-    hoursRendered: payment.hours_rendered,
-    actualHonorarium: payment.actual_honorarium,
-    netHonorarium: payment.net_honorarium,
-    activityCode: payment.activity_code,
-    taxRate: payment.tax_rate,
-    startDate: payment.start_date,
-    endDate: payment.end_date,
-    bankBranch: payment.bank_branch,
-    accountName: payment.account_name,
-    accountNo: payment.account_no,
+  const tempData: Array<Omit<Payment, keyof AccountDetails> & { accountDetails: Buffer }> = (
+    rows as unknown as PaymentRow[]
+  ).map(row => ({
+    ...row,
+    updatedAt: row.updated_at,
+    hoursRendered: row.hours_rendered,
+    actualHonorarium: row.actual_honorarium,
+    netHonorarium: row.net_honorarium,
+    activityCode: row.activity_code,
+    taxRate: row.tax_rate,
+    startDate: row.start_date,
+    endDate: row.end_date,
+    accountDetails: row.account_details,
   }));
 
-  return data;
+  const paymentsWithAccount: Payment[] = tempData.map(payment => {
+    const details = deserializeDetails(payment.accountDetails);
+
+    return {
+      ...payment,
+      ...details,
+    };
+  });
+
+  return paymentsWithAccount;
 }
 
 export type Honorarium = {

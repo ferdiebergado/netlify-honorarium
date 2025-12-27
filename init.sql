@@ -270,4 +270,11 @@ WHERE
   id = NEW.id;
 END;
 
+ALTER TABLE accounts DROP COLUMN bank_branch;
+ALTER TABLE accounts DROP COLUMN account_name;
+ALTER TABLE accounts DROP COLUMN account_no;
+ALTER TABLE accounts ADD COLUMN details BLOB NOT NULL;
+
 COMMIT;
+
+

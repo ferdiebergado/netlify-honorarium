@@ -1,5 +1,6 @@
 import type { Config, Context } from '@netlify/functions';
 import Excel from 'exceljs';
+import { deserializeDetails } from './accounts';
 import { parseActivityCode } from './activity';
 import { turso } from './db';
 import { errorResponse, NotFoundError } from './errors';
@@ -15,15 +16,13 @@ type PayrollRow = {
   payee: string;
   code: string;
   bank: string;
-  bank_branch: string;
-  account_name: string;
-  account_no: string;
+  account_details: Buffer;
   position: string;
   tin: string;
   tax_rate: number;
 };
 
-interface PayrollPayment extends Record<string, string | number> {
+type PayrollPayment = {
   activity: string;
   startDate: string;
   endDate: string;
@@ -32,13 +31,11 @@ interface PayrollPayment extends Record<string, string | number> {
   payee: string;
   activityCode: string;
   bank: string;
-  bankBranch: string;
-  accountName: string;
-  accountNo: string;
+  accountDetails: Buffer;
   position: string;
   tin: string;
   taxRate: number;
-}
+};
 
 export const config: Config = {
   method: 'POST',
@@ -62,9 +59,7 @@ a.code,
 pay.name        AS payee,
 pay.position,
 v.name          AS venue,
-acc.account_name,
-acc.account_no,
-acc.bank_branch,
+acc.details     AS account_details,
 b.name          AS bank,
 t.tin
 FROM payments p
@@ -83,9 +78,7 @@ WHERE p.activity_id = ?
       startDate: payment.start_date,
       endDate: payment.end_date,
       activityCode: payment.code,
-      accountName: payment.account_name,
-      bankBranch: payment.bank_branch,
-      accountNo: payment.account_no,
+      accountDetails: payment.account_details,
       taxRate: payment.tax_rate,
     }));
 
@@ -132,7 +125,8 @@ async function createPayroll(payments: PayrollPayment[]) {
     if (index > 1) sheet.insertRow(currentRow, [], 'i');
 
     const num = index + 1;
-    const { payee, position, accountNo, bank, bankBranch, tin, honorarium } = payment;
+    const { payee, position, accountDetails, bank, tin, honorarium } = payment;
+    const { bankBranch, accountNo } = deserializeDetails(accountDetails);
     const cells: { cell: string; value: Excel.CellValue }[] = [
       {
         cell: 'A',

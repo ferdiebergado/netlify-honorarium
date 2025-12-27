@@ -1,7 +1,21 @@
 import type { Config } from '@netlify/functions';
 import type { Payee } from '../../src/lib/schema';
+import { deserializeDetails } from './accounts';
 import { turso } from './db';
 import { errorResponse } from './errors';
+
+interface PayeeAccountRow {
+  // payees
+  payee_id: number;
+  name: string;
+  office: string;
+  position: string;
+
+  // accounts
+  account_id: number;
+  bank: string;
+  account_details: Buffer;
+}
 
 export const config: Config = {
   method: 'GET',
@@ -19,9 +33,7 @@ SELECT
 
   a.id            AS account_id,
   a.bank_id,
-  a.bank_branch,
-  a.account_no,
-  a.account_name,
+  a.details       AS account_details,
 
   b.name          AS bank
 FROM payees p
@@ -30,29 +42,13 @@ JOIN banks b ON b.id = a.bank_id`;
 
     const { rows } = await turso.execute(query);
     const payeeAccountRows = rows as unknown as PayeeAccountRow[];
+    const data = mapRowsToPayees(payeeAccountRows);
 
-    const payees = mapRowsToPayees(payeeAccountRows);
-
-    return Response.json({ data: payees });
+    return Response.json({ data });
   } catch (error) {
     return errorResponse(error);
   }
 };
-
-interface PayeeAccountRow {
-  // payees
-  payee_id: number;
-  name: string;
-  office: string;
-  position: string;
-
-  // accounts
-  account_id: number;
-  bank: string;
-  bank_branch: string;
-  account_no: string;
-  account_name: string;
-}
 
 function mapRowsToPayees(rows: PayeeAccountRow[]): Payee[] {
   const payees = new Map<number, Payee>();
@@ -74,12 +70,14 @@ function mapRowsToPayees(rows: PayeeAccountRow[]): Payee[] {
       payees.set(rowId, payee);
     }
 
+    const { bankBranch, accountNo, accountName } = deserializeDetails(row.account_details);
+
     payee.accounts.push({
       id: row.account_id,
       bank: row.bank,
-      bankBranch: row.bank_branch,
-      accountNo: row.account_no,
-      accountName: row.account_name,
+      bankBranch: bankBranch,
+      accountNo: accountNo,
+      accountName: accountName,
     });
   }
 

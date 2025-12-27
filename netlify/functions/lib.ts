@@ -104,3 +104,16 @@ export function parseId(id: string): number | null {
 
   return parsedId;
 }
+
+export function toBuffer(value: ArrayBuffer | Uint8Array | Buffer): Buffer {
+  if (Buffer.isBuffer(value)) {
+    return value;
+  }
+
+  if (value instanceof ArrayBuffer) {
+    return Buffer.from(value);
+  }
+
+  // Uint8Array (and other views)
+  return Buffer.from(value.buffer, value.byteOffset, value.byteLength);
+}

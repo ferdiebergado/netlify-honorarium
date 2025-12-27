@@ -2,6 +2,8 @@ import type { Config } from '@netlify/functions';
 import { createPayeeSchema, type Payee } from '../../src/lib/schema';
 import { turso } from './db';
 import { errorResponse, ValidationError } from './errors';
+import type { AccountDetails } from './list-accounts';
+import { encrypt } from './security';
 
 export const config: Config = {
   method: 'POST',
@@ -37,10 +39,13 @@ export default async (req: Request) => {
 
     const [payee] = rows as unknown as Payee[];
 
+    const details: AccountDetails = { bankBranch, accountName, accountNo };
+    const encryptedDetails = encrypt(Buffer.from(JSON.stringify(details), 'utf-8'));
+
     const accountSql = `
-INSERT INTO accounts (payee_id, bank_id, bank_branch, account_no, account_name)
-VALUES (?, ?, ?, ?, ?)`;
-    const accountArgs = [payee.id, bankId, bankBranch, accountNo, accountName];
+INSERT INTO accounts (payee_id, bank_id, details)
+VALUES (?, ?, ?)`;
+    const accountArgs = [payee.id, bankId, encryptedDetails];
 
     const salarySql = 'INSERT INTO salaries (payee_id, salary) VALUES (?, ?)';
     const salaryArgs = [payee.id, salary];
