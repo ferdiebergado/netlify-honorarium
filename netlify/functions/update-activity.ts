@@ -26,12 +26,15 @@ SET title=?, venue_id=?, start_date=?, end_date=?, code=?, focal_id=?
 WHERE id=?
 `;
 
-    const args = [title, venueId, startDate, endDate, code, focalId, id];
-
-    const { rowsAffected } = await turso.execute({
-      sql,
-      args,
-    });
+    const { rowsAffected } = await turso.execute(sql, [
+      title,
+      venueId,
+      startDate,
+      endDate,
+      code,
+      focalId,
+      id,
+    ]);
 
     if (rowsAffected === 0) throw new NotFoundError();
 
