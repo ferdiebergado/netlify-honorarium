@@ -25,3 +25,9 @@ export async function startDownload(res: Response, filename: string) {
   document.body.removeChild(a);
   window.URL.revokeObjectURL(url);
 }
+
+export function checkId(id: string) {
+  const parsedId = parseInt(id);
+
+  if (isNaN(parsedId)) throw new Error('id is not a number.');
+}
