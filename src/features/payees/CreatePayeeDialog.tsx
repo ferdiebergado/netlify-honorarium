@@ -12,7 +12,7 @@ import type { CreatePayeeFormValues } from '../../shared/schema';
 import { useCreatePayee, usePayeeForm } from './payee';
 import PayeeForm from './PayeeForm';
 
-export default function CreatePayeeForm() {
+export default function CreatePayeeDialog() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const formData: CreatePayeeFormValues = {
     name: '',

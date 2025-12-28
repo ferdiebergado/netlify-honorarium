@@ -1,4 +1,4 @@
-import CreatePayeeForm from './CreatePayeeForm';
+import CreatePayeeDialog from './CreatePayeeDialog';
 import PayeeList from './PayeeList';
 
 export default function PayeesPage() {
@@ -10,7 +10,7 @@ export default function PayeesPage() {
           <h2 className="text-muted-foreground">List of Payees</h2>
         </div>
         <div className="flex flex-1 items-end justify-end px-3">
-          <CreatePayeeForm />
+          <CreatePayeeDialog />
         </div>
       </div>
       <PayeeList />

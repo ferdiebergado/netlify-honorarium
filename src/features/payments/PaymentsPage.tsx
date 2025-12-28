@@ -1,6 +1,6 @@
 import CertificationButton from './CertificationButton';
 import ComputationButton from './ComputationButton';
-import CreatePaymentForm from './CreatePaymentForm';
+import CreatePaymentDialog from './CreatePaymentDialog';
 import ORSButton from './ORSButton';
 import PaymentList from './PaymentList';
 import PayrollButton from './PayrollButton';
@@ -14,7 +14,7 @@ export default function PaymentsPage() {
           <h2 className="text-muted-foreground">List of Payments</h2>
         </div>
         <div className="flex flex-1 items-end justify-end px-3">
-          <CreatePaymentForm />
+          <CreatePaymentDialog />
         </div>
       </div>
       <PaymentList />

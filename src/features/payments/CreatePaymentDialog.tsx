@@ -12,7 +12,7 @@ import type { PaymentFormValues } from '../../shared/schema';
 import PaymentForm from './PaymentForm';
 import { useCreatePayment, usePaymentForm } from './payments';
 
-export default function CreatePaymentForm() {
+export default function CreatePaymentDialog() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const formValues: PaymentFormValues = useMemo(
     () => ({
