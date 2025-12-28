@@ -9,7 +9,7 @@ export const config: Config = {
 };
 
 export default async (req: Request) => {
-  console.log('creating activity...');
+  console.log('Creating activity...');
 
   try {
     const body = await req.json();
@@ -18,9 +18,9 @@ export default async (req: Request) => {
     if (error) throw new ValidationError();
 
     const { title, venueId, startDate, endDate, code, focalId } = data;
-    const query =
+    const sql =
       'INSERT INTO activities (title, venue_id, start_date, end_date, code, focal_id) VALUES (?, ?, ?, ?, ?, ?)';
-    await turso.execute(query, [title, venueId, startDate, endDate, code, focalId]);
+    await turso.execute(sql, [title, venueId, startDate, endDate, code, focalId]);
 
     return Response.json({ message: 'Activity created.' });
   } catch (error) {

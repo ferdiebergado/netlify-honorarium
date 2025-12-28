@@ -1,6 +1,7 @@
 import type { Config, Context } from '@netlify/functions';
 import { turso } from '../db';
 import { errorResponse, NotFoundError } from '../errors';
+import { parseId } from '../lib';
 
 export const config: Config = {
   method: 'DELETE',
@@ -8,10 +9,12 @@ export const config: Config = {
 };
 
 export default async (_req: Request, ctx: Context) => {
+  console.log('Deleting activity...');
+
   try {
-    const { id } = ctx.params;
+    const activityId = parseId(ctx.params.id);
     const sql = 'UPDATE activities SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?';
-    const { rowsAffected } = await turso.execute(sql, [id]);
+    const { rowsAffected } = await turso.execute(sql, [activityId]);
 
     if (rowsAffected === 0) throw new NotFoundError();
 
