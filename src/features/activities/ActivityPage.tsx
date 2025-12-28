@@ -112,12 +112,14 @@ export default function ActivityPage() {
         </CardContent>
       </Card>
 
-      <div className="flex items-center space-x-1">
-        <CertificationButton activityId={activityId} />
-        <ComputationButton activityId={activityId} />
-        <ORSButton activityId={activityId} />
-        <PayrollButton activityId={activityId} />
-      </div>
+      {payments && payments.length > 0 && (
+        <div className="flex items-center space-x-1">
+          <CertificationButton activityId={activityId} />
+          <ComputationButton activityId={activityId} />
+          <ORSButton activityId={activityId} />
+          <PayrollButton activityId={activityId} />
+        </div>
+      )}
     </div>
   );
 }
