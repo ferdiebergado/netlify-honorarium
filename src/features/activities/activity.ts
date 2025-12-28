@@ -1,3 +1,4 @@
+import { checkId } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
@@ -108,3 +109,43 @@ export function useDeleteActivity() {
     mutationKey: [queryKey],
   });
 }
+
+async function getActivity(activityId: string): Promise<Activity> {
+  const url = '/api/activities/' + activityId;
+  const res = await fetch(url);
+
+  const { message, data } = (await res.json()) as APIResponse<Activity>;
+
+  if (!res.ok) throw new Error(message);
+
+  return data;
+}
+
+export const useActivity = (activityId: string) => {
+  checkId(activityId);
+
+  return useQuery({
+    queryKey: [queryKey, activityId],
+    queryFn: () => getActivity(activityId),
+  });
+};
+
+async function getFullActivity(activityId: string): Promise<Activity> {
+  const url = '/api/activities/' + activityId + '/payments';
+  const res = await fetch(url);
+
+  const { message, data } = (await res.json()) as APIResponse<Activity>;
+
+  if (!res.ok) throw new Error(message);
+
+  return data;
+}
+
+export const useFullActivity = (activityId: string) => {
+  checkId(activityId);
+
+  return useQuery({
+    queryKey: [queryKey, activityId],
+    queryFn: () => getFullActivity(activityId),
+  });
+};

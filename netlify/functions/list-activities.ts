@@ -30,8 +30,7 @@ SELECT
   f.name      as focal
 FROM activities a 
 JOIN focals f ON f.id = a.focal_id 
-JOIN venues v ON v.id = a.venue_id
-WHERE a.deleted_at IS NULL`;
+JOIN venues v ON v.id = a.venue_id`;
 
 export const config: Config = {
   method: 'GET',
@@ -40,7 +39,7 @@ export const config: Config = {
 
 export default async () => {
   try {
-    const sql = activitiesSql + ' ORDER BY a.created_at DESC';
+    const sql = activitiesSql + ' WHERE a.deleted_at IS NULL ORDER BY a.created_at DESC';
 
     const { rows } = await turso.execute(sql);
     const data = (rows as unknown as ActivityRow[]).map(rowToActivity);

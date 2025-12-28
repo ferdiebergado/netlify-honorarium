@@ -4,7 +4,7 @@ import { roundMoney } from './lib';
 import { deserializeDetails, type AccountDetails } from './list-accounts';
 export const SG29 = 180492;
 
-type PaymentRow = {
+export type PaymentRow = {
   id: number;
   updated_at: string;
   payee: string;
@@ -27,8 +27,7 @@ type PaymentRow = {
   salary: number;
 };
 
-export async function getPayments(activityId: number | null): Promise<Payment[]> {
-  let sql = `
+export const paymentsSql = `
 SELECT 
     pay.id, 
     pay.honorarium, 
@@ -37,7 +36,9 @@ SELECT
     pay.net_honorarium,
     pay.updated_at, 
     pay.tax_rate,
+    p.id            AS payee_id,
     p.name          AS payee, 
+    p.office        AS payee_office,
     a.title         AS activity, 
     a.code          AS activity_code,
     a.start_date,
@@ -62,6 +63,9 @@ JOIN accounts acc ON acc.id = pay.account_id
 JOIN banks b ON b.id = acc.bank_id
 JOIN salaries s ON s.id = pay.salary_id
 `;
+
+export async function getPayments(activityId: number | null): Promise<Payment[]> {
+  let sql = paymentsSql;
 
   if (activityId) sql += ' WHERE pay.activity_id = ?';
 

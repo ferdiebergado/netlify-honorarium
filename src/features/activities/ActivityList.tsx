@@ -6,10 +6,11 @@ import { type ColumnDef } from '@tanstack/react-table';
 import { PhilippinePeso } from 'lucide-react';
 import { Link } from 'react-router';
 import { type Activity } from '../../shared/schema.ts';
+import { useActivities } from './activity.ts';
 import DeleteActivityDialog from './DeleteActivityDialog';
+import PayeeButton from './PayeeButton.tsx';
 import UpdateActivityForm from './UpdateActivityForm';
 import ViewActivityDialog from './ViewActivityDialog';
-import { useActivities } from './activity.ts';
 
 const columns: ColumnDef<Activity>[] = [
   {
@@ -46,6 +47,10 @@ const columns: ColumnDef<Activity>[] = [
     id: 'actions',
     cell: ({ row }) => (
       <div className="flex gap-3">
+        <PayeeButton row={row} />
+        <Button variant="outline" size="icon" title="Payments" asChild>
+          <Link to={'/activities/' + row.getValue<string>('id')}>Details</Link>
+        </Button>
         <Button variant="outline" size="icon" title="Payments" asChild>
           <Link to={'/payments/?activityId=' + row.getValue<string>('id')}>
             <PhilippinePeso />

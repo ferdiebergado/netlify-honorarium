@@ -1,12 +1,10 @@
 import { DataTable } from '@/components/DataTable';
 import { DataTableColumnHeader } from '@/components/DataTableColumnHeader';
-import SkeletonCard from '@/components/SkeletonCard';
 import type { ColumnDef } from '@tanstack/react-table';
 import { formatMoney } from '../../lib/utils';
-import type { Payment } from '../../shared/schema';
-import { usePayments } from './payments';
+import type { Payment, PaymentData } from '../../shared/schema';
 
-const columns: ColumnDef<Payment>[] = [
+const columns: ColumnDef<PaymentData>[] = [
   {
     accessorKey: 'payee',
     header: ({ column }) => <DataTableColumnHeader column={column} title="Payee" />,
@@ -58,12 +56,10 @@ const columns: ColumnDef<Payment>[] = [
   },
 ];
 
-export default function PaymentList() {
-  const { isPending, isError, error, data: payments } = usePayments();
+type PaymentListProps = {
+  payments: Payment[] | PaymentData[];
+};
 
-  if (isPending) return <SkeletonCard />;
-
-  if (isError) return <p className="text-destructive">Error: {error.message}</p>;
-
+export default function PaymentList({ payments }: PaymentListProps) {
   return <DataTable columns={columns} filterColumn="payee" data={payments} />;
 }

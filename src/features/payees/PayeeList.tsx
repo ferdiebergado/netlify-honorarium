@@ -1,9 +1,7 @@
 import { DataTable } from '@/components/DataTable';
 import { DataTableColumnHeader } from '@/components/DataTableColumnHeader';
-import SkeletonCard from '@/components/SkeletonCard';
 import type { ColumnDef } from '@tanstack/react-table';
 import type { Payee } from '../../shared/schema';
-import { usePayees } from './payee';
 import ViewPayeeDialog from './ViewPayeeDialog';
 
 const columns: ColumnDef<Payee>[] = [
@@ -29,12 +27,10 @@ const columns: ColumnDef<Payee>[] = [
   },
 ];
 
-export default function PayeeList() {
-  const { isPending, isError, error, data: payees } = usePayees();
+type PayeeListProps = {
+  payees: Payee[];
+};
 
-  if (isPending) return <SkeletonCard />;
-
-  if (isError) return <p>Error: {error.message}</p>;
-
+export default function PayeeList({ payees }: PayeeListProps) {
   return <DataTable columns={columns} filterColumn="name" data={payees} />;
 }

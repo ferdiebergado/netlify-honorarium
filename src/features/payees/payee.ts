@@ -68,3 +68,21 @@ export function usePayee(id: number) {
     queryFn: () => getPayee(id),
   });
 }
+
+async function getPayeesByActivity(activityId: number): Promise<Payee[]> {
+  const url = `/api/activities/${activityId.toString()}/payees'`;
+  const res = await fetch(url);
+
+  const { message, data } = (await res.json()) as APIResponse<Payee[]>;
+
+  if (!res.ok) throw new Error(message);
+
+  return data;
+}
+
+export function usePayeesByActivity(activityId: number) {
+  return useQuery({
+    queryKey: [queryKey, activityId],
+    queryFn: () => getPayeesByActivity(activityId),
+  });
+}

@@ -1,5 +1,16 @@
 import * as z from 'zod';
 
+export type PaymentData = Pick<
+  Payment,
+  | 'honorarium'
+  | 'hoursRendered'
+  | 'actualHonorarium'
+  | 'netHonorarium'
+  | 'taxRate'
+  | 'payee'
+  | 'role'
+>;
+
 export type Activity = {
   id: number;
   title: string;
@@ -10,6 +21,8 @@ export type Activity = {
   code: string;
   focalId: number;
   focal: string;
+  payees?: Payee[];
+  payments?: PaymentData[];
 };
 
 // TODO: validate range and length
