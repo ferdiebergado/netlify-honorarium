@@ -5,7 +5,7 @@ import { getPayments } from './payments';
 
 export const config: Config = {
   method: 'GET',
-  path: ['/api/payments', '/api/payments/:activity_id'],
+  path: ['/api/payments'],
 };
 
 export default async (_req: Request, ctx: Context) => {

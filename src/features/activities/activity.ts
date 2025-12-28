@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
-import { useSearchParams } from 'react-router';
 import type { APIResponse } from '../../lib/api';
 import { activitySchema, type Activity, type ActivityFormValues } from '../../shared/schema';
 
@@ -16,10 +15,8 @@ export const useActivityForm = (defaultValues: ActivityFormValues) =>
 
 export type ActivityHookForm = ReturnType<typeof useActivityForm>;
 
-async function getActivities(activityId: string | null): Promise<Activity[]> {
-  let url = '/api/activities';
-  if (activityId) url += '/' + activityId;
-
+async function getActivities(): Promise<Activity[]> {
+  const url = '/api/activities';
   const res = await fetch(url);
 
   const { message, data } = (await res.json()) as APIResponse<Activity[]>;
@@ -30,12 +27,9 @@ async function getActivities(activityId: string | null): Promise<Activity[]> {
 }
 
 export const useActivities = () => {
-  const [searchParams] = useSearchParams();
-  const activityId = searchParams.get('activityId');
-
   return useQuery({
-    queryKey: [queryKey, activityId],
-    queryFn: () => getActivities(activityId),
+    queryKey: [queryKey],
+    queryFn: getActivities,
   });
 };
 
