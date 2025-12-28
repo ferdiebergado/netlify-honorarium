@@ -1,3 +1,4 @@
+import Loader from '@/components/Loader.tsx';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -18,13 +19,15 @@ import {
 } from '@/components/ui/table';
 import { Briefcase, Building2, Info } from 'lucide-react';
 import type { Payee } from '../../shared/schema.ts';
+import { usePayeeAccounts } from '../accounts/accounts.ts';
 
 type ViewPayeeProps = {
   payee: Payee;
 };
 
 export default function ViewPayeeDialog({ payee }: ViewPayeeProps) {
-  const { name, position, office, accounts } = payee;
+  const { name, position, office } = payee;
+  const { isPending, isError, error, isSuccess, data: accounts } = usePayeeAccounts(payee.id);
 
   return (
     <Dialog>
@@ -79,7 +82,9 @@ export default function ViewPayeeDialog({ payee }: ViewPayeeProps) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {accounts.length &&
+                {isPending && <Loader text="Loading accounts..." />}
+                {isError && <p>Error: {error.message}</p>}
+                {isSuccess &&
                   accounts.map(({ bank, bankBranch, accountNo, accountName }) => (
                     <TableRow key={accountNo}>
                       <TableCell className="font-medium">{bank}</TableCell>

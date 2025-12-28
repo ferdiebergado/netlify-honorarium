@@ -18,3 +18,20 @@ export function useAccounts() {
     queryFn: getAccounts,
   });
 }
+
+async function getPayeeAccounts(payeeId: number) {
+  const res = await fetch('/api/accounts/' + payeeId.toString());
+
+  const { message, data } = (await res.json()) as APIResponse<Account[]>;
+
+  if (!res.ok) throw new Error(message);
+
+  return data;
+}
+
+export function usePayeeAccounts(payeeId: number) {
+  return useQuery({
+    queryKey: ['accounts', payeeId],
+    queryFn: () => getPayeeAccounts(payeeId),
+  });
+}
