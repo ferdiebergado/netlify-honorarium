@@ -6,6 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { formatMoney } from '@/lib/utils';
 import type { PaymentData } from '@/shared/schema';
 
 type PaymentsTableProps = {
@@ -19,11 +20,11 @@ export default function PaymentsTable({ payments }: PaymentsTableProps) {
         <TableRow>
           <TableHead className="font-bold">Payee</TableHead>
           <TableHead className="font-bold">Role</TableHead>
-          <TableHead className="font-bold">Hours Rendered</TableHead>
-          <TableHead className="font-bold">Actual Honorarium</TableHead>
-          <TableHead className="font-bold">Honorarium</TableHead>
-          <TableHead className="font-bold">Tax (%)</TableHead>
-          <TableHead className="font-bold">Net Honorarium</TableHead>
+          <TableHead className="text-right font-bold">Hours Rendered</TableHead>
+          <TableHead className="text-right font-bold">Actual Honorarium</TableHead>
+          <TableHead className="text-right font-bold">Honorarium</TableHead>
+          <TableHead className="text-right font-bold">Tax (%)</TableHead>
+          <TableHead className="text-right font-bold">Net Honorarium</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -31,11 +32,11 @@ export default function PaymentsTable({ payments }: PaymentsTableProps) {
           <TableRow>
             <TableCell>{payment.payee}</TableCell>
             <TableCell>{payment.role}</TableCell>
-            <TableCell>{payment.hoursRendered}</TableCell>
-            <TableCell>{payment.actualHonorarium}</TableCell>
-            <TableCell>{payment.honorarium}</TableCell>
-            <TableCell>{payment.taxRate}</TableCell>
-            <TableCell>{payment.netHonorarium}</TableCell>
+            <TableCell className="text-right">{payment.hoursRendered}</TableCell>
+            <TableCell className="text-right">{formatMoney(payment.actualHonorarium)}</TableCell>
+            <TableCell className="text-right">{formatMoney(payment.honorarium)}</TableCell>
+            <TableCell className="text-right">{payment.taxRate}</TableCell>
+            <TableCell className="text-right">{formatMoney(payment.netHonorarium)}</TableCell>
           </TableRow>
         ))}
       </TableBody>
