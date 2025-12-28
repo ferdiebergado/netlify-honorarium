@@ -1,9 +1,9 @@
 import type { Config } from '@netlify/functions';
 import type { Account } from '../../src/shared/schema';
-import { turso } from './db';
-import { errorResponse } from './errors';
-import { toBuffer } from './lib';
-import { decrypt } from './security';
+import { turso } from '../db';
+import { errorResponse } from '../errors';
+import { toBuffer } from '../lib';
+import { decrypt } from '../security';
 
 export type AccountRow = {
   id: number;

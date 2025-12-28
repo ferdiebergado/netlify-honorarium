@@ -1,7 +1,7 @@
 import type { Config, Context } from '@netlify/functions';
 import { activitySchema } from '../../src/shared/schema';
-import { turso } from './db';
-import { errorResponse, NotFoundError, ValidationError } from './errors';
+import { turso } from '../db';
+import { errorResponse, NotFoundError, ValidationError } from '../errors';
 
 export const config: Config = {
   method: 'PUT',

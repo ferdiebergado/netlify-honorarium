@@ -1,8 +1,8 @@
 import type { Config } from '@netlify/functions';
 import { paymentSchema } from '../../src/shared/schema';
-import { turso } from './db';
-import { errorResponse, NotFoundError, ValidationError } from './errors';
-import { computeHonorarium } from './payments';
+import { turso } from '../db';
+import { errorResponse, NotFoundError, ValidationError } from '../errors';
+import { computeHonorarium } from '../payments';
 
 export const config: Config = {
   method: 'POST',

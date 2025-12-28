@@ -1,8 +1,8 @@
 import type { Config, Context } from '@netlify/functions';
 import type { Activity, Payee, PaymentData } from '../../src/shared/schema';
-import { turso } from './db';
-import { errorResponse } from './errors';
-import { parseId } from './lib';
+import { turso } from '../db';
+import { errorResponse } from '../errors';
+import { parseId } from '../lib';
 
 type PaymentRow = {
   id: number;

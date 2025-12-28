@@ -1,11 +1,11 @@
 import type { Config, Context } from '@netlify/functions';
 import Excel from 'exceljs';
-import { parseActivityCode } from './activity';
-import { turso } from './db';
-import { errorResponse, NotFoundError } from './errors';
-import { toDateRange } from './lib';
+import { parseActivityCode } from '../activity';
+import { turso } from '../db';
+import { errorResponse, NotFoundError } from '../errors';
+import { toDateRange } from '../lib';
+import { payroll } from '../payroll';
 import { deserializeDetails } from './list-accounts';
-import { payroll } from './payroll';
 
 type PayrollRow = {
   activity: string;

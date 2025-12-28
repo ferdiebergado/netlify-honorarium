@@ -1,9 +1,9 @@
 import type { Config } from '@netlify/functions';
 import { createPayeeSchema, type Payee } from '../../src/shared/schema';
-import { turso } from './db';
-import { errorResponse, ValidationError } from './errors';
+import { turso } from '../db';
+import { errorResponse, ValidationError } from '../errors';
+import { encrypt } from '../security';
 import type { AccountDetails } from './list-accounts';
-import { encrypt } from './security';
 
 export const config: Config = {
   method: 'POST',

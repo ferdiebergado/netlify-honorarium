@@ -46,7 +46,7 @@ export function useCreatePayment() {
   });
 }
 
-async function getPayments(activityId: string | null) {
+async function getPayments(activityId?: string) {
   let url = '/api/payments';
   if (activityId) url += '/' + activityId;
 
@@ -58,10 +58,7 @@ async function getPayments(activityId: string | null) {
   return data;
 }
 
-export function usePayments() {
-  const [searchParams] = useSearchParams();
-  const activityId = searchParams.get('activityId');
-
+export function usePayments(activityId?: string) {
   return useQuery({
     queryKey: [queryKey, activityId],
     queryFn: () => getPayments(activityId),

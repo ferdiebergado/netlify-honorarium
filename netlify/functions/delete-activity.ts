@@ -1,6 +1,6 @@
 import type { Config, Context } from '@netlify/functions';
-import { turso } from './db';
-import { errorResponse, NotFoundError } from './errors';
+import { turso } from '../db';
+import { errorResponse, NotFoundError } from '../errors';
 
 export const config: Config = {
   method: 'DELETE',

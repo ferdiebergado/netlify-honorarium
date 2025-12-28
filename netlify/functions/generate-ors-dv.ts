@@ -1,10 +1,10 @@
 import type { Config, Context } from '@netlify/functions';
 import Excel from 'exceljs';
-import { parseActivityCode } from './activity';
-import { turso } from './db';
-import { errorResponse, NotFoundError } from './errors';
-import { toDateRange } from './lib';
-import { ors } from './ors';
+import { parseActivityCode } from '../activity';
+import { turso } from '../db';
+import { errorResponse, NotFoundError } from '../errors';
+import { toDateRange } from '../lib';
+import { ors } from '../ors';
 
 type ORSPaymentRow = {
   activity: string;

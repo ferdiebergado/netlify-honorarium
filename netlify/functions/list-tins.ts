@@ -1,6 +1,6 @@
 import type { Config } from '@netlify/functions';
-import { turso } from './db';
-import { errorResponse } from './errors';
+import { turso } from '../db';
+import { errorResponse } from '../errors';
 
 type TinRow = {
   id: number;

@@ -1,7 +1,7 @@
 import type { Config } from '@netlify/functions';
 import type { Payee } from '../../src/shared/schema';
-import { turso } from './db';
-import { errorResponse } from './errors';
+import { turso } from '../db';
+import { errorResponse } from '../errors';
 
 export const config: Config = {
   method: 'GET',

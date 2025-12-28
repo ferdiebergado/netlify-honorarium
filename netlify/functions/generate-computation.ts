@@ -1,33 +1,38 @@
 import { mergeDocx } from '@benedicte/docx-merge';
 import type { Config, Context } from '@netlify/functions';
-import type { Payment } from '../../src/lib/schema';
-import { cert } from './cert';
-import { errorResponse, NotFoundError } from './errors';
-import { amountToWords, docxResponse, formatDate, formatToPhp, toDateRange } from './lib';
-import { getPayments } from './payments';
-import { patchDoc } from './word';
+import type { Payment } from '../../src/shared/schema';
+import { comp } from '../comp';
+import { errorResponse, NotFoundError } from '../errors';
+import { docxResponse, formatToPhp, toDateRange } from '../lib';
+import { getMaxSalary, getPayments } from '../payments';
+import { patchDoc } from '../word';
 
-type CertificationPatches = {
+type ComputationPatches = {
   payee: string;
   role: string;
   activity: string;
-  venue: string;
+  bank: string;
+  bank_branch: string;
   date: string;
-  end_date: string;
-  amount_words: string;
-  amount: string;
-  tax: string;
+  account_name: string;
+  account_no: string;
+  honorarium: string;
+  actual_honorarium: string;
+  net_honorarium: string;
+  tin: string;
   focal: string;
   position: string;
+  salary: string;
+  hours: string;
 };
 
 export const config: Config = {
   method: 'POST',
-  path: '/api/certification/:activity_id',
+  path: '/api/computations/:activity_id',
 };
 
 export default async (_req: Request, ctx: Context) => {
-  console.log('Generating certification...');
+  console.log('Generating computation...');
 
   try {
     const { activity_id } = ctx.params;
@@ -40,10 +45,10 @@ export default async (_req: Request, ctx: Context) => {
 
     const firstPayment = payments[0];
     const activityCode = firstPayment.activityCode;
-    const filename = 'certification-' + activityCode;
+    const filename = 'computation-' + activityCode;
 
     const patches = createPatches(firstPayment);
-    const firstCert = await patchDoc(cert, patches);
+    const firstCert = await patchDoc(comp, patches);
 
     if (!firstCert) throw new Error('failed to patch document');
 
@@ -51,8 +56,7 @@ export default async (_req: Request, ctx: Context) => {
 
     const patchDocs = payments.slice(1).map(async payment => {
       const patches = createPatches(payment);
-      const patched = await patchDoc(cert, patches);
-
+      const patched = await patchDoc(comp, patches);
       if (!patched) throw new Error('failed to patch document');
       return patched;
     });
@@ -71,19 +75,22 @@ export default async (_req: Request, ctx: Context) => {
   }
 };
 
-function createPatches(payment: Payment): CertificationPatches {
-  const tags: CertificationPatches = {
+function createPatches(payment: Payment): ComputationPatches {
+  const salary = getMaxSalary(payment.salary);
+
+  const tags: ComputationPatches = {
+    ...payment,
     payee: payment.payee.toLocaleUpperCase(),
-    role: payment.role,
-    activity: payment.activity,
-    venue: payment.venue,
-    end_date: formatDate(payment.endDate),
-    amount: formatToPhp(payment.honorarium),
-    tax: payment.taxRate.toString(),
+    honorarium: formatToPhp(payment.honorarium),
     focal: payment.focal.toLocaleUpperCase(),
-    position: payment.position,
     date: toDateRange(payment.startDate, payment.endDate),
-    amount_words: amountToWords(payment.honorarium),
+    bank_branch: payment.bankBranch,
+    account_name: payment.accountName,
+    account_no: payment.accountNo,
+    actual_honorarium: formatToPhp(payment.actualHonorarium),
+    net_honorarium: formatToPhp(payment.netHonorarium),
+    salary: formatToPhp(salary),
+    hours: payment.hoursRendered.toString(),
   };
 
   return tags;

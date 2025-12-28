@@ -1,6 +1,6 @@
 import type { Config } from '@netlify/functions';
-import { turso } from './db';
-import { errorResponse } from './errors';
+import { turso } from '../db';
+import { errorResponse } from '../errors';
 export const config: Config = {
   method: 'GET',
   path: '/api/salaries',
