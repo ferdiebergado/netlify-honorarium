@@ -55,9 +55,9 @@ SELECT
 FROM activities a 
 JOIN focals f ON f.id = a.focal_id 
 JOIN venues v ON v.id = a.venue_id
-JOIN payments pay ON pay.activity_id = a.id 
-JOIN payees p ON p.id = pay.payee_id
-JOIN roles r ON r.id = pay.role_id
+LEFT JOIN payments pay ON pay.activity_id = a.id 
+LEFT JOIN payees p ON p.id = pay.payee_id
+LEFT JOIN roles r ON r.id = pay.role_id
 WHERE a.id = ? AND a.deleted_at IS NULL
 `;
 
@@ -85,6 +85,8 @@ function rowsToActivity(rows: PaymentRow[]): Activity {
   const firstRow = rows[0];
 
   rows.forEach(row => {
+    if (!row.payee_id) return;
+
     const payee: Payee = {
       id: row.payee_id,
       name: row.payee,
