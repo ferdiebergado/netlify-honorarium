@@ -1,10 +1,10 @@
 import type { Config, Context } from '@netlify/functions';
 import Excel from 'exceljs';
-import { deserializeDetails } from './accounts';
 import { parseActivityCode } from './activity';
 import { turso } from './db';
 import { errorResponse, NotFoundError } from './errors';
 import { toDateRange } from './lib';
+import { deserializeDetails } from './list-accounts';
 import { payroll } from './payroll';
 
 type PayrollRow = {
