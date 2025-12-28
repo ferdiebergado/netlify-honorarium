@@ -1,4 +1,5 @@
 import { ToWords } from 'to-words';
+import { NotFoundError } from './errors';
 
 const months = [
   'January',
@@ -97,14 +98,6 @@ export function xlsxResponse(body: Buffer, filename: string) {
   });
 }
 
-export function parseId(id: string): number | null {
-  const parsedId = id ? parseInt(id) : null;
-
-  if (parsedId && isNaN(parsedId)) throw new Error('invalid id');
-
-  return parsedId;
-}
-
 export function toBuffer(value: ArrayBuffer | Uint8Array | Buffer): Buffer {
   if (Buffer.isBuffer(value)) {
     return value;
@@ -116,4 +109,11 @@ export function toBuffer(value: ArrayBuffer | Uint8Array | Buffer): Buffer {
 
   // Uint8Array (and other views)
   return Buffer.from(value.buffer, value.byteOffset, value.byteLength);
+}
+
+export function parseId(id: string): number {
+  const parsedId = parseInt(id);
+  if (isNaN(parsedId)) throw new NotFoundError();
+
+  return parsedId;
 }
