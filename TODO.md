@@ -1,15 +1,55 @@
 # Todo
 
-- Use Empty component for empty lists
 - Create typeguards for json responses
-- NavMenu
-- Sidebar
-- Pagination
-- Sorting
-- Search
-- Expand activity form
+- oauth
+- dark mode
+- CRUD
+- service layer
+- specify columns in select statement
+- Use Empty component for empty lists
+- add right padding to error message
+- optimize query in getPayments
+- show alert on form errors instead of toast
+- classify by file each features
+- activity code input format
+- embedded TODOs
+- use derivedstate instead of useeffect
+- use context providers where applicable
+- mask account number when viewing
+- embed objects in schemas
+- separate query per action
+- payroll: splice row 2 if there is only 1 payee
+- check status 500 in front end
+- memoize decryption
+- form schemas: validate range and length
+- back button
+- venueinput, focalinput: use comboboxfield
 
 # Done
 
+- venueinput handle ispending and iserror before rendering
+- disable report buttons if list is empty
+- move non-handlers to netlify root
+- encrypt account in db
+- banks table
+- skeleton
+- functions: clean up imports from src
+- payroll: include tax rate
+- rename fundsource to fundcluster
+- compute honorarium helper
+- disable report buttons on submit
+- activity input: wrap value
 - Directly return the resultset rows as json response from netlify functions
 - Integrate dialog with CreateActivityForm
+- Enable type-aware lints
+- NavMenu
+- Sidebar
+- Extract activity form inputs
+- Expand activity form
+- Sorting
+- validate enddate is on/after start date
+- validate input in functions
+- Pagination
+- Search
+- react query eslint plugin
+- move id validator to lib
