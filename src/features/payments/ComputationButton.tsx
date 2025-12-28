@@ -2,18 +2,22 @@ import Loader from '@/components/Loader';
 import { Button } from '@/components/ui/button';
 import { useComp } from './payments';
 
-export default function ComputationButton() {
+type ComputationButtonProps = {
+  activityId: string;
+};
+
+export default function ComputationButton({ activityId }: ComputationButtonProps) {
   const title = 'Computation';
   const { isPending, mutate: genComp } = useComp();
 
   const handleClick = () => {
-    genComp();
+    genComp(activityId);
   };
 
   return (
     <Button
       title={title}
-      className="mx-3 mt-6 flex w-36 shrink-0"
+      className="mx-3 mt-6 flex w-36 shrink-0 font-bold"
       onClick={handleClick}
       disabled={isPending}
     >

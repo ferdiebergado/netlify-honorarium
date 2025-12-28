@@ -113,10 +113,10 @@ export default function ActivityPage() {
       </Card>
 
       <div className="flex items-center space-x-1">
-        <CertificationButton />
-        <ComputationButton />
-        <ORSButton />
-        <PayrollButton />
+        <CertificationButton activityId={activityId} />
+        <ComputationButton activityId={activityId} />
+        <ORSButton activityId={activityId} />
+        <PayrollButton activityId={activityId} />
       </div>
     </div>
   );

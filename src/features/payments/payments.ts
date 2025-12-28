@@ -1,9 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
-import { useSearchParams } from 'react-router';
 import type { APIResponse } from '../../lib/api';
-import { startDownload } from '../../lib/utils';
+import { checkId, startDownload } from '../../lib/utils';
 import type { PaymentFormValues } from '../../shared/schema';
 import { paymentSchema, type Payment } from '../../shared/schema';
 
@@ -65,11 +64,8 @@ export function usePayments(activityId?: string) {
   });
 }
 
-async function genCert(activityId: string | null) {
-  console.log('generating cert...');
-
-  if (!activityId) return;
-
+async function genCert(activityId: string) {
+  checkId(activityId);
   const res = await fetch('/api/certification/' + activityId, {
     method: 'POST',
   });
@@ -85,19 +81,14 @@ async function genCert(activityId: string | null) {
 }
 
 export function useCert() {
-  const [searchParams] = useSearchParams();
-  const activityId = searchParams.get('activityId');
-
   return useMutation({
-    mutationKey: ['certification', activityId],
-    mutationFn: () => genCert(activityId),
+    mutationKey: ['certification'],
+    mutationFn: (activityId: string) => genCert(activityId),
   });
 }
 
-async function genComp(activityId: string | null) {
-  console.log('generating comp...');
-
-  if (!activityId) return;
+async function genComp(activityId: string) {
+  checkId(activityId);
 
   const res = await fetch('/api/computations/' + activityId, {
     method: 'POST',
@@ -114,19 +105,14 @@ async function genComp(activityId: string | null) {
 }
 
 export function useComp() {
-  const [searchParams] = useSearchParams();
-  const activityId = searchParams.get('activityId');
-
   return useMutation({
-    mutationKey: ['computation', activityId],
-    mutationFn: () => genComp(activityId),
+    mutationKey: ['computation'],
+    mutationFn: (activityId: string) => genComp(activityId),
   });
 }
 
-async function genORS(activityId: string | null) {
-  console.log('generating ORS...');
-
-  if (!activityId) return;
+async function genORS(activityId: string) {
+  checkId(activityId);
 
   const res = await fetch('/api/ors/' + activityId, {
     method: 'POST',
@@ -143,19 +129,14 @@ async function genORS(activityId: string | null) {
 }
 
 export function useORS() {
-  const [searchParams] = useSearchParams();
-  const activityId = searchParams.get('activityId');
-
   return useMutation({
-    mutationKey: ['ors', activityId],
-    mutationFn: () => genORS(activityId),
+    mutationKey: ['ors'],
+    mutationFn: (activityId: string) => genORS(activityId),
   });
 }
 
-async function genPayroll(activityId: string | null) {
-  console.log('generating Payroll...');
-
-  if (!activityId) return;
+async function genPayroll(activityId: string) {
+  checkId(activityId);
 
   const res = await fetch('/api/payrolls/' + activityId, {
     method: 'POST',
@@ -172,11 +153,8 @@ async function genPayroll(activityId: string | null) {
 }
 
 export function usePayroll() {
-  const [searchParams] = useSearchParams();
-  const activityId = searchParams.get('activityId');
-
   return useMutation({
-    mutationKey: ['payroll', activityId],
-    mutationFn: () => genPayroll(activityId),
+    mutationKey: ['payroll'],
+    mutationFn: (activityId: string) => genPayroll(activityId),
   });
 }
