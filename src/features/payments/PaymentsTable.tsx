@@ -28,17 +28,25 @@ export default function PaymentsTable({ payments }: PaymentsTableProps) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {payments.map(payment => (
+        {payments.length > 0 ? (
+          payments.map(payment => (
+            <TableRow>
+              <TableCell>{payment.payee}</TableCell>
+              <TableCell>{payment.role}</TableCell>
+              <TableCell className="text-right">{payment.hoursRendered}</TableCell>
+              <TableCell className="text-right">{formatMoney(payment.actualHonorarium)}</TableCell>
+              <TableCell className="text-right">{formatMoney(payment.honorarium)}</TableCell>
+              <TableCell className="text-right">{payment.taxRate}</TableCell>
+              <TableCell className="text-right">{formatMoney(payment.netHonorarium)}</TableCell>
+            </TableRow>
+          ))
+        ) : (
           <TableRow>
-            <TableCell>{payment.payee}</TableCell>
-            <TableCell>{payment.role}</TableCell>
-            <TableCell className="text-right">{payment.hoursRendered}</TableCell>
-            <TableCell className="text-right">{formatMoney(payment.actualHonorarium)}</TableCell>
-            <TableCell className="text-right">{formatMoney(payment.honorarium)}</TableCell>
-            <TableCell className="text-right">{payment.taxRate}</TableCell>
-            <TableCell className="text-right">{formatMoney(payment.netHonorarium)}</TableCell>
+            <TableCell colSpan={7} className="text-muted-foreground p-6 text-center">
+              No records found.
+            </TableCell>
           </TableRow>
-        ))}
+        )}
       </TableBody>
     </Table>
   );

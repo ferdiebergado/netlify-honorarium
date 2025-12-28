@@ -24,14 +24,22 @@ export default function PayeesTable({ payees }: PayeesTableProps) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {payees.map(payee => (
+        {payees.length > 0 ? (
+          payees.map(payee => (
+            <TableRow>
+              <TableCell>{payee.name}</TableCell>
+              <TableCell>{payee.office}</TableCell>
+              <TableCell>{payee.position}</TableCell>
+              <TableCell>View</TableCell>
+            </TableRow>
+          ))
+        ) : (
           <TableRow>
-            <TableCell>{payee.name}</TableCell>
-            <TableCell>{payee.office}</TableCell>
-            <TableCell>{payee.position}</TableCell>
-            <TableCell>View</TableCell>
+            <TableCell colSpan={7} className="text-muted-foreground p-6 text-center">
+              No records found.
+            </TableCell>
           </TableRow>
-        ))}
+        )}
       </TableBody>
     </Table>
   );
