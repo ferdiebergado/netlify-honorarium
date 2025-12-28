@@ -47,7 +47,6 @@ export type Payee = {
   name: string;
   position: string;
   office: string;
-  accounts: Omit<Account, 'payeeId'>[];
 };
 
 export const createPayeeSchema = z.object({
