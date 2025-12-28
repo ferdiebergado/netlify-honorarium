@@ -1,12 +1,12 @@
 import SkeletonCard from '@/components/SkeletonCard';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Calendar, CirclePlus, MapPin, Tag, UserStar } from 'lucide-react';
+import { Calendar, MapPin, Tag, UserStar } from 'lucide-react';
 import { useParams } from 'react-router';
 import PayeesTable from '../payees/PayeesTable';
 import CertificationButton from '../payments/CertificationButton';
 import ComputationButton from '../payments/ComputationButton';
+import CreatePaymentDialog from '../payments/CreatePaymentDialog';
 import ORSButton from '../payments/ORSButton';
 import PaymentsTable from '../payments/PaymentsTable';
 import PayrollButton from '../payments/PayrollButton';
@@ -33,6 +33,9 @@ export default function ActivityPage() {
           <h2 className="text-muted-foreground flex items-center gap-1">
             <MapPin className="h-3 w-3" /> {venue}
           </h2>
+        </div>
+        <div className="flex flex-1 items-end justify-end px-3">
+          <CreatePaymentDialog />
         </div>
       </div>
       <div className="flex flex-row gap-6">
@@ -92,44 +95,29 @@ export default function ActivityPage() {
           </CardContent>
         </Card>
 
+        {/* PAYEES */}
         <Card className="flex-1">
-          <CardHeader className="flex">
-            <div className="flex flex-col">
-              <h1 className="text-xl font-bold">Payees</h1>
-            </div>
-            <div className="flex flex-1 items-end justify-end gap-3">
-              <Button className="w-36 bg-cyan-500 font-bold">
-                <CirclePlus /> Add Payee
-              </Button>
-            </div>
-          </CardHeader>
+          <CardHeader className="text-xl font-bold">Payees</CardHeader>
           <CardContent>
             <PayeesTable payees={payees ?? []} />
           </CardContent>
         </Card>
       </div>
+      {/* END PAYEES */}
 
       <Card>
-        <CardHeader className="flex">
-          <div className="flex flex-col">
-            <h1 className="text-xl font-bold">Payments</h1>
-          </div>
-          <div className="flex flex-1 items-end justify-end gap-3">
-            <Button className="w-36 bg-cyan-500 font-bold">
-              <CirclePlus /> Add Payment
-            </Button>
-          </div>
-        </CardHeader>
+        <CardHeader className="text-xl font-bold">Payments</CardHeader>
         <CardContent>
           <PaymentsTable payments={payments ?? []} />
-          <div className="flex items-center gap-1">
-            <CertificationButton />
-            <ComputationButton />
-            <ORSButton />
-            <PayrollButton />
-          </div>
         </CardContent>
       </Card>
+
+      <div className="flex items-center space-x-1">
+        <CertificationButton />
+        <ComputationButton />
+        <ORSButton />
+        <PayrollButton />
+      </div>
     </div>
   );
 }
