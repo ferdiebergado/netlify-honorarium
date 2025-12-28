@@ -1,11 +1,15 @@
 import SkeletonCard from '@/components/SkeletonCard';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Calendar, MapPin, Tag, UserStar } from 'lucide-react';
+import { Calendar, CirclePlus, MapPin, Tag, UserStar } from 'lucide-react';
 import { useParams } from 'react-router';
-import PayeeList from '../payees/PayeeList';
-import PaymentList from '../payments/PaymentList';
+import PayeesTable from '../payees/PayeesTable';
+import CertificationButton from '../payments/CertificationButton';
+import ComputationButton from '../payments/ComputationButton';
+import ORSButton from '../payments/ORSButton';
+import PaymentsTable from '../payments/PaymentsTable';
+import PayrollButton from '../payments/PayrollButton';
 import { useFullActivity } from './activity';
 
 export default function ActivityPage() {
@@ -30,82 +34,100 @@ export default function ActivityPage() {
             <MapPin className="h-3 w-3" /> {venue}
           </h2>
         </div>
-        <div className="flex flex-1 items-end justify-end gap-3">
-          <Button>Add Payee</Button>
-          <Button>Create Payment</Button>
-        </div>
       </div>
-      <Card className="w-1/2">
-        <CardContent>
+      <div className="flex flex-row gap-6">
+        <Card className="w-1/3">
           <CardHeader>
-            <CardTitle className="text-xl font-bold">{title}</CardTitle>
-            <CardDescription className="flex items-center gap-1 text-sm">
-              <MapPin className="h-3 w-3" /> {venue}
-            </CardDescription>
+            <CardTitle className="text-xl font-bold">Activity Details</CardTitle>
           </CardHeader>
+          <CardContent>
+            <Separator className="my-2" />
 
-          <Separator className="my-2" />
-
-          <div className="grid gap-4 py-4">
-            {/* Date Section */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
-                  Start Date
-                </p>
-                <div className="flex items-center gap-2 text-sm">
-                  <Calendar className="h-4 w-4 opacity-70" />
-                  <span>{startDate}</span>
+            <div className="grid gap-4 py-4">
+              {/* Date Section */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
+                    Start Date
+                  </p>
+                  <div className="flex items-center gap-2 text-sm">
+                    <Calendar className="h-4 w-4 opacity-70" />
+                    <span>{startDate}</span>
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
+                    End Date
+                  </p>
+                  <div className="flex items-center gap-2 text-sm">
+                    <Calendar className="h-4 w-4 opacity-70" />
+                    <span>{endDate}</span>
+                  </div>
                 </div>
               </div>
-              <div className="space-y-1">
-                <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
-                  End Date
-                </p>
-                <div className="flex items-center gap-2 text-sm">
-                  <Calendar className="h-4 w-4 opacity-70" />
-                  <span>{endDate}</span>
+
+              <Separator />
+
+              {/* Metadata Section */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-sm">
+                  <div className="text-muted-foreground flex items-center gap-2">
+                    <Tag className="h-4 w-4" />
+                    <span>Activity Code</span>
+                  </div>
+                  <span className="bg-muted rounded px-2 py-0.5 font-mono font-medium">{code}</span>
+                </div>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between text-sm">
+                  <div className="text-muted-foreground flex items-center gap-2">
+                    <UserStar className="h-4 w-4" />
+                    <span>Focal Person</span>
+                  </div>
+                  <span className="text-foreground font-medium">{focal}</span>
                 </div>
               </div>
             </div>
+          </CardContent>
+        </Card>
 
-            <Separator />
-
-            {/* Metadata Section */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between text-sm">
-                <div className="text-muted-foreground flex items-center gap-2">
-                  <Tag className="h-4 w-4" />
-                  <span>Activity Code</span>
-                </div>
-                <span className="bg-muted rounded px-2 py-0.5 font-mono font-medium">{code}</span>
-              </div>
+        <Card className="flex-1">
+          <CardHeader className="flex">
+            <div className="flex flex-col">
+              <h1 className="text-xl font-bold">Payees</h1>
             </div>
-
-            <div>
-              <div className="flex items-center justify-between text-sm">
-                <div className="text-muted-foreground flex items-center gap-2">
-                  <UserStar className="h-4 w-4" />
-                  <span>Focal Person</span>
-                </div>
-                <span className="text-foreground font-medium">{focal}</span>
-              </div>
+            <div className="flex flex-1 items-end justify-end gap-3">
+              <Button className="w-36 bg-cyan-500 font-bold">
+                <CirclePlus /> Add Payee
+              </Button>
             </div>
+          </CardHeader>
+          <CardContent>
+            <PayeesTable payees={payees ?? []} />
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card>
+        <CardHeader className="flex">
+          <div className="flex flex-col">
+            <h1 className="text-xl font-bold">Payments</h1>
           </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader className="text-xl font-bold">Payees</CardHeader>
+          <div className="flex flex-1 items-end justify-end gap-3">
+            <Button className="w-36 bg-cyan-500 font-bold">
+              <CirclePlus /> Add Payment
+            </Button>
+          </div>
+        </CardHeader>
         <CardContent>
-          <PayeeList payees={payees ?? []} />
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader className="text-xl font-bold">Payments</CardHeader>
-        <CardContent>
-          <PaymentList payments={payments ?? []} />
+          <PaymentsTable payments={payments ?? []} />
+          <div className="flex items-center gap-1">
+            <CertificationButton />
+            <ComputationButton />
+            <ORSButton />
+            <PayrollButton />
+          </div>
         </CardContent>
       </Card>
     </div>
