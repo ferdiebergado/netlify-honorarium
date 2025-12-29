@@ -26,7 +26,7 @@ export default function PayeesTable({ payees }: PayeesTableProps) {
       <TableBody>
         {payees.length > 0 ? (
           payees.map(payee => (
-            <TableRow>
+            <TableRow key={payee.id}>
               <TableCell>{payee.name}</TableCell>
               <TableCell>{payee.office}</TableCell>
               <TableCell>{payee.position}</TableCell>

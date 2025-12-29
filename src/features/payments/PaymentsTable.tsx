@@ -30,7 +30,7 @@ export default function PaymentsTable({ payments }: PaymentsTableProps) {
       <TableBody>
         {payments.length > 0 ? (
           payments.map(payment => (
-            <TableRow>
+            <TableRow key={payment.id}>
               <TableCell>{payment.payee}</TableCell>
               <TableCell>{payment.role}</TableCell>
               <TableCell className="text-right">{payment.hoursRendered}</TableCell>
