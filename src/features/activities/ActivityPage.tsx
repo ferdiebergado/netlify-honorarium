@@ -1,6 +1,7 @@
 import SkeletonCard from '@/components/SkeletonCard';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { checkId } from '@/lib/utils';
 import { Calendar, MapPin, Tag, UserStar } from 'lucide-react';
 import { useParams } from 'react-router';
 import PayeesTable from '../payees/PayeesTable';
@@ -16,6 +17,8 @@ export default function ActivityPage() {
   const { activityId } = useParams<{ activityId: string }>();
 
   if (!activityId) throw new Error('activityId param is required');
+
+  checkId(activityId);
 
   const { isPending, isError, error, data: activity } = useFullActivity(activityId);
 
@@ -35,7 +38,7 @@ export default function ActivityPage() {
           </h2>
         </div>
         <div className="flex flex-1 items-end justify-end px-3">
-          <CreatePaymentDialog />
+          <CreatePaymentDialog activity={{ id: parseInt(activityId), title }} />
         </div>
       </div>
       <div className="flex flex-row gap-6">
