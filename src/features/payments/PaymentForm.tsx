@@ -2,15 +2,16 @@ import { Button } from '@/components/ui/button';
 import { DialogFooter } from '@/components/ui/dialog';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { useEffect } from 'react';
 import { Controller } from 'react-hook-form';
 import { toast } from 'sonner';
 import AccountInput from '../../features/accounts/AccountInput';
-import ActivityInput from '../../features/activities/ActivityInput';
 import PayeeInput from '../../features/payees/PayeeInput';
 import RoleInput from '../../features/roles/RoleInput';
 import SalaryInput from '../../features/salaries/SalaryInput';
 import TinInput from '../../features/tins/TinInput';
-import type { PaymentFormValues } from '../../shared/schema';
+import type { Activity, PaymentFormValues } from '../../shared/schema';
+import ActivityInput from '../activities/ActivityInput';
 import { type PaymentHookForm } from './payments';
 
 type PaymentFormProps = {
@@ -19,6 +20,9 @@ type PaymentFormProps = {
   onSubmit: (data: PaymentFormValues) => Promise<{ message: string }>;
   setIsDialogOpen: (open: boolean) => void;
   loadingMsg: string;
+  activity?: Pick<Activity, 'id' | 'title'>;
+  isSuccess: boolean;
+  isError: boolean;
 };
 
 export default function PaymentForm({
@@ -27,19 +31,14 @@ export default function PaymentForm({
   onSubmit,
   loadingMsg,
   setIsDialogOpen,
+  activity,
+  isSuccess,
+  isError,
 }: PaymentFormProps) {
   const handleSubmit = (formData: PaymentFormValues) => {
     setIsDialogOpen(false);
     toast.promise(onSubmit(formData), {
       loading: loadingMsg,
-      success: ({ message }: { message: string }) => {
-        form.reset();
-        return message;
-      },
-      error: (err: Error) => {
-        setIsDialogOpen(true);
-        return err.message;
-      },
     });
   };
 
@@ -52,10 +51,33 @@ export default function PaymentForm({
     setIsDialogOpen(false);
   };
 
+  useEffect(() => {
+    if (isError) setIsDialogOpen(true);
+  }, [isError, setIsDialogOpen]);
+
+  useEffect(() => {
+    if (isSuccess) form.reset(values);
+  });
+
   return (
     <form id="payment-form" onSubmit={form.handleSubmit(handleSubmit)}>
       <FieldGroup>
-        <ActivityInput form={form} />
+        {activity ? (
+          <Controller
+            name="activityId"
+            control={form.control}
+            render={() => (
+              <Field>
+                <FieldLabel htmlFor="activity">Activity</FieldLabel>
+                <Input type="hidden" disabled value={activity.id} />
+                <span>{activity.title}</span>
+              </Field>
+            )}
+          />
+        ) : (
+          <ActivityInput form={form} />
+        )}
+
         <PayeeInput form={form} />
         <RoleInput form={form} />
 

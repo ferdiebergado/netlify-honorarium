@@ -24,7 +24,7 @@ export default function CreateActivityForm() {
   };
 
   const form = useActivityForm(formValues);
-  const { mutateAsync: createActivity } = useCreateActivity();
+  const { isError, isSuccess, mutateAsync: createActivity } = useCreateActivity();
 
   const handleClick = () => {
     setIsDialogOpen(true);
@@ -46,6 +46,8 @@ export default function CreateActivityForm() {
           onSubmit={createActivity}
           setIsDialogOpen={setIsDialogOpen}
           loadingMsg="Creating Activity..."
+          isSuccess={isSuccess}
+          isError={isError}
         />
       </DialogContent>
     </Dialog>

@@ -8,15 +8,19 @@ import {
 } from '@/components/ui/dialog';
 import { CirclePlus } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import type { PaymentFormValues } from '../../shared/schema';
+import type { Activity, PaymentFormValues } from '../../shared/schema';
 import PaymentForm from './PaymentForm';
 import { useCreatePayment, usePaymentForm } from './payments';
 
-export default function CreatePaymentDialog() {
+type CreatePaymentDialogProps = {
+  activity?: Pick<Activity, 'id' | 'title'>;
+};
+
+export default function CreatePaymentDialog({ activity }: CreatePaymentDialogProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const formValues: PaymentFormValues = useMemo(
     () => ({
-      activityId: 0,
+      activityId: activity?.id ?? 0,
       payeeId: 0,
       roleId: 0,
       honorarium: 0,
@@ -24,11 +28,11 @@ export default function CreatePaymentDialog() {
       taxRate: 10,
       accountId: 0,
     }),
-    []
+    [activity?.id]
   );
 
   const form = usePaymentForm(formValues);
-  const { mutateAsync: createPayment } = useCreatePayment();
+  const { isError, isSuccess, mutateAsync: createPayment } = useCreatePayment();
 
   const handleClick = () => {
     setIsDialogOpen(true);
@@ -54,6 +58,9 @@ export default function CreatePaymentDialog() {
           onSubmit={createPayment}
           loadingMsg="Creating payment..."
           setIsDialogOpen={setIsDialogOpen}
+          activity={activity}
+          isSuccess={isSuccess}
+          isError={isError}
         />
       </DialogContent>
     </Dialog>

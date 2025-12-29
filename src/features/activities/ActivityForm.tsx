@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/input-group';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ChevronDownIcon } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { toast } from 'sonner';
 import FocalInput from '../../features/focals/FocalInput';
@@ -25,6 +25,8 @@ type ActivityFormProps = {
   onSubmit: (data: ActivityFormValues) => Promise<{ message: string }>;
   setIsDialogOpen: (open: boolean) => void;
   loadingMsg: string;
+  isSuccess: boolean;
+  isError: boolean;
 };
 
 export default function ActivityForm({
@@ -33,6 +35,8 @@ export default function ActivityForm({
   onSubmit,
   setIsDialogOpen,
   loadingMsg,
+  isSuccess,
+  isError,
 }: ActivityFormProps) {
   const [isStartDateOpen, setIsStartDateOpen] = useState(false);
   const [isEndDateOpen, setIsEndDateOpen] = useState(false);
@@ -42,14 +46,6 @@ export default function ActivityForm({
 
     toast.promise(onSubmit(formData), {
       loading: loadingMsg,
-      success: ({ message }: { message: string }) => {
-        form.reset(values);
-        return message;
-      },
-      error: (err: Error) => {
-        setIsDialogOpen(true);
-        return err.message;
-      },
     });
   };
 
@@ -61,6 +57,14 @@ export default function ActivityForm({
     form.reset(values);
     setIsDialogOpen(false);
   };
+
+  useEffect(() => {
+    if (isError) setIsDialogOpen(true);
+  }, [isError, setIsDialogOpen]);
+
+  useEffect(() => {
+    if (isSuccess) form.reset(values);
+  });
 
   return (
     <form id="activity-form" onSubmit={form.handleSubmit(handleSubmit)}>
