@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { DialogFooter } from '@/components/ui/dialog';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { useEffect } from 'react';
 import { Controller } from 'react-hook-form';
 import { toast } from 'sonner';
 import BankInput from '../../features/banks/BankInput';
@@ -14,6 +15,8 @@ type PayeeFormProps = {
   onSubmit: (data: CreatePayeeFormValues) => Promise<{ message: string }>;
   setIsDialogOpen: (open: boolean) => void;
   loadingMsg: string;
+  isSuccess: boolean;
+  isError: boolean;
 };
 
 export default function PayeeForm({
@@ -22,20 +25,14 @@ export default function PayeeForm({
   onSubmit,
   loadingMsg,
   setIsDialogOpen,
+  isSuccess,
+  isError,
 }: PayeeFormProps) {
   const handleSubmit = (formData: CreatePayeeFormValues) => {
     setIsDialogOpen(false);
 
     toast.promise(onSubmit(formData), {
       loading: loadingMsg,
-      success: ({ message }: { message: string }) => {
-        form.reset();
-        return message;
-      },
-      error: (err: Error) => {
-        setIsDialogOpen(true);
-        return err.message;
-      },
     });
   };
 
@@ -47,6 +44,14 @@ export default function PayeeForm({
     form.reset(values);
     setIsDialogOpen(false);
   };
+
+  useEffect(() => {
+    if (isError) setIsDialogOpen(true);
+  }, [isError, setIsDialogOpen]);
+
+  useEffect(() => {
+    if (isSuccess) form.reset();
+  }, [isSuccess, form]);
 
   return (
     <form id="payee-form" onSubmit={form.handleSubmit(handleSubmit)}>

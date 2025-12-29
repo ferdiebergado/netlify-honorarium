@@ -6,7 +6,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { CirclePlus } from 'lucide-react';
 import { useState } from 'react';
 import type { CreatePayeeFormValues } from '../../shared/schema';
 import { useCreatePayee, usePayeeForm } from './payee';
@@ -27,7 +26,7 @@ export default function CreatePayeeDialog() {
   };
 
   const form = usePayeeForm(formData);
-  const { mutateAsync: createPayee } = useCreatePayee();
+  const { isError, isSuccess, mutateAsync: createPayee } = useCreatePayee();
 
   const handleClick = () => {
     setIsDialogOpen(true);
@@ -35,8 +34,13 @@ export default function CreatePayeeDialog() {
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <Button size="lg" className="bg-cyan-500" onClick={handleClick}>
-        <CirclePlus /> New Payee
+      <Button
+        size="sm"
+        variant="ghost"
+        onClick={handleClick}
+        className="text-muted-foreground w-full text-center"
+      >
+        (Payee not in the list? Click here to add a new payee...)
       </Button>
       <DialogContent>
         <DialogHeader>
@@ -49,6 +53,8 @@ export default function CreatePayeeDialog() {
           onSubmit={createPayee}
           loadingMsg="Creating payee..."
           setIsDialogOpen={setIsDialogOpen}
+          isSuccess={isSuccess}
+          isError={isError}
         />
       </DialogContent>
     </Dialog>
