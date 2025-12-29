@@ -19,3 +19,19 @@ export function useTins() {
     queryFn: getTins,
   });
 }
+
+async function getPayeeTins(payeeId: string) {
+  const res = await fetch('/api/tins/' + payeeId);
+  const { message, data } = (await res.json()) as APIResponse<Tin[]>;
+
+  if (!res.ok) throw new Error(message);
+
+  return data;
+}
+
+export function usePayeeTins(payeeId: string) {
+  return useQuery({
+    queryKey: [queryKey, payeeId],
+    queryFn: () => getPayeeTins(payeeId),
+  });
+}
