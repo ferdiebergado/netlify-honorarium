@@ -7,7 +7,7 @@ type BankInputProps = {
 };
 
 export default function BankInput({ form }: BankInputProps) {
-  const { isPending, isError, error, isSuccess, data: banks } = useBanks();
+  const { isPending, isError, error, data: banks = [] } = useBanks();
 
   return (
     <ComboboxField
@@ -19,14 +19,10 @@ export default function BankInput({ form }: BankInputProps) {
       isPending={isPending}
       isError={isError}
       errorMessage={error?.message}
-      options={
-        isSuccess
-          ? banks.map(bank => ({
-              id: bank.id,
-              label: bank.name,
-            }))
-          : []
-      }
+      options={banks.map(bank => ({
+        id: bank.id,
+        label: bank.name,
+      }))}
     />
   );
 }
