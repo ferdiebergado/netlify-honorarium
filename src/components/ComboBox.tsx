@@ -11,7 +11,7 @@ import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { CommandLoading } from 'cmdk';
 import { Check, ChevronsUpDown } from 'lucide-react';
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Controller, type FieldValues, type Path, type UseFormReturn } from 'react-hook-form';
 import { cn } from '../lib/utils';
 
@@ -31,6 +31,7 @@ type ComboboxFieldProps<TFieldValues extends FieldValues> = {
   isPending?: boolean;
   isError?: boolean;
   errorMessage?: string;
+  children?: ReactNode;
 };
 
 export function ComboboxField<TFieldValues extends FieldValues>({
@@ -43,6 +44,7 @@ export function ComboboxField<TFieldValues extends FieldValues>({
   isPending,
   isError,
   errorMessage,
+  children,
 }: ComboboxFieldProps<TFieldValues>) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -83,6 +85,7 @@ export function ComboboxField<TFieldValues extends FieldValues>({
                 />
                 <CommandList>
                   {isPending && <CommandLoading>Loading...</CommandLoading>}
+                  <CommandItem>{children}</CommandItem>
                   <CommandEmpty>No results found.</CommandEmpty>
                   <CommandGroup>
                     {options.map(option => (
