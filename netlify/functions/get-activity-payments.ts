@@ -24,6 +24,7 @@ type PaymentRow = {
   tax_rate: number;
   honorarium: number;
   role: string;
+  payment_id: number;
 };
 
 const fullActivitySql = `
@@ -45,6 +46,7 @@ SELECT
   p.position    AS payee_position,
   p.office      AS payee_office,
 
+  pay.id        AS payment_id,
   pay.hours_rendered,
   pay.actual_honorarium,
   pay.net_honorarium,
@@ -106,7 +108,7 @@ function rowsToActivity(rows: PaymentRow[]): Activity {
       netHonorarium: row.net_honorarium,
       payee: row.payee,
       role: row.role,
-      id: row.id,
+      id: row.payment_id,
     };
 
     payments.push(payment);
