@@ -104,6 +104,7 @@ function rowsToActivity(rows: PaymentRow[]): Activity {
       netHonorarium: row.net_honorarium,
       payee: row.payee,
       role: row.role,
+      id: row.id,
     };
 
     payments.push(payment);
