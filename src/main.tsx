@@ -8,11 +8,9 @@ import './index.css';
 
 const queryClient = new QueryClient({
   mutationCache: new MutationCache({
-    onSuccess: (data, _variables, _context, mutation) => {
+    onSuccess: data => {
       toast.success((data as { message: string }).message);
-      queryClient.invalidateQueries({
-        queryKey: mutation.options.mutationKey,
-      });
+      queryClient.invalidateQueries();
     },
     onError: (err: Error) => toast.error(err.message),
   }),

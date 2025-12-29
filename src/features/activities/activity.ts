@@ -55,7 +55,6 @@ async function createActivity(formData: ActivityFormValues) {
 export const useCreateActivity = () =>
   useMutation<{ message: string }, Error, ActivityFormValues>({
     mutationFn: createActivity,
-    mutationKey: [queryKey],
   });
 
 export type UpdateActivityData = {
@@ -84,7 +83,6 @@ async function updateActivity({ activityId, formData }: UpdateActivityData) {
 export function useUpdateActivity() {
   return useMutation({
     mutationFn: updateActivity,
-    mutationKey: [queryKey],
   });
 }
 
@@ -106,7 +104,6 @@ async function deleteActivity(id: number) {
 export function useDeleteActivity() {
   return useMutation({
     mutationFn: deleteActivity,
-    mutationKey: [queryKey],
   });
 }
 
@@ -142,8 +139,6 @@ async function getFullActivity(activityId: string): Promise<Activity> {
 }
 
 export const useFullActivity = (activityId: string) => {
-  checkId(activityId);
-
   return useQuery({
     queryKey: [queryKey, activityId],
     queryFn: () => getFullActivity(activityId),

@@ -33,7 +33,6 @@ async function createPayee(data: CreatePayeeFormValues) {
 export const useCreatePayee = () =>
   useMutation({
     mutationFn: createPayee,
-    mutationKey: [queryKey],
   });
 
 async function getPayees() {

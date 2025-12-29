@@ -38,10 +38,6 @@ async function createPayment(formData: PaymentFormValues) {
 export function useCreatePayment() {
   return useMutation({
     mutationFn: createPayment,
-    mutationKey: [queryKey],
-    onError: err => {
-      console.error(err);
-    },
   });
 }
 
@@ -82,7 +78,6 @@ async function genCert(activityId: string) {
 
 export function useCert() {
   return useMutation({
-    mutationKey: ['certification'],
     mutationFn: (activityId: string) => genCert(activityId),
   });
 }
@@ -106,7 +101,6 @@ async function genComp(activityId: string) {
 
 export function useComp() {
   return useMutation({
-    mutationKey: ['computation'],
     mutationFn: (activityId: string) => genComp(activityId),
   });
 }
@@ -130,7 +124,6 @@ async function genORS(activityId: string) {
 
 export function useORS() {
   return useMutation({
-    mutationKey: ['ors'],
     mutationFn: (activityId: string) => genORS(activityId),
   });
 }
@@ -154,7 +147,6 @@ async function genPayroll(activityId: string) {
 
 export function usePayroll() {
   return useMutation({
-    mutationKey: ['payroll'],
     mutationFn: (activityId: string) => genPayroll(activityId),
   });
 }
