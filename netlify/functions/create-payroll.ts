@@ -12,7 +12,7 @@ type PayrollRow = {
   start_date: string;
   end_date: string;
   venue: string;
-  honorarium: number;
+  total_honorarium: number;
   payee: string;
   code: string;
   bank: string;
@@ -50,7 +50,6 @@ export default async (_req: Request, ctx: Context) => {
 
     const sql = `
 SELECT 
-p.honorarium,
 p.tax_rate,
 a.title         AS activity,
 a.start_date,
@@ -61,7 +60,8 @@ pay.position,
 v.name          AS venue,
 acc.details     AS account_details,
 b.name          AS bank,
-t.tin
+t.tin,
+SUM(p.honorarium)  AS total_honorarium
 FROM payments p
 JOIN activities a ON a.id = p.activity_id
 JOIN payees pay ON pay.id = p.payee_id
@@ -70,6 +70,7 @@ JOIN accounts acc ON acc.id = p.account_id
 JOIN banks b ON b.id = acc.bank_id
 JOIN tins t ON t.id = p.tin_id
 WHERE p.activity_id = ?
+GROUP BY pay.id
 `;
 
     const { rows } = await turso.execute(sql, [activityId]);
@@ -80,6 +81,7 @@ WHERE p.activity_id = ?
       activityCode: payment.code,
       accountDetails: payment.account_details,
       taxRate: payment.tax_rate,
+      honorarium: payment.total_honorarium,
     }));
 
     if (rows.length === 0) throw new NotFoundError();
