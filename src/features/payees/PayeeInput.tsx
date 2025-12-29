@@ -1,5 +1,6 @@
 import { ComboboxField } from '@/components/ComboBox';
 import type { PaymentHookForm } from '../payments/payments';
+import CreatePayeeDialog from './CreatePayeeDialog';
 import { usePayees } from './payee';
 
 type PayeeInputProps = {
@@ -27,6 +28,8 @@ export default function PayeeInput({ form }: PayeeInputProps) {
             }))
           : []
       }
-    />
+    >
+      <CreatePayeeDialog />
+    </ComboboxField>
   );
 }
