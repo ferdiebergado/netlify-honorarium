@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/command';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Spinner } from '@/components/ui/spinner';
+import { CommandLoading } from 'cmdk';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { useState } from 'react';
 import { Controller, type FieldValues, type Path, type UseFormReturn } from 'react-hook-form';
@@ -54,65 +54,61 @@ export function ComboboxField<TFieldValues extends FieldValues>({
         <Field data-invalid={fieldState.invalid}>
           <FieldLabel htmlFor={name}>{label}</FieldLabel>
 
-          {isPending && (
-            <div className="flex items-center gap-3 text-sm">
-              <Spinner />
-              Loading…
-            </div>
-          )}
-
           {isError && errorMessage && <FieldError errors={[{ message: errorMessage }]} />}
 
-          {!isPending && !isError && (
-            <Popover open={isOpen} onOpenChange={setIsOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  aria-expanded={isOpen}
-                  className="w-auto justify-between text-left wrap-break-word whitespace-break-spaces"
-                >
-                  {field.value ? options.find(o => o.id === field.value)?.label : placeholder}
-                  <ChevronsUpDown className="opacity-50" />
-                </Button>
-              </PopoverTrigger>
+          <Popover open={isOpen} onOpenChange={setIsOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                role="combobox"
+                aria-expanded={isOpen}
+                className="h-auto w-full justify-between text-left wrap-break-word whitespace-break-spaces"
+              >
+                {field.value ? options.find(o => o.id === field.value)?.label : placeholder}
+                <ChevronsUpDown className="opacity-50" />
+              </Button>
+            </PopoverTrigger>
 
-              <PopoverContent className="p-0">
-                <Command>
-                  <CommandInput
-                    id={name}
-                    placeholder={searchPlaceholder}
-                    className="h-9"
-                    aria-invalid={fieldState.invalid}
-                  />
-                  <CommandList>
-                    <CommandEmpty>No results found.</CommandEmpty>
-                    <CommandGroup>
-                      {options.map(option => (
-                        <CommandItem
-                          key={option.id}
-                          value={option.label}
-                          onSelect={() => {
-                            field.onChange(option.id);
-                            setIsOpen(false);
-                          }}
-                          className="wrap-break-word whitespace-break-spaces"
-                        >
-                          {option.label}
-                          <Check
-                            className={cn(
-                              'ml-auto',
-                              field.value === option.id ? 'opacity-100' : 'opacity-0'
-                            )}
-                          />
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
-          )}
+            <PopoverContent
+              align="start"
+              sideOffset={4}
+              className="w-(--radix-popover-trigger-width) p-0"
+            >
+              <Command>
+                <CommandInput
+                  id={name}
+                  placeholder={searchPlaceholder}
+                  className="h-9"
+                  aria-invalid={fieldState.invalid}
+                />
+                <CommandList>
+                  {isPending && <CommandLoading>Loading...</CommandLoading>}
+                  <CommandEmpty>No results found.</CommandEmpty>
+                  <CommandGroup>
+                    {options.map(option => (
+                      <CommandItem
+                        key={option.id}
+                        value={option.label}
+                        onSelect={() => {
+                          field.onChange(option.id);
+                          setIsOpen(false);
+                        }}
+                        className="wrap-break-word whitespace-break-spaces"
+                      >
+                        {option.label}
+                        <Check
+                          className={cn(
+                            'ml-auto',
+                            field.value === option.id ? 'opacity-100' : 'opacity-0'
+                          )}
+                        />
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
 
           {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
         </Field>
