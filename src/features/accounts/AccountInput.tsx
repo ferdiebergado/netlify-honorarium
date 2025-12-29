@@ -1,4 +1,4 @@
-import { ComboboxField } from '@/components/ComboBox';
+import { SelectField } from '@/components/SelectField';
 import { useEffect, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
 import type { PaymentHookForm } from '../../features/payments/payments';
@@ -14,7 +14,7 @@ export default function AccountInput({ form }: AccountInputProps) {
     name: 'payeeId',
   });
 
-  const { isPending, isError, error, isSuccess, data: accounts = [] } = useAccounts();
+  const { isPending, isError, error, data: accounts = [] } = useAccounts();
 
   const filteredAccounts = useMemo(
     () => accounts.filter(account => account.payeeId === payeeId),
@@ -26,23 +26,19 @@ export default function AccountInput({ form }: AccountInputProps) {
   }, [form, payeeId]);
 
   return (
-    <ComboboxField
-      form={form}
+    <SelectField
       name="accountId"
+      control={form.control}
       label="Bank Account"
-      placeholder="Select bank account..."
-      searchPlaceholder="Search bank account..."
-      isPending={isPending}
+      placeholder="Select account..."
+      triggerClassName="w-[180px]"
+      options={filteredAccounts.map(({ id, accountNo, bank, bankBranch }) => ({
+        value: id,
+        label: `${bank} ${bankBranch} ${accountNo}`,
+      }))}
+      isLoading={isPending}
       isError={isError}
-      errorMessage={error?.message}
-      options={
-        isSuccess
-          ? filteredAccounts.map(({ id, accountNo, bank, bankBranch }) => ({
-              id,
-              label: `${bank} ${bankBranch} ${accountNo} `,
-            }))
-          : []
-      }
+      error={error}
     />
   );
 }
