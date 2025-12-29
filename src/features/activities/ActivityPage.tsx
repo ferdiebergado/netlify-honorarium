@@ -1,3 +1,4 @@
+import BackButton from '@/components/BackButton';
 import SkeletonCard from '@/components/SkeletonCard';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -115,14 +116,17 @@ export default function ActivityPage() {
         </CardContent>
       </Card>
 
-      {payments && payments.length > 0 && (
-        <div className="flex items-center space-x-1">
-          <CertificationButton activityId={activityId} />
-          <ComputationButton activityId={activityId} />
-          <ORSButton activityId={activityId} />
-          <PayrollButton activityId={activityId} />
-        </div>
-      )}
+      <div className="flex items-center justify-between">
+        {payments && payments.length > 0 && (
+          <div className="flex items-center space-x-1">
+            <CertificationButton activityId={activityId} />
+            <ComputationButton activityId={activityId} />
+            <ORSButton activityId={activityId} />
+            <PayrollButton activityId={activityId} />
+          </div>
+        )}
+        <BackButton path="/activities" />
+      </div>
     </div>
   );
 }
