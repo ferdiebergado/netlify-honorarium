@@ -1,8 +1,8 @@
-import { ComboboxField } from '@/components/ComboBox';
+import { SelectField } from '@/components/SelectField';
 import { useEffect, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
 import type { PaymentHookForm } from '../payments/payments';
-import { useSalaries } from './salaries';
+import { useSalary } from './salaries';
 
 type SalaryInputProps = {
   form: PaymentHookForm;
@@ -14,7 +14,7 @@ export default function SalaryInput({ form }: SalaryInputProps) {
     name: 'payeeId',
   });
 
-  const { isPending, isError, error, isSuccess, data: salaries = [] } = useSalaries();
+  const { isPending, isError, error, data: salaries = [] } = useSalary(payeeId.toString());
 
   const filteredSalaries = useMemo(
     () => salaries.filter(s => s.payeeId === payeeId),
@@ -26,23 +26,19 @@ export default function SalaryInput({ form }: SalaryInputProps) {
   }, [form, payeeId]);
 
   return (
-    <ComboboxField
-      form={form}
+    <SelectField
       name="salaryId"
+      control={form.control}
       label="Basic Salary"
       placeholder="Select salary..."
-      searchPlaceholder="Search salary..."
-      isPending={isPending}
+      triggerClassName="w-[180px]"
+      options={filteredSalaries.map(salary => ({
+        value: salary.id,
+        label: salary.salary.toString(),
+      }))}
+      isLoading={isPending}
       isError={isError}
-      errorMessage={error?.message}
-      options={
-        isSuccess
-          ? filteredSalaries.map(salary => ({
-              id: salary.id,
-              label: salary.salary.toString(),
-            }))
-          : []
-      }
+      error={error}
     />
   );
 }

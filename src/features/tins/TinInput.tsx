@@ -1,8 +1,8 @@
-import { ComboboxField } from '@/components/ComboBox';
+import { SelectField } from '@/components/SelectField';
 import { useEffect, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
 import type { PaymentHookForm } from '../payments/payments';
-import { useTins } from './tins';
+import { usePayeeTins } from './tins';
 
 type TinInputProps = {
   form: PaymentHookForm;
@@ -14,7 +14,7 @@ export default function TinInput({ form }: TinInputProps) {
     name: 'payeeId',
   });
 
-  const { isPending, isError, error, isSuccess, data: tins = [] } = useTins();
+  const { isPending, isError, error, data: tins = [] } = usePayeeTins(payeeId.toString());
 
   const filteredTins = useMemo(() => tins.filter(tin => tin.payeeId === payeeId), [payeeId, tins]);
 
@@ -23,23 +23,19 @@ export default function TinInput({ form }: TinInputProps) {
   }, [form, payeeId]);
 
   return (
-    <ComboboxField
-      form={form}
+    <SelectField
       name="tinId"
+      control={form.control}
       label="Tax Identification Number (TIN)"
-      placeholder="Select tin..."
-      searchPlaceholder="Search tin..."
-      isPending={isPending}
+      placeholder="Select TIN..."
+      triggerClassName="w-[180px]"
+      options={filteredTins.map(tin => ({
+        value: tin.id,
+        label: tin.tin,
+      }))}
+      isLoading={isPending}
       isError={isError}
-      errorMessage={error?.message}
-      options={
-        isSuccess
-          ? filteredTins.map(tin => ({
-              id: tin.id,
-              label: tin.tin,
-            }))
-          : []
-      }
+      error={error}
     />
   );
 }

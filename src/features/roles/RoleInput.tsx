@@ -1,4 +1,4 @@
-import { ComboboxField } from '@/components/ComboBox';
+import { SelectField } from '@/components/SelectField';
 import type { PaymentHookForm } from '../../features/payments/payments';
 import { useRoles } from './roles';
 
@@ -7,26 +7,22 @@ type RoleInputProps = {
 };
 
 export default function RoleInput({ form }: RoleInputProps) {
-  const { isPending, isError, error, isSuccess, data: roles } = useRoles();
+  const { isPending, isError, error, data: roles = [] } = useRoles();
 
   return (
-    <ComboboxField
-      form={form}
+    <SelectField
       name="roleId"
+      control={form.control}
       label="Role"
-      placeholder="Select role..."
-      searchPlaceholder="Search role..."
-      isPending={isPending}
+      placeholder="Select a role..."
+      triggerClassName="w-[180px]"
+      options={roles.map(role => ({
+        value: role.id,
+        label: role.name,
+      }))}
+      isLoading={isPending}
       isError={isError}
-      errorMessage={error?.message}
-      options={
-        isSuccess
-          ? roles.map(role => ({
-              id: role.id,
-              label: role.name,
-            }))
-          : []
-      }
+      error={error}
     />
   );
 }
