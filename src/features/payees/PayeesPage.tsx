@@ -1,7 +1,15 @@
+import SkeletonCard from '@/components/SkeletonCard';
 import CreatePayeeDialog from './CreatePayeeDialog';
+import { usePayees } from './payee';
 import PayeeList from './PayeeList';
 
 export default function PayeesPage() {
+  const { isPending, isError, error, data: payees } = usePayees();
+
+  if (isPending) return <SkeletonCard />;
+
+  if (isError) return <p className="text-destructive m-3">Error: {error.message}</p>;
+
   return (
     <>
       <div className="mb-6 flex">
@@ -13,7 +21,7 @@ export default function PayeesPage() {
           <CreatePayeeDialog />
         </div>
       </div>
-      <PayeeList />
+      <PayeeList payees={payees} />
     </>
   );
 }
