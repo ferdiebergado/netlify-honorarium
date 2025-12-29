@@ -94,7 +94,9 @@ function rowsToActivity(rows: PaymentRow[]): Activity {
       office: row.payee_office,
     };
 
-    payees.push(payee);
+    const existingPayee = payees.find(p => p.id === payee.id);
+
+    if (!existingPayee) payees.push(payee);
 
     const payment: PaymentData = {
       honorarium: row.honorarium,
