@@ -1,9 +1,16 @@
-import { MutationCache, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  MutationCache,
+  QueryClient,
+  QueryClientProvider,
+  QueryErrorResetBoundary,
+} from '@tanstack/react-query';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { ErrorBoundary } from 'react-error-boundary';
 import { BrowserRouter } from 'react-router';
 import { toast } from 'sonner';
 import App from './App';
+import { Button } from './components/ui/button';
 import './index.css';
 
 const queryClient = new QueryClient({
@@ -20,7 +27,27 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <App />
+        <QueryErrorResetBoundary>
+          {({ reset }) => (
+            <ErrorBoundary
+              onReset={reset}
+              fallbackRender={({ resetErrorBoundary }) => (
+                <div>
+                  There was an error!
+                  <Button
+                    onClick={() => {
+                      resetErrorBoundary();
+                    }}
+                  >
+                    Try again
+                  </Button>
+                </div>
+              )}
+            >
+              <App />
+            </ErrorBoundary>
+          )}
+        </QueryErrorResetBoundary>
       </QueryClientProvider>
     </BrowserRouter>
   </StrictMode>
