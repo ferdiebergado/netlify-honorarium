@@ -19,3 +19,19 @@ export function useSalaries() {
     queryFn: getSalaries,
   });
 }
+
+async function getSalary(payeeId: string) {
+  const res = await fetch('/api/salaries/' + payeeId);
+  const { message, data } = (await res.json()) as APIResponse<Salary[]>;
+
+  if (!res.ok) throw new Error(message);
+
+  return data;
+}
+
+export function useSalary(payeeId: string) {
+  return useQuery({
+    queryKey: [queryKey, payeeId],
+    queryFn: () => getSalary(payeeId),
+  });
+}
