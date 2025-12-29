@@ -82,14 +82,16 @@ export default function PaymentForm({
         <RoleInput form={form} />
 
         <FieldGroup className="@container/field-group flex flex-row">
-          <SalaryInput form={form} />
+          <div className="flex-1">
+            <SalaryInput form={form} />
+          </div>
 
           {/*  HONORARIUM */}
           <Controller
             name="honorarium"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
+              <Field className="flex-1" data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="honorarium">Honorarium</FieldLabel>
                 <Input
                   {...field}
