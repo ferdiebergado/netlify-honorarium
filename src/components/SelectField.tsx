@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { type Control, Controller, type FieldValues, type Path } from 'react-hook-form';
 import Loader from './Loader';
 import { Field, FieldError, FieldLabel } from './ui/field';
@@ -26,6 +27,7 @@ type ControlledSelectProps<T extends FieldValues> = {
   isLoading: boolean;
   isError: boolean;
   error: Error | null;
+  children?: ReactNode;
 };
 
 export function SelectField<T extends FieldValues>({
@@ -39,6 +41,7 @@ export function SelectField<T extends FieldValues>({
   isLoading,
   isError,
   error,
+  children,
 }: ControlledSelectProps<T>) {
   const fieldId = id ?? name;
 
@@ -71,6 +74,7 @@ export function SelectField<T extends FieldValues>({
               </SelectTrigger>
 
               <SelectContent>
+                <SelectItem value="0">{children}</SelectItem>
                 <SelectSeparator />
                 {options.map(opt => (
                   <SelectItem key={opt.value} value={String(opt.value)}>
