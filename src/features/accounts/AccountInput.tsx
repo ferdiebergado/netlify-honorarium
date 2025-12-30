@@ -3,6 +3,7 @@ import { useEffect, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
 import type { PaymentHookForm } from '../../features/payments/payments';
 import { useAccounts } from './accounts';
+import CreateAccountDialog from './CreateAccountDialog';
 
 type AccountInputProps = {
   form: PaymentHookForm;
@@ -39,6 +40,8 @@ export default function AccountInput({ form }: AccountInputProps) {
       isLoading={isPending}
       isError={isError}
       error={error}
-    />
+    >
+      <CreateAccountDialog payeeId={payeeId} />
+    </SelectField>
   );
 }

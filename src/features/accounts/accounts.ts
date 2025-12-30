@@ -1,6 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
 import type { APIResponse } from '../../lib/api';
-import type { Account } from '../../shared/schema';
+import {
+  createAccountSchema,
+  type Account,
+  type CreateAccountFormValues,
+} from '../../shared/schema';
 
 async function getAccounts() {
   const res = await fetch('/api/accounts');
@@ -33,5 +39,35 @@ export function usePayeeAccounts(payeeId: number) {
   return useQuery({
     queryKey: ['accounts', payeeId],
     queryFn: () => getPayeeAccounts(payeeId),
+  });
+}
+
+export function useAccountForm(defaultValues: CreateAccountFormValues) {
+  return useForm<CreateAccountFormValues>({
+    resolver: zodResolver(createAccountSchema),
+    defaultValues,
+  });
+}
+export type AccountHookForm = ReturnType<typeof useAccountForm>;
+
+async function createAccount(formData: CreateAccountFormValues) {
+  const res = await fetch('/api/accounts', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formData),
+  });
+
+  const { message } = (await res.json()) as { message: string };
+
+  if (!res.ok) throw new Error(message);
+
+  return { message };
+}
+
+export function useCreateAccount() {
+  return useMutation({
+    mutationFn: createAccount,
   });
 }
