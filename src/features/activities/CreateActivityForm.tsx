@@ -21,6 +21,7 @@ export default function CreateActivityForm() {
     endDate: '',
     code: '',
     focalId: 0,
+    payees: [],
   };
 
   const form = useActivityForm(formValues);
