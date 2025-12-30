@@ -1,7 +1,9 @@
 import { Button } from '@/components/ui/button';
+import { ButtonGroup } from '@/components/ui/button-group';
 import { DialogFooter } from '@/components/ui/dialog';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { IconPlus } from '@tabler/icons-react';
 import { useEffect } from 'react';
 import { Controller } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -81,9 +83,16 @@ export default function PaymentForm({
         <PayeeInput form={form} />
         <RoleInput form={form} />
 
-        <FieldGroup className="@container/field-group flex flex-row">
+        <FieldGroup className="items @container/field-group flex flex-row">
           <div className="flex-1">
-            <SalaryInput form={form} />
+            <ButtonGroup className="flex w-full items-end">
+              <SalaryInput form={form} />
+              <ButtonGroup className="w-1/4">
+                <Button aria-label="Add salary" size="icon" variant="outline">
+                  <IconPlus />
+                </Button>
+              </ButtonGroup>
+            </ButtonGroup>
           </div>
 
           {/*  HONORARIUM */}
