@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Briefcase, Building2, Info } from 'lucide-react';
+import { IconBriefcase, IconBuilding, IconInfoCircle } from '@tabler/icons-react';
 import type { Payee } from '../../shared/schema.ts';
 import { usePayeeAccounts } from '../accounts/accounts.ts';
 
@@ -31,16 +31,18 @@ export default function ViewPayeeDialog({ payee }: ViewPayeeProps) {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button size="icon" title="Info">
-          <Info />
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button size="icon" title="Info">
+            <IconInfoCircle />
+          </Button>
+        }
+      ></DialogTrigger>
       <DialogContent className="w-full max-w-5xl pt-12">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold">{name}</DialogTitle>
           <DialogDescription className="flex items-center gap-1 text-sm">
-            <Building2 className="h-3 w-3" /> {office}
+            <IconBuilding className="h-3 w-3" /> {office}
           </DialogDescription>
         </DialogHeader>
 
@@ -54,7 +56,7 @@ export default function ViewPayeeDialog({ payee }: ViewPayeeProps) {
                 Position
               </p>
               <div className="flex items-center gap-2 text-sm">
-                <Briefcase className="h-4 w-4 opacity-70" />
+                <IconBriefcase className="h-4 w-4 opacity-70" />
                 <span>{position}</span>
               </div>
             </div>

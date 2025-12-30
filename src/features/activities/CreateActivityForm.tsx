@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { CirclePlus } from 'lucide-react';
+import { IconCirclePlus } from '@tabler/icons-react';
 import { useState } from 'react';
 import type { ActivityFormValues } from '../../shared/schema';
 import { useActivityForm, useCreateActivity } from './activity';
@@ -33,7 +33,7 @@ export default function CreateActivityForm() {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <Button size="lg" className="bg-cyan-500" onClick={handleClick}>
-        <CirclePlus /> New Activity
+        <IconCirclePlus /> New Activity
       </Button>
       <DialogContent>
         <DialogHeader>

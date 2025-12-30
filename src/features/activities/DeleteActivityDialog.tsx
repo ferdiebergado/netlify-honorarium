@@ -10,7 +10,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { Trash2 } from 'lucide-react';
+import { IconTrash } from '@tabler/icons-react';
 import { toast } from 'sonner';
 import type { Activity } from '../../shared/schema';
 import { useDeleteActivity } from './activity';
@@ -30,17 +30,19 @@ export default function DeleteActivityDialog({ activity }: DeleteActivityDialogP
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button
-          type="button"
-          variant="outline"
-          size="icon"
-          className="text-destructive"
-          title="Delete"
-        >
-          <Trash2 />
-        </Button>
-      </AlertDialogTrigger>
+      <AlertDialogTrigger
+        render={
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            className="text-destructive"
+            title="Delete"
+          >
+            <IconTrash />
+          </Button>
+        }
+      ></AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>

@@ -9,11 +9,10 @@ import {
 } from '@/components/ui/command';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { IconChevronsDown } from '@tabler/icons-react';
 import { CommandLoading } from 'cmdk';
-import { Check, ChevronsUpDown } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { Controller, type FieldValues, type Path, type UseFormReturn } from 'react-hook-form';
-import { cn } from '../lib/utils';
 
 type ComboboxOption = {
   id: number | string;
@@ -54,57 +53,51 @@ export function ComboboxField<TFieldValues extends FieldValues>({
       control={form.control}
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid}>
-          <FieldLabel htmlFor={name}>{label}</FieldLabel>
+          <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
 
           {isError && errorMessage && <FieldError errors={[{ message: errorMessage }]} />}
 
           <Popover open={isOpen} onOpenChange={setIsOpen}>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                role="combobox"
-                aria-expanded={isOpen}
-                className="h-auto w-full justify-between text-left wrap-break-word whitespace-break-spaces"
-              >
-                {field.value ? options.find(o => o.id === field.value)?.label : placeholder}
-                <ChevronsUpDown className="opacity-50" />
-              </Button>
-            </PopoverTrigger>
+            <PopoverTrigger
+              render={
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  className="justify-between text-left wrap-break-word whitespace-break-spaces"
+                  aria-expanded={isOpen}
+                >
+                  {field.value
+                    ? options.find(option => option.id === field.value)?.label
+                    : placeholder}
+                  <IconChevronsDown className="opacity-50" />
+                </Button>
+              }
+            ></PopoverTrigger>
 
-            <PopoverContent
-              align="start"
-              sideOffset={4}
-              className="w-(--radix-popover-trigger-width) p-0"
-            >
+            <PopoverContent align="start" sideOffset={4} className="p-0 sm:w-88">
               <Command>
                 <CommandInput
-                  id={name}
+                  id={field.name}
                   placeholder={searchPlaceholder}
-                  className="h-9"
                   aria-invalid={fieldState.invalid}
                 />
                 <CommandList>
                   {isPending && <CommandLoading>Loading...</CommandLoading>}
-                  <CommandItem>{children}</CommandItem>
+                  {children && <CommandItem>{children}</CommandItem>}
+
                   <CommandEmpty>No results found.</CommandEmpty>
                   <CommandGroup>
                     {options.map(option => (
                       <CommandItem
                         key={option.id}
                         value={option.label}
+                        data-checked={field.value === option.id}
                         onSelect={() => {
                           field.onChange(option.id);
                           setIsOpen(false);
                         }}
-                        className="wrap-break-word whitespace-break-spaces"
                       >
                         {option.label}
-                        <Check
-                          className={cn(
-                            'ml-auto',
-                            field.value === option.id ? 'opacity-100' : 'opacity-0'
-                          )}
-                        />
                       </CommandItem>
                     ))}
                   </CommandGroup>

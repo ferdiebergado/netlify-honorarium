@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
 import { DialogFooter } from '@/components/ui/dialog';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
@@ -9,9 +8,7 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from '@/components/ui/input-group';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { ChevronDownIcon } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Controller } from 'react-hook-form';
 import { toast } from 'sonner';
 import FocalInput from '../../features/focals/FocalInput';
@@ -38,9 +35,6 @@ export default function ActivityForm({
   isSuccess,
   isError,
 }: ActivityFormProps) {
-  const [isStartDateOpen, setIsStartDateOpen] = useState(false);
-  const [isEndDateOpen, setIsEndDateOpen] = useState(false);
-
   const handleSubmit = (formData: ActivityFormValues) => {
     setIsDialogOpen(false);
 
@@ -108,35 +102,8 @@ export default function ActivityForm({
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="start-date">Start Date</FieldLabel>
-                <Popover open={isStartDateOpen} onOpenChange={setIsStartDateOpen}>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      id="date"
-                      className="w-48 justify-between font-normal"
-                    >
-                      {field.value
-                        ? new Date(field.value).toLocaleDateString()
-                        : 'Select start date'}
-                      <ChevronDownIcon />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto overflow-hidden p-0" align="start">
-                    <Calendar
-                      id="start-date"
-                      mode="single"
-                      selected={new Date(field.value)}
-                      captionLayout="dropdown"
-                      onSelect={date => {
-                        if (!date) return;
-                        field.onChange(date.toLocaleDateString('sv'));
-                        setIsStartDateOpen(false);
-                      }}
-                      aria-invalid={fieldState.invalid}
-                    />
-                  </PopoverContent>
-                </Popover>
+                <FieldLabel htmlFor={field.name}>Start Date</FieldLabel>
+                <Input type="date" {...field} id={field.name} aria-invalid={fieldState.invalid} />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}
@@ -149,33 +116,8 @@ export default function ActivityForm({
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="end-date">End Date</FieldLabel>
-                <Popover open={isEndDateOpen} onOpenChange={setIsEndDateOpen}>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      id="date"
-                      className="w-48 justify-between font-normal"
-                    >
-                      {field.value ? new Date(field.value).toLocaleDateString() : 'Select end date'}
-                      <ChevronDownIcon />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto overflow-hidden p-0" align="start">
-                    <Calendar
-                      id="end-date"
-                      mode="single"
-                      selected={new Date(field.value)}
-                      captionLayout="dropdown"
-                      onSelect={date => {
-                        if (!date) return;
-                        field.onChange(date.toLocaleDateString('sv'));
-                        setIsEndDateOpen(false);
-                      }}
-                      aria-invalid={fieldState.invalid}
-                    />
-                  </PopoverContent>
-                </Popover>
+                <FieldLabel htmlFor={field.name}>End Date</FieldLabel>
+                <Input type="date" {...field} id={field.name} aria-invalid={fieldState.invalid} />
                 {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}

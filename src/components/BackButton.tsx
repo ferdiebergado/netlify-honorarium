@@ -7,8 +7,10 @@ type BackButtonProps = {
 
 export default function BackButton({ path }: BackButtonProps) {
   return (
-    <Button variant="outline" className="mx-3 mt-6 font-bold" asChild>
-      <Link to={path}>Back</Link>
-    </Button>
+    <Button
+      variant="outline"
+      className="mx-3 mt-6 font-bold"
+      render={<Link to={path}>Back</Link>}
+    ></Button>
   );
 }

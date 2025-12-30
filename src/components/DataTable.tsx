@@ -1,3 +1,4 @@
+import { IconSearch } from '@tabler/icons-react';
 import {
   flexRender,
   getCoreRowModel,
@@ -8,7 +9,6 @@ import {
   type ColumnFiltersState,
   type SortingState,
 } from '@tanstack/react-table';
-import { SearchIcon } from 'lucide-react';
 import { useState } from 'react';
 import { DataTablePagination } from './DataTablePagination';
 import { DataTableViewOptions } from './DataTableViewOptions';
@@ -56,7 +56,7 @@ export function DataTable<TData, TValue>({
               onChange={event => table.getColumn(filterColumn)?.setFilterValue(event.target.value)}
             />
             <InputGroupAddon>
-              <SearchIcon />
+              <IconSearch />
             </InputGroupAddon>
           </InputGroup>
 

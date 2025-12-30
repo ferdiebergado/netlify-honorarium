@@ -1,4 +1,10 @@
-import { Calendar1, Home, PhilippinePeso, Settings, Users } from 'lucide-react';
+import {
+  IconCalendar,
+  IconCurrencyPeso,
+  IconHome,
+  IconSettings,
+  IconUsers,
+} from '@tabler/icons-react';
 import type { FC } from 'react';
 import { Link } from 'react-router';
 import {
@@ -17,27 +23,27 @@ const items = [
   {
     title: 'Home',
     url: '/',
-    icon: Home,
+    icon: IconHome,
   },
   {
     title: 'Activities',
     url: '/activities',
-    icon: Calendar1,
+    icon: IconCalendar,
   },
   {
     title: 'Payees',
     url: '/payees',
-    icon: Users,
+    icon: IconUsers,
   },
   {
     title: 'Payments',
     url: '/payments',
-    icon: PhilippinePeso,
+    icon: IconCurrencyPeso,
   },
   {
     title: 'Settings',
     url: '#',
-    icon: Settings,
+    icon: IconSettings,
   },
 ];
 
@@ -51,12 +57,14 @@ const AppSidebar: FC = () => {
             <SidebarMenu>
               {items.map(item => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link to={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
+                  <SidebarMenuButton
+                    render={
+                      <Link to={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    }
+                  ></SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>

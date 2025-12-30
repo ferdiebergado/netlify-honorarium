@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { FilePenLine } from 'lucide-react';
+import { IconFilePencil } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import type { Activity, ActivityFormValues } from '../../shared/schema';
 import { useActivityForm, useUpdateActivity } from './activity';
@@ -21,7 +21,7 @@ export default function UpdateActivityForm({ activity }: UpdateActivityProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const form = useActivityForm(activity);
-  const { mutateAsync: updateActivity } = useUpdateActivity();
+  const { isSuccess, isError, mutateAsync: updateActivity } = useUpdateActivity();
 
   const handleSubmit = (formData: ActivityFormValues) =>
     updateActivity({ activityId: activity.id, formData });
@@ -32,11 +32,13 @@ export default function UpdateActivityForm({ activity }: UpdateActivityProps) {
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogTrigger asChild>
-        <Button type="button" size="icon" variant="outline" title="Update">
-          <FilePenLine />
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button type="button" size="icon" variant="outline" title="Update">
+            <IconFilePencil />
+          </Button>
+        }
+      ></DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Update Activity</DialogTitle>
@@ -48,6 +50,8 @@ export default function UpdateActivityForm({ activity }: UpdateActivityProps) {
           onSubmit={handleSubmit}
           setIsDialogOpen={setIsDialogOpen}
           loadingMsg="Updating Activity..."
+          isSuccess={isSuccess}
+          isError={isError}
         />
       </DialogContent>
     </Dialog>

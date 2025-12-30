@@ -1,5 +1,5 @@
-import { Loader } from 'lucide-react';
+import { IconLoader } from '@tabler/icons-react';
 
 export default function Spinner() {
-  return <Loader size={10} className="animate-spin" />;
+  return <IconLoader size={10} className="animate-spin" />;
 }

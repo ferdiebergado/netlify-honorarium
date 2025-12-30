@@ -8,7 +8,13 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
-import { Calendar, Info, MapPin, Tag, UserStar } from 'lucide-react';
+import {
+  IconCalendar,
+  IconInfoCircle,
+  IconMapPin,
+  IconTag,
+  IconUserStar,
+} from '@tabler/icons-react';
 import { type Activity } from '../../shared/schema';
 
 type ViewActivityProps = {
@@ -20,16 +26,18 @@ export default function ViewActivityDialog({ activity }: ViewActivityProps) {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button type="button" size="icon" variant="outline" title="Info">
-          <Info />
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <Button type="button" size="icon" variant="outline" title="Info">
+            <IconInfoCircle />
+          </Button>
+        }
+      ></DialogTrigger>
       <DialogContent className="pt-12 sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold">{title}</DialogTitle>
           <DialogDescription className="flex items-center gap-1 text-sm">
-            <MapPin className="h-3 w-3" /> {venue}
+            <IconMapPin className="h-3 w-3" /> {venue}
           </DialogDescription>
         </DialogHeader>
 
@@ -43,7 +51,7 @@ export default function ViewActivityDialog({ activity }: ViewActivityProps) {
                 Start Date
               </p>
               <div className="flex items-center gap-2 text-sm">
-                <Calendar className="h-4 w-4 opacity-70" />
+                <IconCalendar className="h-4 w-4 opacity-70" />
                 <span>{startDate}</span>
               </div>
             </div>
@@ -52,7 +60,7 @@ export default function ViewActivityDialog({ activity }: ViewActivityProps) {
                 End Date
               </p>
               <div className="flex items-center gap-2 text-sm">
-                <Calendar className="h-4 w-4 opacity-70" />
+                <IconCalendar className="h-4 w-4 opacity-70" />
                 <span>{endDate}</span>
               </div>
             </div>
@@ -64,7 +72,7 @@ export default function ViewActivityDialog({ activity }: ViewActivityProps) {
           <div className="space-y-3">
             <div className="flex items-center justify-between text-sm">
               <div className="text-muted-foreground flex items-center gap-2">
-                <Tag className="h-4 w-4" />
+                <IconTag className="h-4 w-4" />
                 <span>Activity Code</span>
               </div>
               <span className="bg-muted rounded px-2 py-0.5 font-mono font-medium">{code}</span>
@@ -74,7 +82,7 @@ export default function ViewActivityDialog({ activity }: ViewActivityProps) {
           <div>
             <div className="flex items-center justify-between text-sm">
               <div className="text-muted-foreground flex items-center gap-2">
-                <UserStar className="h-4 w-4" />
+                <IconUserStar className="h-4 w-4" />
                 <span>Focal Person</span>
               </div>
               <span className="text-foreground font-medium">{focal}</span>

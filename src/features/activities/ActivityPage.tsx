@@ -3,7 +3,7 @@ import SkeletonCard from '@/components/SkeletonCard';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { checkId } from '@/lib/utils';
-import { Calendar, MapPin, Tag, UserStar } from 'lucide-react';
+import { IconCalendar, IconMapPin, IconTag, IconUserStar } from '@tabler/icons-react';
 import { useParams } from 'react-router';
 import PayeesTable from '../payees/PayeesTable';
 import CertificationButton from '../payments/CertificationButton';
@@ -35,7 +35,7 @@ export default function ActivityPage() {
         <div className="flex flex-col px-3">
           <h1 className="text-2xl font-bold">{title}</h1>
           <h2 className="text-muted-foreground flex items-center gap-1">
-            <MapPin className="h-3 w-3" /> {venue}
+            <IconMapPin className="h-3 w-3" /> {venue}
           </h2>
         </div>
         <div className="flex flex-1 items-end justify-end px-3">
@@ -58,7 +58,7 @@ export default function ActivityPage() {
                     Start Date
                   </p>
                   <div className="flex items-center gap-2 text-sm">
-                    <Calendar className="h-4 w-4 opacity-70" />
+                    <IconCalendar className="h-4 w-4 opacity-70" />
                     <span>{startDate}</span>
                   </div>
                 </div>
@@ -67,7 +67,7 @@ export default function ActivityPage() {
                     End Date
                   </p>
                   <div className="flex items-center gap-2 text-sm">
-                    <Calendar className="h-4 w-4 opacity-70" />
+                    <IconCalendar className="h-4 w-4 opacity-70" />
                     <span>{endDate}</span>
                   </div>
                 </div>
@@ -79,7 +79,7 @@ export default function ActivityPage() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-sm">
                   <div className="text-muted-foreground flex items-center gap-2">
-                    <Tag className="h-4 w-4" />
+                    <IconTag className="h-4 w-4" />
                     <span>Activity Code</span>
                   </div>
                   <span className="bg-muted rounded px-2 py-0.5 font-mono font-medium">{code}</span>
@@ -89,7 +89,7 @@ export default function ActivityPage() {
               <div>
                 <div className="flex items-center justify-between text-sm">
                   <div className="text-muted-foreground flex items-center gap-2">
-                    <UserStar className="h-4 w-4" />
+                    <IconUserStar className="h-4 w-4" />
                     <span>Focal Person</span>
                   </div>
                   <span className="text-foreground font-medium">{focal}</span>

@@ -70,14 +70,16 @@ export function SelectField<T extends FieldValues>({
                 className={triggerClassName}
                 aria-invalid={fieldState.invalid}
               >
-                <SelectValue placeholder={placeholder} />
+                <SelectValue>
+                  {options.find(o => o.value === field.value)?.label ?? placeholder}
+                </SelectValue>
               </SelectTrigger>
 
               <SelectContent>
                 <SelectItem value="0">{children}</SelectItem>
                 <SelectSeparator />
                 {options.map(opt => (
-                  <SelectItem key={opt.value} value={String(opt.value)}>
+                  <SelectItem key={opt.value} value={opt.value.toString()}>
                     {opt.label}
                   </SelectItem>
                 ))}

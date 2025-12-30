@@ -116,14 +116,14 @@ export default function PaymentForm({
           {/* END OF HONORARIUM */}
         </FieldGroup>
 
-        <FieldGroup className="@container/field-group flex flex-row">
+        <FieldGroup className="@container/field-group flex flex-row items-end gap-1">
           {/*  TAX RATE */}
           <Controller
             name="taxRate"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid} className="w-1/2 pr-2">
-                <FieldLabel htmlFor="tax">Withholding tax rate</FieldLabel>
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="tax">Withholding Tax Rate (%)</FieldLabel>
                 <Input
                   {...field}
                   id="tax"

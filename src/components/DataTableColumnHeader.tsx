@@ -1,5 +1,4 @@
 import { type Column } from '@tanstack/react-table';
-import { ArrowDown, ArrowUp, ChevronsUpDown, EyeOff } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -9,6 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { IconArrowDown, IconArrowUp, IconChevronDown, IconEyeOff } from '@tabler/icons-react';
 import { cn } from '../lib/utils';
 
 type DataTableColumnHeaderProps<TData, TValue> = {
@@ -28,25 +28,27 @@ export function DataTableColumnHeader<TData, TValue>({
   return (
     <div className={cn('flex items-center gap-2', className)}>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="sm" className="data-[state=open]:bg-accent -ml-3 h-8">
-            <span>{title}</span>
-            {column.getIsSorted() === 'desc' ? (
-              <ArrowDown />
-            ) : column.getIsSorted() === 'asc' ? (
-              <ArrowUp />
-            ) : (
-              <ChevronsUpDown />
-            )}
-          </Button>
-        </DropdownMenuTrigger>
+        <DropdownMenuTrigger
+          render={
+            <Button variant="ghost" size="sm" className="data-[state=open]:bg-accent -ml-3 h-8">
+              <span>{title}</span>
+              {column.getIsSorted() === 'desc' ? (
+                <IconArrowDown />
+              ) : column.getIsSorted() === 'asc' ? (
+                <IconArrowUp />
+              ) : (
+                <IconChevronDown />
+              )}
+            </Button>
+          }
+        ></DropdownMenuTrigger>
         <DropdownMenuContent align="start">
           <DropdownMenuItem
             onClick={() => {
               column.toggleSorting(false);
             }}
           >
-            <ArrowUp />
+            <IconArrowUp />
             Asc
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -54,7 +56,7 @@ export function DataTableColumnHeader<TData, TValue>({
               column.toggleSorting(true);
             }}
           >
-            <ArrowDown />
+            <IconArrowDown />
             Desc
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -63,7 +65,7 @@ export function DataTableColumnHeader<TData, TValue>({
               column.toggleVisibility(false);
             }}
           >
-            <EyeOff />
+            <IconEyeOff />
             Hide
           </DropdownMenuItem>
         </DropdownMenuContent>

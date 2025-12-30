@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { CirclePlus } from 'lucide-react';
+import { IconCirclePlus } from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
 import type { Activity, PaymentFormValues } from '../../shared/schema';
 import PaymentForm from './PaymentForm';
@@ -45,7 +45,7 @@ export default function CreatePaymentDialog({ activity }: CreatePaymentDialogPro
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <Button size="lg" className="bg-cyan-500" onClick={handleClick}>
-        <CirclePlus /> New Payment
+        <IconCirclePlus /> New Payment
       </Button>
       <DialogContent>
         <DialogHeader>

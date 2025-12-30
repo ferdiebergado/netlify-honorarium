@@ -9,8 +9,11 @@ type PayeeButtonProps = {
 
 export default function PayeeButton({ row }: PayeeButtonProps) {
   return (
-    <Button variant="outline" size="icon" title="Payments" asChild>
-      <Link to={'/payees/?activityId=' + row.getValue<string>('id')}>Payees</Link>
-    </Button>
+    <Button
+      variant="outline"
+      size="icon"
+      title="Payments"
+      render={<Link to={'/payees/?activityId=' + row.getValue<string>('id')}>Payees</Link>}
+    ></Button>
   );
 }
