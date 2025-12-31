@@ -56,6 +56,7 @@ export function SelectField<T extends FieldValues>({
             <div className="flex-1">
               <Select
                 name={field.name}
+                items={options}
                 value={String(field.value) === '0' ? '' : String(field.value)}
                 onValueChange={value => {
                   field.onChange(Number(value));
@@ -80,7 +81,7 @@ export function SelectField<T extends FieldValues>({
                   </SelectValue>
                 </SelectTrigger>
 
-                <SelectContent key={JSON.stringify(options.map(o => o.value))}>
+                <SelectContent>
                   <SelectSeparator />
                   {!isLoading &&
                     !isError &&
