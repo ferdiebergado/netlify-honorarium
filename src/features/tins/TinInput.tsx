@@ -19,13 +19,11 @@ export default function TinInput({ form }: TinInputProps) {
 
   const options = useMemo(
     () =>
-      tins
-        .filter(tin => tin.payeeId === payeeId)
-        .map(tin => ({
-          value: tin.id,
-          label: tin.tin,
-        })),
-    [payeeId, tins]
+      tins.map(tin => ({
+        value: tin.id,
+        label: tin.tin,
+      })),
+    [tins]
   );
 
   useEffect(() => {
