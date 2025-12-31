@@ -38,6 +38,7 @@ export default function CreateAccountPopover({ payeeId }: CreateAccountPopover) 
             onClick={handleClick}
             className="text-muted-foreground text-center"
             disabled={!payeeId}
+            title="Click to add a new account."
           >
             <IconPlus />
           </Button>

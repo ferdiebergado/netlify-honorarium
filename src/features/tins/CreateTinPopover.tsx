@@ -35,6 +35,7 @@ export default function CreateTinPopover({ payeeId }: CreateTinPopoverProps) {
             onClick={handleClick}
             className="text-muted-foreground text-center"
             disabled={!payeeId}
+            title="Click to add a new TIN."
           >
             <IconPlus />
           </Button>

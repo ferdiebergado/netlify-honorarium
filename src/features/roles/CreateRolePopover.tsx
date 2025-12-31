@@ -29,6 +29,7 @@ export default function CreateRolePopover() {
             variant="outline"
             onClick={handleClick}
             className="text-muted-foreground text-center"
+            title="Click to add a new role."
           >
             <IconPlus />
           </Button>

@@ -40,13 +40,16 @@ export default function CreatePayeeDialog() {
         variant="outline"
         onClick={handleClick}
         className="text-muted-foreground h-9 text-center"
+        title="Click to add a new payee."
       >
         <IconPlus />
       </Button>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>New Payee</DialogTitle>
-          <DialogDescription>Create a new payee.</DialogDescription>
+          <DialogTitle className="text-lg font-semibold">New Payee</DialogTitle>
+          <DialogDescription className="text-muted-foreground">
+            Create a new payee.
+          </DialogDescription>
         </DialogHeader>
         <PayeeForm
           form={form}

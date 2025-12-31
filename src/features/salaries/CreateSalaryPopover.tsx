@@ -35,6 +35,7 @@ export default function CreateSalaryPopover({ payeeId }: CreateSalaryPopover) {
             onClick={handleClick}
             className="text-muted-foreground text-center"
             disabled={!payeeId}
+            title="Click to add a salary."
           >
             <IconPlus />
           </Button>
