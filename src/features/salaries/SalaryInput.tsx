@@ -17,7 +17,13 @@ export default function SalaryInput({ form }: SalaryInputProps) {
   const { isPending, isError, error, data: salaries = [] } = useSalary(payeeId.toString());
 
   const filteredSalaries = useMemo(
-    () => salaries.filter(s => s.payeeId === payeeId),
+    () =>
+      salaries
+        .filter(s => s.payeeId === payeeId)
+        .map(salary => ({
+          value: salary.id,
+          label: salary.salary.toString(),
+        })),
     [payeeId, salaries]
   );
 
@@ -31,11 +37,8 @@ export default function SalaryInput({ form }: SalaryInputProps) {
       control={form.control}
       label="Basic Salary"
       placeholder="Select salary..."
-      triggerClassName="w-[180px]"
-      options={filteredSalaries.map(salary => ({
-        value: salary.id,
-        label: salary.salary.toString(),
-      }))}
+      triggerClassName="w-full"
+      options={filteredSalaries}
       isLoading={isPending}
       isError={isError}
       error={error}

@@ -18,7 +18,13 @@ export default function AccountInput({ form }: AccountInputProps) {
   const { isPending, isError, error, data: accounts = [] } = useAccounts();
 
   const filteredAccounts = useMemo(
-    () => accounts.filter(account => account.payeeId === payeeId),
+    () =>
+      accounts
+        .filter(account => account.payeeId === payeeId)
+        .map(({ id, accountNo, bank, bankBranch }) => ({
+          value: id,
+          label: `${bank} ${bankBranch} ${accountNo}`,
+        })),
     [payeeId, accounts]
   );
 
@@ -32,11 +38,8 @@ export default function AccountInput({ form }: AccountInputProps) {
       control={form.control}
       label="Bank Account"
       placeholder="Select account..."
-      triggerClassName="w-[180px]"
-      options={filteredAccounts.map(({ id, accountNo, bank, bankBranch }) => ({
-        value: id,
-        label: `${bank} ${bankBranch} ${accountNo}`,
-      }))}
+      triggerClassName="w-78"
+      options={filteredAccounts}
       isLoading={isPending}
       isError={isError}
       error={error}
