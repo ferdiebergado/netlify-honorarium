@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { DialogFooter } from '@/components/ui/dialog';
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { useEffect } from 'react';
@@ -122,7 +121,7 @@ export default function AccountForm({
         />
         {/* END OF ACCOUNT NAME */}
 
-        <DialogFooter>
+        <div className="flex w-full justify-end gap-2">
           <Button type="button" variant="outline" onClick={handleCancel}>
             Cancel
           </Button>
@@ -130,11 +129,10 @@ export default function AccountForm({
           <Button type="button" variant="outline" onClick={handleReset}>
             Reset
           </Button>
-
           <Button type="submit" form="payee-form">
             Submit
           </Button>
-        </DialogFooter>
+        </div>
       </FieldGroup>
     </form>
   );

@@ -2,6 +2,7 @@ import { SelectField } from '@/components/SelectField';
 import { useEffect, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
 import type { PaymentHookForm } from '../payments/payments';
+import CreateTinPopover from './CreateTinPopover';
 import { usePayeeTins } from './tins';
 
 type TinInputProps = {
@@ -16,7 +17,16 @@ export default function TinInput({ form }: TinInputProps) {
 
   const { isPending, isError, error, data: tins = [] } = usePayeeTins(payeeId.toString());
 
-  const filteredTins = useMemo(() => tins.filter(tin => tin.payeeId === payeeId), [payeeId, tins]);
+  const options = useMemo(
+    () =>
+      tins
+        .filter(tin => tin.payeeId === payeeId)
+        .map(tin => ({
+          value: tin.id,
+          label: tin.tin,
+        })),
+    [payeeId, tins]
+  );
 
   useEffect(() => {
     form.setValue('tinId', 0);
@@ -29,13 +39,12 @@ export default function TinInput({ form }: TinInputProps) {
       label="Tax Identification Number (TIN)"
       placeholder="Select TIN..."
       triggerClassName="w-[180px]"
-      options={filteredTins.map(tin => ({
-        value: tin.id,
-        label: tin.tin,
-      }))}
+      options={options}
       isLoading={isPending}
       isError={isError}
       error={error}
-    />
+    >
+      <CreateTinPopover payeeId={payeeId} />
+    </SelectField>
   );
 }

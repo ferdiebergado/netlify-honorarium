@@ -2,6 +2,7 @@ import { SelectField } from '@/components/SelectField';
 import { useEffect, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
 import type { PaymentHookForm } from '../payments/payments';
+import CreateSalaryPopover from './CreateSalaryPopover';
 import { useSalary } from './salaries';
 
 type SalaryInputProps = {
@@ -16,7 +17,7 @@ export default function SalaryInput({ form }: SalaryInputProps) {
 
   const { isPending, isError, error, data: salaries = [] } = useSalary(payeeId.toString());
 
-  const filteredSalaries = useMemo(
+  const options = useMemo(
     () =>
       salaries
         .filter(s => s.payeeId === payeeId)
@@ -38,10 +39,12 @@ export default function SalaryInput({ form }: SalaryInputProps) {
       label="Basic Salary"
       placeholder="Select salary..."
       triggerClassName="w-full"
-      options={filteredSalaries}
+      options={options}
       isLoading={isPending}
       isError={isError}
       error={error}
-    />
+    >
+      <CreateSalaryPopover payeeId={payeeId} />
+    </SelectField>
   );
 }

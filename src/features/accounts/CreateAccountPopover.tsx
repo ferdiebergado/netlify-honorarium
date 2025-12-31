@@ -6,12 +6,12 @@ import type { CreateAccountFormValues } from '../../shared/schema';
 import AccountForm from './AccountForm';
 import { useAccountForm, useCreateAccount } from './accounts';
 
-type CreateAccountDialog = {
+type CreateAccountPopover = {
   payeeId: number;
 };
 
-export default function CreateAccountDialog({ payeeId }: CreateAccountDialog) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+export default function CreateAccountPopover({ payeeId }: CreateAccountPopover) {
+  const [isOpen, setIsOpen] = useState(false);
 
   const formData: CreateAccountFormValues = {
     payeeId,
@@ -25,11 +25,11 @@ export default function CreateAccountDialog({ payeeId }: CreateAccountDialog) {
   const { isError, isSuccess, mutateAsync: createAccount } = useCreateAccount();
 
   const handleClick = () => {
-    setIsDialogOpen(true);
+    setIsOpen(true);
   };
 
   return (
-    <Popover open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger
         render={
           <Button
@@ -37,6 +37,7 @@ export default function CreateAccountDialog({ payeeId }: CreateAccountDialog) {
             variant="outline"
             onClick={handleClick}
             className="text-muted-foreground text-center"
+            disabled={!payeeId}
           >
             <IconPlus />
           </Button>
@@ -50,7 +51,7 @@ export default function CreateAccountDialog({ payeeId }: CreateAccountDialog) {
           values={formData}
           onSubmit={createAccount}
           loadingMsg="Creating account..."
-          setIsDialogOpen={setIsDialogOpen}
+          setIsDialogOpen={setIsOpen}
           isSuccess={isSuccess}
           isError={isError}
         />

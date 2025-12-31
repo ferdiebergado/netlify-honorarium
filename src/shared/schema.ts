@@ -91,17 +91,37 @@ export type Role = {
   name: string;
 };
 
+export const roleSchema = z.object({
+  name: z.string().min(1, 'Role is required.'),
+});
+
+export type RoleFormValues = z.infer<typeof roleSchema>;
+
 export type Salary = {
   id: number;
   salary: number;
   payeeId: number;
 };
 
+export const salarySchema = z.object({
+  payeeId: z.number().min(1, 'Payee is required.'),
+  salary: z.number().min(1, 'Salary is required'),
+});
+
+export type SalaryFormValues = z.infer<typeof salarySchema>;
+
 export type Tin = {
   id: number;
   tin: string;
   payeeId: number;
 };
+
+export const tinSchema = z.object({
+  payeeId: z.number().min(1, 'Payee is required.'),
+  tin: z.string().min(1, 'TIN is required'),
+});
+
+export type TinFormValues = z.infer<typeof tinSchema>;
 
 export type Venue = {
   id: number;
