@@ -17,7 +17,7 @@ export default function AccountInput({ form }: AccountInputProps) {
 
   const { isPending, isError, error, data: accounts = [] } = useAccounts();
 
-  const filteredAccounts = useMemo(
+  const options = useMemo(
     () =>
       accounts
         .filter(account => account.payeeId === payeeId)
@@ -39,7 +39,7 @@ export default function AccountInput({ form }: AccountInputProps) {
       label="Bank Account"
       placeholder="Select account..."
       triggerClassName="w-78"
-      options={filteredAccounts}
+      options={options}
       isLoading={isPending}
       isError={isError}
       error={error}
