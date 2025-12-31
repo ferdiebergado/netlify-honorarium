@@ -49,7 +49,7 @@ export default function CreatePaymentDialog({ activity }: CreatePaymentDialogPro
       </Button>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>New Payment</DialogTitle>
+          <DialogTitle className="text-lg font-semibold">New Payment</DialogTitle>
           <DialogDescription>Create a new payment.</DialogDescription>
         </DialogHeader>
         <PaymentForm
