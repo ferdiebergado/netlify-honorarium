@@ -82,37 +82,39 @@ export default function PaymentForm({
         <RoleInput form={form} />
 
         <FieldGroup className="items @container/field-group flex flex-row">
-          <div className="flex-1">
+          <div className="w-6/10">
             <SalaryInput form={form} />
           </div>
 
           {/*  HONORARIUM */}
-          <Controller
-            name="honorarium"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field className="flex-1" data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="honorarium">Honorarium</FieldLabel>
-                <Input
-                  {...field}
-                  id="honorarium"
-                  aria-invalid={fieldState.invalid}
-                  placeholder="30000"
-                  autoComplete="off"
-                  type="number"
-                  onChange={e => {
-                    const value = e.target.value;
-                    if (value === '') {
-                      field.onChange();
-                    } else {
-                      field.onChange(Number(value));
-                    }
-                  }}
-                />
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-              </Field>
-            )}
-          />
+          <div className="flex-1">
+            <Controller
+              name="honorarium"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field className="flex-1" data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="honorarium">Honorarium</FieldLabel>
+                  <Input
+                    {...field}
+                    id="honorarium"
+                    aria-invalid={fieldState.invalid}
+                    placeholder="30000"
+                    autoComplete="off"
+                    type="number"
+                    onChange={e => {
+                      const value = e.target.value;
+                      if (value === '') {
+                        field.onChange();
+                      } else {
+                        field.onChange(Number(value));
+                      }
+                    }}
+                  />
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
+          </div>
           {/* END OF HONORARIUM */}
         </FieldGroup>
 
