@@ -6,6 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
 import type { CreatePayeeFormValues } from '../../shared/schema';
 import { useCreatePayee, usePayeeForm } from './payee';
@@ -35,12 +36,12 @@ export default function CreatePayeeDialog() {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <Button
-        size="sm"
-        variant="ghost"
+        size="icon"
+        variant="outline"
         onClick={handleClick}
-        className="text-muted-foreground w-full text-center"
+        className="text-muted-foreground h-9 text-center"
       >
-        (Payee not in the list? Click here to add a new payee...)
+        <IconPlus />
       </Button>
       <DialogContent>
         <DialogHeader>
