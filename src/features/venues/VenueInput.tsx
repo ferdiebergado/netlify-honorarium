@@ -1,4 +1,4 @@
-import { ComboboxField } from '@/components/ComboBox';
+import { SingleCombobox } from '@/components/SingleComboBox';
 import type { ActivityHookForm } from '../../features/activities/activity';
 import { useVenues } from '../../features/venues/venue';
 
@@ -7,22 +7,20 @@ type VenueInputProps = {
 };
 
 export default function VenueInput({ form }: VenueInputProps) {
-  const { isPending, isError, error, data: venues = [] } = useVenues();
+  const { data: venues = [] } = useVenues();
+
+  const options = venues.map(venue => ({
+    value: venue.id,
+    label: venue.name,
+  }));
 
   return (
-    <ComboboxField
-      form={form}
+    <SingleCombobox
+      control={form.control}
       name="venueId"
       label="Venue"
       placeholder="Select venue..."
-      searchPlaceholder="Search venue..."
-      isPending={isPending}
-      isError={isError}
-      errorMessage={error?.message}
-      options={venues.map(venue => ({
-        id: venue.id,
-        label: venue.name,
-      }))}
+      options={options}
     />
   );
 }

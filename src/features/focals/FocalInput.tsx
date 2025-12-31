@@ -1,4 +1,4 @@
-import { ComboboxField } from '@/components/ComboBox';
+import { SingleCombobox } from '@/components/SingleComboBox';
 import type { FC } from 'react';
 import type { ActivityHookForm } from '../../features/activities/activity';
 import { useFocals } from './focal';
@@ -8,22 +8,20 @@ type FocalInputProps = {
 };
 
 const FocalInput: FC<FocalInputProps> = ({ form }) => {
-  const { isPending, isError, error, data: focals = [] } = useFocals();
+  const { data: focals = [] } = useFocals();
+
+  const options = focals.map(focal => ({
+    value: focal.id,
+    label: focal.name,
+  }));
 
   return (
-    <ComboboxField
-      form={form}
+    <SingleCombobox
+      control={form.control}
       name="focalId"
       label="Focal Person"
       placeholder="Select focal..."
-      searchPlaceholder="Search focal..."
-      isPending={isPending}
-      isError={isError}
-      errorMessage={error?.message}
-      options={focals.map(focal => ({
-        id: focal.id,
-        label: focal.name,
-      }))}
+      options={options}
     />
   );
 };
