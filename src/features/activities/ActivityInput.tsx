@@ -1,32 +1,32 @@
-import { ComboboxField } from '@/components/ComboBox';
+import { SingleCombobox } from '@/components/SingleComboBox';
+import type { Control, FieldValues } from 'react-hook-form';
 import { useActivities } from '../../features/activities/activity';
-import type { PaymentHookForm } from '../../features/payments/payments';
 
-type ActivityInputProps = {
-  form: PaymentHookForm;
+type WithActivityId = {
+  activityId: number;
 };
 
-export default function ActivityInput({ form }: ActivityInputProps) {
-  const { isPending, isError, error, isSuccess, data: activities } = useActivities();
+type ActivityInputProps<T extends FieldValues & WithActivityId> = {
+  control: Control<T>;
+};
+
+export default function ActivityInput<T extends FieldValues & WithActivityId>({
+  control,
+}: ActivityInputProps<T>) {
+  const { data: activities = [] } = useActivities();
+
+  const options = activities.map(activity => ({
+    value: activity.id,
+    label: activity.title,
+  }));
 
   return (
-    <ComboboxField
-      form={form}
+    <SingleCombobox
+      control={control}
       name="activityId"
       label="Activity"
       placeholder="Select activity..."
-      searchPlaceholder="Search activity..."
-      isPending={isPending}
-      isError={isError}
-      errorMessage={error?.message}
-      options={
-        isSuccess
-          ? activities.map(activity => ({
-              id: activity.id,
-              label: activity.title,
-            }))
-          : []
-      }
+      options={options}
     />
   );
 }

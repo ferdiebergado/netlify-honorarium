@@ -75,7 +75,7 @@ export default function PaymentForm({
             )}
           />
         ) : (
-          <ActivityInput form={form} />
+          <ActivityInput control={form.control} />
         )}
 
         <PayeeInput control={form.control} />

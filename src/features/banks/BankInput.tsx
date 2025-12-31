@@ -1,4 +1,4 @@
-import { ComboboxField } from '@/components/ComboBox';
+import { SingleCombobox } from '@/components/SingleComboBox';
 import type { FieldValues, Path, UseFormReturn } from 'react-hook-form';
 import { useBanks } from './banks';
 
@@ -11,22 +11,20 @@ type BankInputProps<T extends FieldValues & WithBankId> = {
 };
 
 export default function BankInput<T extends FieldValues & WithBankId>({ form }: BankInputProps<T>) {
-  const { isPending, isError, error, data: banks = [] } = useBanks();
+  const { data: banks = [] } = useBanks();
+
+  const options = banks.map(bank => ({
+    value: bank.id,
+    label: bank.name,
+  }));
 
   return (
-    <ComboboxField
-      form={form}
+    <SingleCombobox
+      control={form.control}
       name={'bankId' as Path<T>}
       label="Bank Name"
       placeholder="Select bank..."
-      searchPlaceholder="Search bank..."
-      isPending={isPending}
-      isError={isError}
-      errorMessage={error?.message}
-      options={banks.map(bank => ({
-        id: bank.id,
-        label: bank.name,
-      }))}
+      options={options}
     />
   );
 }
