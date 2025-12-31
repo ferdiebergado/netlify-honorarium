@@ -58,33 +58,35 @@ export function SelectField<T extends FieldValues>({
           {isError && <span className="text-destructive">Error: {error?.message}</span>}
 
           {!isLoading && !isError && (
-            <Select
-              name={field.name}
-              value={String(field.value) === '0' ? '' : String(field.value)}
-              onValueChange={value => {
-                field.onChange(Number(value));
-              }}
-            >
-              <SelectTrigger
-                id={fieldId}
-                className={triggerClassName}
-                aria-invalid={fieldState.invalid}
+            <div className="flex w-full items-center gap-2">
+              <Select
+                name={field.name}
+                value={String(field.value) === '0' ? '' : String(field.value)}
+                onValueChange={value => {
+                  field.onChange(Number(value));
+                }}
               >
-                <SelectValue>
-                  {options.find(o => o.value === field.value)?.label ?? placeholder}
-                </SelectValue>
-              </SelectTrigger>
+                <SelectTrigger
+                  id={fieldId}
+                  className={triggerClassName}
+                  aria-invalid={fieldState.invalid}
+                >
+                  <SelectValue>
+                    {options.find(o => o.value === field.value)?.label ?? placeholder}
+                  </SelectValue>
+                </SelectTrigger>
 
-              <SelectContent>
-                <SelectItem value="0">{children}</SelectItem>
-                <SelectSeparator />
-                {options.map(opt => (
-                  <SelectItem key={opt.value} value={opt.value.toString()}>
-                    {opt.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+                <SelectContent key={JSON.stringify(options.map(o => o.value))}>
+                  <SelectSeparator />
+                  {options.map(opt => (
+                    <SelectItem key={opt.value} value={opt.value.toString()}>
+                      {opt.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {children}
+            </div>
           )}
 
           {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
