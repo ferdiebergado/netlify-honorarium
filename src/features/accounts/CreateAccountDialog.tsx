@@ -1,11 +1,6 @@
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
 import type { CreateAccountFormValues } from '../../shared/schema';
 import AccountForm from './AccountForm';
@@ -34,20 +29,22 @@ export default function CreateAccountDialog({ payeeId }: CreateAccountDialog) {
   };
 
   return (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <Button
-        size="sm"
-        variant="ghost"
-        onClick={handleClick}
-        className="text-muted-foreground w-full text-center"
-      >
-        (Account not in the list? Click here to add a new account...)
-      </Button>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>New Account</DialogTitle>
-          <DialogDescription>Create a new account.</DialogDescription>
-        </DialogHeader>
+    <Popover open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <PopoverTrigger
+        render={
+          <Button
+            size="icon"
+            variant="outline"
+            onClick={handleClick}
+            className="text-muted-foreground text-center"
+          >
+            <IconPlus />
+          </Button>
+        }
+      ></PopoverTrigger>
+      <PopoverContent>
+        <h1 className="text-lg font-semibold">New Account</h1>
+        <h2 className="text-muted-foreground">Create a new account.</h2>
         <AccountForm
           form={form}
           values={formData}
@@ -57,7 +54,7 @@ export default function CreateAccountDialog({ payeeId }: CreateAccountDialog) {
           isSuccess={isSuccess}
           isError={isError}
         />
-      </DialogContent>
-    </Dialog>
+      </PopoverContent>
+    </Popover>
   );
 }
