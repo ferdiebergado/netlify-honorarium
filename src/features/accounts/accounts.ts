@@ -26,7 +26,7 @@ export function useAccounts() {
 }
 
 async function getPayeeAccounts(payeeId: number) {
-  const res = await fetch('/api/accounts/' + payeeId.toString());
+  const res = await fetch('/api/payees/' + payeeId.toString() + '/accounts');
 
   const { message, data } = (await res.json()) as APIResponse<Account[]>;
 

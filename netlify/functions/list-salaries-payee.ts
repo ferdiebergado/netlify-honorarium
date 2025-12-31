@@ -6,7 +6,7 @@ import { parseId } from '../lib';
 
 export const config: Config = {
   method: 'GET',
-  path: '/api/salaries/:payee_id',
+  path: '/api/payees/:payee_id/salaries',
 };
 
 type SalaryRow = {

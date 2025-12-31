@@ -23,7 +23,7 @@ export function useSalaries() {
 }
 
 async function getSalary(payeeId: string) {
-  const res = await fetch('/api/salaries/' + payeeId);
+  const res = await fetch('/api/payees/' + payeeId + '/salaries');
   const { message, data } = (await res.json()) as APIResponse<Salary[]>;
 
   if (!res.ok) throw new Error(message);
