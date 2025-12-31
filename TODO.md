@@ -6,9 +6,7 @@
 - CRUD
 - service layer
 - specify columns in select statement
-- Use Empty component for empty lists
 - add right padding to error message
-- optimize query in getPayments
 - show alert on form errors instead of toast
 - classify by file each features
 - activity code input format
@@ -22,11 +20,24 @@
 - check status 500 in front end
 - memoize decryption
 - form schemas: validate range and length
-- back button
-- venueinput, focalinput: use comboboxfield
+- do not use path aliases
+- payments total in table footer
+- autofill when salary/tin/account is only 1
+- ensure rows returned has deleted_at is null
 
 # Done
 
+- error page
+- 404 page
+- add payee
+- error boundary
+- optimize query in getPayments
+- sum honorarium if payee has multiple honorarium
+- select for inputs with few options: role, salary, tin, bank account
+- unique payees on activity page
+- back button
+- venueinput, focalinput: use comboboxfield
+- command.loading
 - venueinput handle ispending and iserror before rendering
 - disable report buttons if list is empty
 - move non-handlers to netlify root
