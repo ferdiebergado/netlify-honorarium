@@ -14,7 +14,6 @@ import { toast } from 'sonner';
 import FocalInput from '../../features/focals/FocalInput';
 import VenueInput from '../../features/venues/VenueInput';
 import type { ActivityFormValues } from '../../shared/schema';
-import PayeeComboBox from '../payees/PayeeComboBox';
 import { type ActivityHookForm } from './activity';
 
 type ActivityFormProps = {
@@ -149,8 +148,6 @@ export default function ActivityForm({
         {/* FOCAL */}
         <FocalInput form={form} />
         {/* END OF FOCAL */}
-
-        <PayeeComboBox control={form.control} />
 
         <DialogFooter>
           <Button type="button" variant="outline" onClick={handleCancel}>
