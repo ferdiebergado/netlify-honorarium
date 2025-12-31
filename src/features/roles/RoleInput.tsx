@@ -15,7 +15,7 @@ export default function RoleInput({ form }: RoleInputProps) {
       control={form.control}
       label="Role"
       placeholder="Select a role..."
-      triggerClassName="w-[180px]"
+      triggerClassName="w-full"
       options={roles.map(role => ({
         value: role.id,
         label: role.name,
