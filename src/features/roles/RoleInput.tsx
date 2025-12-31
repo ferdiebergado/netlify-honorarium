@@ -1,4 +1,5 @@
 import { SelectField } from '@/components/SelectField';
+import { useMemo } from 'react';
 import type { PaymentHookForm } from '../../features/payments/payments';
 import CreateRolePopover from './CreateRolePopover';
 import { useRoles } from './roles';
@@ -10,10 +11,14 @@ type RoleInputProps = {
 export default function RoleInput({ form }: RoleInputProps) {
   const { isPending, isError, error, data: roles = [] } = useRoles();
 
-  const options = roles.map(role => ({
-    value: role.id,
-    label: role.name,
-  }));
+  const options = useMemo(
+    () =>
+      roles.map(role => ({
+        value: role.id,
+        label: role.name,
+      })),
+    [roles]
+  );
 
   return (
     <SelectField
