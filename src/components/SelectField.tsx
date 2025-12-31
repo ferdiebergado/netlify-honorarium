@@ -1,6 +1,6 @@
+import { IconLoader } from '@tabler/icons-react';
 import type { ReactNode } from 'react';
 import { type Control, Controller, type FieldValues, type Path } from 'react-hook-form';
-import Loader from './Loader';
 import { Field, FieldError, FieldLabel } from './ui/field';
 import {
   Select,
@@ -52,44 +52,48 @@ export function SelectField<T extends FieldValues>({
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid}>
           <FieldLabel htmlFor={fieldId}>{label}</FieldLabel>
-
-          {isLoading && <Loader text="Loading..." />}
-
-          {isError && <span className="text-destructive">Error: {error?.message}</span>}
-
-          {!isLoading && !isError && (
-            <div className="flex w-full items-center gap-2">
-              <div className="flex-1">
-                <Select
-                  name={field.name}
-                  value={String(field.value) === '0' ? '' : String(field.value)}
-                  onValueChange={value => {
-                    field.onChange(Number(value));
-                  }}
+          <div className="flex w-full items-center gap-2">
+            <div className="flex-1">
+              <Select
+                name={field.name}
+                value={String(field.value) === '0' ? '' : String(field.value)}
+                onValueChange={value => {
+                  field.onChange(Number(value));
+                }}
+              >
+                <SelectTrigger
+                  id={fieldId}
+                  className={triggerClassName}
+                  aria-invalid={fieldState.invalid}
                 >
-                  <SelectTrigger
-                    id={fieldId}
-                    className={triggerClassName}
-                    aria-invalid={fieldState.invalid}
-                  >
-                    <SelectValue>
-                      {options.find(o => o.value === field.value)?.label ?? placeholder}
-                    </SelectValue>
-                  </SelectTrigger>
+                  <SelectValue>
+                    {isLoading ? (
+                      <>
+                        <IconLoader className="text-muted-foreground h-4 w-4 animate-spin" />{' '}
+                        Loading...
+                      </>
+                    ) : isError ? (
+                      <span className="text-destructive">{error?.message}</span>
+                    ) : (
+                      (options.find(o => o.value === field.value)?.label ?? placeholder)
+                    )}
+                  </SelectValue>
+                </SelectTrigger>
 
-                  <SelectContent key={JSON.stringify(options.map(o => o.value))}>
-                    <SelectSeparator />
-                    {options.map(opt => (
+                <SelectContent key={JSON.stringify(options.map(o => o.value))}>
+                  <SelectSeparator />
+                  {!isLoading &&
+                    !isError &&
+                    options.map(opt => (
                       <SelectItem key={opt.value} value={opt.value.toString()}>
                         {opt.label}
                       </SelectItem>
                     ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              {children}
+                </SelectContent>
+              </Select>
             </div>
-          )}
+            {children}
+          </div>
 
           {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
         </Field>
