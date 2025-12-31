@@ -10,7 +10,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { BrowserRouter } from 'react-router';
 import { toast } from 'sonner';
 import App from './App';
-import { Button } from './components/ui/button';
+import FallbackPage from './components/FallbackPage';
 import './index.css';
 
 const queryClient = new QueryClient({
@@ -32,16 +32,7 @@ createRoot(document.getElementById('root')!).render(
             <ErrorBoundary
               onReset={reset}
               fallbackRender={({ resetErrorBoundary }) => (
-                <div>
-                  There was an error!
-                  <Button
-                    onClick={() => {
-                      resetErrorBoundary();
-                    }}
-                  >
-                    Try again
-                  </Button>
-                </div>
+                <FallbackPage resetErrorBoundary={resetErrorBoundary} />
               )}
             >
               <App />
