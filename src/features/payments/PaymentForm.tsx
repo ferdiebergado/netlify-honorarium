@@ -78,7 +78,7 @@ export default function PaymentForm({
           <ActivityInput form={form} />
         )}
 
-        <PayeeInput form={form} />
+        <PayeeInput control={form.control} />
         <RoleInput form={form} />
 
         <FieldGroup className="items @container/field-group flex flex-row">
