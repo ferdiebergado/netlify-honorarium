@@ -19,13 +19,11 @@ export default function SalaryInput({ form }: SalaryInputProps) {
 
   const options = useMemo(
     () =>
-      salaries
-        .filter(s => s.payeeId === payeeId)
-        .map(salary => ({
-          value: salary.id,
-          label: salary.salary.toString(),
-        })),
-    [payeeId, salaries]
+      salaries.map(salary => ({
+        value: salary.id,
+        label: salary.salary.toString(),
+      })),
+    [salaries]
   );
 
   useEffect(() => {
