@@ -59,32 +59,34 @@ export function SelectField<T extends FieldValues>({
 
           {!isLoading && !isError && (
             <div className="flex w-full items-center gap-2">
-              <Select
-                name={field.name}
-                value={String(field.value) === '0' ? '' : String(field.value)}
-                onValueChange={value => {
-                  field.onChange(Number(value));
-                }}
-              >
-                <SelectTrigger
-                  id={fieldId}
-                  className={triggerClassName}
-                  aria-invalid={fieldState.invalid}
+              <div className="flex-1">
+                <Select
+                  name={field.name}
+                  value={String(field.value) === '0' ? '' : String(field.value)}
+                  onValueChange={value => {
+                    field.onChange(Number(value));
+                  }}
                 >
-                  <SelectValue>
-                    {options.find(o => o.value === field.value)?.label ?? placeholder}
-                  </SelectValue>
-                </SelectTrigger>
+                  <SelectTrigger
+                    id={fieldId}
+                    className={triggerClassName}
+                    aria-invalid={fieldState.invalid}
+                  >
+                    <SelectValue>
+                      {options.find(o => o.value === field.value)?.label ?? placeholder}
+                    </SelectValue>
+                  </SelectTrigger>
 
-                <SelectContent key={JSON.stringify(options.map(o => o.value))}>
-                  <SelectSeparator />
-                  {options.map(opt => (
-                    <SelectItem key={opt.value} value={opt.value.toString()}>
-                      {opt.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                  <SelectContent key={JSON.stringify(options.map(o => o.value))}>
+                    <SelectSeparator />
+                    {options.map(opt => (
+                      <SelectItem key={opt.value} value={opt.value.toString()}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               {children}
             </div>
           )}
