@@ -1,4 +1,5 @@
 import { ComboboxField } from '@/components/ComboBox';
+import { useMemo } from 'react';
 import type { FieldValues, Path, UseFormReturn } from 'react-hook-form';
 import CreatePayeeDialog from './CreatePayeeDialog';
 import { usePayees } from './payee';
@@ -16,6 +17,15 @@ export default function PayeeInput<T extends FieldValues & HasPayeeId>({
 }: PayeeInputProps<T>) {
   const { isPending, isError, error, data: payees = [] } = usePayees();
 
+  const options = useMemo(
+    () =>
+      payees.map(payee => ({
+        id: payee.id,
+        label: payee.name,
+      })),
+    [payees]
+  );
+
   return (
     <ComboboxField
       form={form}
@@ -26,10 +36,7 @@ export default function PayeeInput<T extends FieldValues & HasPayeeId>({
       isPending={isPending}
       isError={isError}
       errorMessage={error?.message}
-      options={payees.map(payee => ({
-        id: payee.id,
-        label: payee.name,
-      }))}
+      options={options}
     >
       <CreatePayeeDialog />
     </ComboboxField>
