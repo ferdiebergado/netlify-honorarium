@@ -1,6 +1,7 @@
 import { ComboboxField } from '@/components/ComboBox';
 import type { ActivityHookForm } from '../../features/activities/activity';
 import { useVenues } from '../../features/venues/venue';
+import CreateVenuePopover from './CreateVenuePopover';
 
 type VenueInputProps = {
   form: ActivityHookForm;
@@ -24,6 +25,8 @@ export default function VenueInput({ form }: VenueInputProps) {
       isPending={isPending}
       isError={isError}
       errorMessage={error?.message}
-    />
+    >
+      <CreateVenuePopover />
+    </ComboboxField>
   );
 }

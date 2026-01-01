@@ -127,6 +127,12 @@ export type Venue = {
   name: string;
 };
 
+export const venueSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+});
+
+export type VenueFormValues = z.infer<typeof venueSchema>;
+
 export const paymentSchema = z.object({
   activityId: z.number().min(1, 'Activity is required.'),
   payeeId: z.number().min(1, 'Payee is required.'),
