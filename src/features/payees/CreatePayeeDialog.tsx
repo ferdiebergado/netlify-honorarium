@@ -35,14 +35,9 @@ export default function CreatePayeeDialog() {
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <Button
-        size="icon"
-        variant="outline"
-        onClick={handleClick}
-        className="text-muted-foreground h-9 text-center"
-        title="Click to add a new payee."
-      >
-        <IconPlus />
+      <Button variant="ghost" className="w-full justify-start font-normal" onClick={handleClick}>
+        <IconPlus className="-ms-2 opacity-60" aria-hidden="true" />
+        New payee
       </Button>
       <DialogContent>
         <DialogHeader>
@@ -53,7 +48,6 @@ export default function CreatePayeeDialog() {
         </DialogHeader>
         <PayeeForm
           form={form}
-          values={formData}
           onSubmit={createPayee}
           loadingMsg="Creating payee..."
           setIsDialogOpen={setIsDialogOpen}
