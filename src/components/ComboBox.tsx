@@ -6,13 +6,14 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
+  CommandSeparator,
 } from '@/components/ui/command';
 import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { IconChevronsDown } from '@tabler/icons-react';
+import { IconSelector } from '@tabler/icons-react';
 import { CommandLoading } from 'cmdk';
 import { useState, type ReactNode } from 'react';
-import { Controller, type FieldValues, type Path, type UseFormReturn } from 'react-hook-form';
+import { Controller, type Control, type FieldValues, type Path } from 'react-hook-form';
 
 type ComboboxOption = {
   id: number | string;
@@ -20,7 +21,7 @@ type ComboboxOption = {
 };
 
 type ComboboxFieldProps<TFieldValues extends FieldValues> = {
-  form: UseFormReturn<TFieldValues>;
+  control: Control<TFieldValues>;
   name: Path<TFieldValues>;
   label: string;
   placeholder?: string;
@@ -34,7 +35,7 @@ type ComboboxFieldProps<TFieldValues extends FieldValues> = {
 };
 
 export function ComboboxField<TFieldValues extends FieldValues>({
-  form,
+  control,
   name,
   label,
   placeholder = 'Select...',
@@ -50,7 +51,7 @@ export function ComboboxField<TFieldValues extends FieldValues>({
   return (
     <Controller
       name={name}
-      control={form.control}
+      control={control}
       render={({ field, fieldState }) => (
         <Field data-invalid={fieldState.invalid}>
           <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
@@ -69,7 +70,7 @@ export function ComboboxField<TFieldValues extends FieldValues>({
                   {field.value
                     ? options.find(option => option.id === field.value)?.label
                     : placeholder}
-                  <IconChevronsDown className="opacity-50" />
+                  <IconSelector className="opacity-50" />
                 </Button>
               }
             ></PopoverTrigger>
@@ -82,24 +83,27 @@ export function ComboboxField<TFieldValues extends FieldValues>({
                   aria-invalid={fieldState.invalid}
                 />
                 <CommandList>
+                  {children && <CommandGroup>{children}</CommandGroup>}
+                  <CommandSeparator />
                   {isPending && <CommandLoading>Loading...</CommandLoading>}
-                  {children && <CommandItem>{children}</CommandItem>}
 
                   <CommandEmpty>No results found.</CommandEmpty>
                   <CommandGroup>
-                    {options.map(option => (
-                      <CommandItem
-                        key={option.id}
-                        value={option.label}
-                        data-checked={field.value === option.id}
-                        onSelect={() => {
-                          field.onChange(option.id);
-                          setIsOpen(false);
-                        }}
-                      >
-                        {option.label}
-                      </CommandItem>
-                    ))}
+                    {!isPending &&
+                      !isError &&
+                      options.map(option => (
+                        <CommandItem
+                          key={option.id}
+                          value={option.label}
+                          data-checked={field.value === option.id}
+                          onSelect={() => {
+                            field.onChange(option.id);
+                            setIsOpen(false);
+                          }}
+                        >
+                          {option.label}
+                        </CommandItem>
+                      ))}
                   </CommandGroup>
                 </CommandList>
               </Command>
