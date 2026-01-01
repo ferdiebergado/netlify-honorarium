@@ -8,7 +8,8 @@ import {
   ComboboxSeparator,
   ComboboxValue,
 } from '@/components/ui/combobox';
-import type { ReactNode } from 'react';
+import type { ComboboxRoot } from '@base-ui/react';
+import { type ReactNode } from 'react';
 import { Controller, type Control, type FieldValues, type Path } from 'react-hook-form';
 import { Field, FieldError, FieldLabel } from './ui/field';
 
@@ -24,6 +25,7 @@ type SingleComboboxProps<T extends FieldValues> = {
   options: Option[];
   placeholder?: string;
   children?: ReactNode;
+  props?: ComboboxRoot.Props<Option>;
 };
 
 export function SingleCombobox<T extends FieldValues>({
@@ -33,6 +35,7 @@ export function SingleCombobox<T extends FieldValues>({
   placeholder = 'Select options…',
   children,
   label,
+  props,
 }: SingleComboboxProps<T>) {
   return (
     <Controller
@@ -44,14 +47,19 @@ export function SingleCombobox<T extends FieldValues>({
           <div className="flex w-full items-center gap-2">
             <div className="flex-1">
               <Combobox
+                {...props}
+                name={field.name}
                 items={options}
-                value={String(field.value) === '0' ? '' : String(field.value)}
+                value={field.value}
                 onValueChange={value => {
-                  field.onChange(Number(value));
+                  if (!value) return;
+
+                  if (value.value === 0) return;
+
+                  field.onChange(value);
                 }}
-                itemToStringLabel={value =>
-                  options.find(opt => opt.value.toString() === value)?.label || value
-                }
+                isItemEqualToValue={(item, selected) => item.value === selected.value}
+                itemToStringLabel={opt => opt.label}
               >
                 <div className="flex w-full flex-col gap-3">
                   <ComboboxValue>
@@ -67,9 +75,9 @@ export function SingleCombobox<T extends FieldValues>({
 
                   <ComboboxSeparator />
                   <ComboboxList>
-                    {(opt: Option) => (
-                      <ComboboxItem key={opt.value} value={opt.value.toString()}>
-                        {opt.label}
+                    {(option: Option) => (
+                      <ComboboxItem key={option.value} index={option.value} value={option}>
+                        {option.label}
                       </ComboboxItem>
                     )}
                   </ComboboxList>
