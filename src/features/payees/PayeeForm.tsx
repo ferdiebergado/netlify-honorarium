@@ -11,7 +11,6 @@ import { type PayeeHookForm } from './payee';
 
 type PayeeFormProps = {
   form: PayeeHookForm;
-  values: CreatePayeeFormValues;
   onSubmit: (data: CreatePayeeFormValues) => Promise<{ message: string }>;
   setIsDialogOpen: (open: boolean) => void;
   loadingMsg: string;
@@ -20,7 +19,6 @@ type PayeeFormProps = {
 };
 
 export default function PayeeForm({
-  values,
   form,
   onSubmit,
   loadingMsg,
@@ -37,11 +35,11 @@ export default function PayeeForm({
   };
 
   const handleReset = () => {
-    form.reset(values);
+    form.reset();
   };
 
   const handleCancel = () => {
-    form.reset(values);
+    form.reset();
     setIsDialogOpen(false);
   };
 

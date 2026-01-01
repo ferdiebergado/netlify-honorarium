@@ -27,7 +27,7 @@ export default function UpdateActivityForm({ activity }: UpdateActivityProps) {
     updateActivity({ activityId: activity.id, formData });
 
   useEffect(() => {
-    form.reset(activity);
+    form.reset();
   }, [activity, form]);
 
   return (
@@ -46,7 +46,6 @@ export default function UpdateActivityForm({ activity }: UpdateActivityProps) {
         </DialogHeader>
         <ActivityForm
           form={form}
-          values={activity}
           onSubmit={handleSubmit}
           setIsDialogOpen={setIsDialogOpen}
           loadingMsg="Updating Activity..."

@@ -9,7 +9,6 @@ import type { SalaryHookForm } from './salaries';
 
 type SalaryFormProps = {
   form: SalaryHookForm;
-  values: SalaryFormValues;
   onSubmit: (data: SalaryFormValues) => Promise<{ message: string }>;
   setIsPopoverOpen: (open: boolean) => void;
   loadingMsg: string;
@@ -19,7 +18,6 @@ type SalaryFormProps = {
 };
 
 export default function SalaryForm({
-  values,
   form,
   onSubmit,
   loadingMsg,
@@ -37,11 +35,11 @@ export default function SalaryForm({
   };
 
   const handleReset = () => {
-    form.reset(values);
+    form.reset();
   };
 
   const handleCancel = () => {
-    form.reset(values);
+    form.reset();
     setIsPopoverOpen(false);
   };
 

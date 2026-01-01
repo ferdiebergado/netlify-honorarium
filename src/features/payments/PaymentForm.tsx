@@ -16,7 +16,6 @@ import { type PaymentHookForm } from './payments';
 
 type PaymentFormProps = {
   form: PaymentHookForm;
-  values: PaymentFormValues;
   onSubmit: (data: PaymentFormValues) => Promise<{ message: string }>;
   setIsDialogOpen: (open: boolean) => void;
   loadingMsg: string;
@@ -26,7 +25,6 @@ type PaymentFormProps = {
 };
 
 export default function PaymentForm({
-  values,
   form,
   onSubmit,
   loadingMsg,
@@ -43,11 +41,11 @@ export default function PaymentForm({
   };
 
   const handleReset = () => {
-    form.reset(values);
+    form.reset();
   };
 
   const handleCancel = () => {
-    form.reset(values);
+    form.reset();
     setIsDialogOpen(false);
   };
 
@@ -56,7 +54,7 @@ export default function PaymentForm({
   }, [isError, setIsDialogOpen]);
 
   useEffect(() => {
-    if (isSuccess) form.reset(values);
+    if (isSuccess) form.reset();
   });
 
   return (
@@ -79,7 +77,7 @@ export default function PaymentForm({
         )}
 
         <PayeeInput control={form.control} />
-        <RoleInput form={form} />
+        <RoleInput control={form.control} />
 
         <FieldGroup className="items @container/field-group flex flex-row">
           <div className="w-6/10">

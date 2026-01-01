@@ -10,7 +10,6 @@ import type { AccountHookForm } from './accounts';
 
 type AccountFormProps = {
   form: AccountHookForm;
-  values: CreateAccountFormValues;
   onSubmit: (data: CreateAccountFormValues) => Promise<{ message: string }>;
   setIsDialogOpen: (open: boolean) => void;
   loadingMsg: string;
@@ -19,7 +18,6 @@ type AccountFormProps = {
 };
 
 export default function AccountForm({
-  values,
   form,
   onSubmit,
   loadingMsg,
@@ -36,11 +34,11 @@ export default function AccountForm({
   };
 
   const handleReset = () => {
-    form.reset(values);
+    form.reset();
   };
 
   const handleCancel = () => {
-    form.reset(values);
+    form.reset();
     setIsDialogOpen(false);
   };
 

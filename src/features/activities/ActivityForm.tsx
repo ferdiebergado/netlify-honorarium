@@ -18,7 +18,6 @@ import { type ActivityHookForm } from './activity';
 
 type ActivityFormProps = {
   form: ActivityHookForm;
-  values: ActivityFormValues;
   onSubmit: (data: ActivityFormValues) => Promise<{ message: string }>;
   setIsDialogOpen: (open: boolean) => void;
   loadingMsg: string;
@@ -28,7 +27,6 @@ type ActivityFormProps = {
 
 export default function ActivityForm({
   form,
-  values,
   onSubmit,
   setIsDialogOpen,
   loadingMsg,
@@ -48,7 +46,7 @@ export default function ActivityForm({
   };
 
   const handleCancel = () => {
-    form.reset(values);
+    form.reset();
     setIsDialogOpen(false);
   };
 
@@ -57,7 +55,7 @@ export default function ActivityForm({
   }, [isError, setIsDialogOpen]);
 
   useEffect(() => {
-    if (isSuccess) form.reset(values);
+    if (isSuccess) form.reset();
   });
 
   return (

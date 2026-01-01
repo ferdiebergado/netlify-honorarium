@@ -39,7 +39,7 @@ export default function CreatePaymentDialog({ activity }: CreatePaymentDialogPro
   };
 
   useEffect(() => {
-    form.reset(formValues);
+    form.reset();
   }, [formValues, form]);
 
   return (
@@ -54,7 +54,6 @@ export default function CreatePaymentDialog({ activity }: CreatePaymentDialogPro
         </DialogHeader>
         <PaymentForm
           form={form}
-          values={formValues}
           onSubmit={createPayment}
           loadingMsg="Creating payment..."
           setIsDialogOpen={setIsDialogOpen}

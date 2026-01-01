@@ -40,7 +40,6 @@ export default function CreateRolePopover() {
         <h2 className="text-muted-foreground">Add a new role.</h2>
         <RoleForm
           form={form}
-          values={formData}
           onSubmit={createRole}
           loadingMsg="Creating role..."
           setIsPopoverOpen={setIsOpen}

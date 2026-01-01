@@ -9,7 +9,6 @@ import type { RoleHookForm } from './roles';
 
 type RoleFormProps = {
   form: RoleHookForm;
-  values: RoleFormValues;
   onSubmit: (data: RoleFormValues) => Promise<{ message: string }>;
   setIsPopoverOpen: (open: boolean) => void;
   loadingMsg: string;

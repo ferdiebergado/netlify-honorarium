@@ -46,7 +46,6 @@ export default function CreateSalaryPopover({ payeeId }: CreateSalaryPopover) {
         <h2 className="text-muted-foreground">Add a new basic salary for the payee.</h2>
         <SalaryForm
           form={form}
-          values={formData}
           onSubmit={createSalary}
           loadingMsg="Creating salary..."
           setIsPopoverOpen={setIsOpen}

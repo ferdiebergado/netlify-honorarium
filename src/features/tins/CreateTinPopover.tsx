@@ -46,7 +46,6 @@ export default function CreateTinPopover({ payeeId }: CreateTinPopoverProps) {
         <h2 className="text-muted-foreground">Add a new tin for the payee.</h2>
         <TinForm
           form={form}
-          values={formData}
           onSubmit={createTin}
           loadingMsg="Creating TIN..."
           setIsPopoverOpen={setIsOpen}

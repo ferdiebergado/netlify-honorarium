@@ -9,7 +9,6 @@ import type { TinHookForm } from './tins';
 
 type TinFormProps = {
   form: TinHookForm;
-  values: TinFormValues;
   onSubmit: (data: TinFormValues) => Promise<{ message: string }>;
   setIsPopoverOpen: (open: boolean) => void;
   loadingMsg: string;
@@ -19,7 +18,6 @@ type TinFormProps = {
 };
 
 export default function TinForm({
-  values,
   form,
   onSubmit,
   loadingMsg,
@@ -37,11 +35,11 @@ export default function TinForm({
   };
 
   const handleReset = () => {
-    form.reset(values);
+    form.reset();
   };
 
   const handleCancel = () => {
-    form.reset(values);
+    form.reset();
     setIsPopoverOpen(false);
   };
 
