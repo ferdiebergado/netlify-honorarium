@@ -1,14 +1,20 @@
 import { SelectField } from '@/components/SelectField';
 import { useMemo } from 'react';
-import type { PaymentHookForm } from '../../features/payments/payments';
+import type { Control, FieldValues, Path } from 'react-hook-form';
 import CreateRolePopover from './CreateRolePopover';
 import { useRoles } from './roles';
 
-type RoleInputProps = {
-  form: PaymentHookForm;
+type WithRoleId = {
+  roleId: number;
 };
 
-export default function RoleInput({ form }: RoleInputProps) {
+type RoleInputProps<T extends FieldValues & WithRoleId> = {
+  control: Control<T>;
+};
+
+export default function RoleInput<T extends FieldValues & WithRoleId>({
+  control,
+}: RoleInputProps<T>) {
   const { isPending, isError, error, data: roles = [] } = useRoles();
 
   const options = useMemo(
@@ -22,8 +28,8 @@ export default function RoleInput({ form }: RoleInputProps) {
 
   return (
     <SelectField
-      name="roleId"
-      control={form.control}
+      name={'roleId' as Path<T>}
+      control={control}
       label="Role"
       placeholder="Select a role..."
       triggerClassName="w-full"
