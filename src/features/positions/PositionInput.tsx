@@ -1,9 +1,11 @@
 import { ComboboxField } from '@/components/ComboBox';
 import { useMemo } from 'react';
-import { usePositions, type PositionHookForm } from './position';
+import type { FocalHookForm } from '../focals/focal';
+import CreatePositionPopover from './CreatePositionPopover';
+import { usePositions } from './position';
 
 type PositionInputProps = {
-  form: PositionHookForm;
+  form: FocalHookForm;
 };
 
 export default function PositionInput({ form }: PositionInputProps) {
@@ -21,13 +23,15 @@ export default function PositionInput({ form }: PositionInputProps) {
   return (
     <ComboboxField
       control={form.control}
-      name="name"
-      label="Name"
-      placeholder="Select name..."
+      name="positionId"
+      label="Position"
+      placeholder="Select position..."
       options={options}
       isPending={isPending}
       isError={isError}
       errorMessage={error?.message}
-    ></ComboboxField>
+    >
+      <CreatePositionPopover />
+    </ComboboxField>
   );
 }

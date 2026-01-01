@@ -1,6 +1,7 @@
 import { ComboboxField } from '@/components/ComboBox';
 import { useMemo, type FC } from 'react';
 import type { ActivityHookForm } from '../../features/activities/activity';
+import CreateFocalPopover from './CreateFocalPopover';
 import { useFocals } from './focal';
 
 type FocalInputProps = {
@@ -29,7 +30,9 @@ const FocalInput: FC<FocalInputProps> = ({ form }) => {
       isPending={isPending}
       isError={isError}
       errorMessage={error?.message}
-    />
+    >
+      <CreateFocalPopover />
+    </ComboboxField>
   );
 };
 

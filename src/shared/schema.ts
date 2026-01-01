@@ -85,6 +85,13 @@ export type Focal = {
   name: string;
 };
 
+export const focalSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  positionId: z.number().min(1, 'Position is required.'),
+});
+
+export type FocalFormValues = z.infer<typeof focalSchema>;
+
 export type Position = {
   id: number;
   name: string;
