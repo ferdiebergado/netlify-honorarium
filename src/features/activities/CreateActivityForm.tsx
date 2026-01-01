@@ -21,7 +21,6 @@ export default function CreateActivityForm() {
     endDate: '',
     code: '',
     focalId: 0,
-    payees: [],
   };
 
   const form = useActivityForm(formValues);
@@ -43,7 +42,6 @@ export default function CreateActivityForm() {
         </DialogHeader>
         <ActivityForm
           form={form}
-          values={formValues}
           onSubmit={createActivity}
           setIsDialogOpen={setIsDialogOpen}
           loadingMsg="Creating Activity..."

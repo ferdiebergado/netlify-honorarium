@@ -26,7 +26,6 @@ export const activitySchema = z
     endDate: z.iso.date(),
     code: z.string().min(17, 'Activity Code must be at least 17 characters.'),
     focalId: z.number().min(1, 'Focal Person is required.'),
-    payees: z.array(z.number()),
   })
   .refine(data => new Date(data.endDate) >= new Date(data.startDate), {
     path: ['endDate'],
