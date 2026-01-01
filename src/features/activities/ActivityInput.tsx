@@ -1,5 +1,5 @@
-import { SingleCombobox } from '@/components/SingleComboBox';
-import type { Control, FieldValues } from 'react-hook-form';
+import { ComboboxField } from '@/components/ComboBox';
+import type { Control, FieldValues, Path } from 'react-hook-form';
 import { useActivities } from '../../features/activities/activity';
 
 type WithActivityId = {
@@ -16,14 +16,14 @@ export default function ActivityInput<T extends FieldValues & WithActivityId>({
   const { data: activities = [] } = useActivities();
 
   const options = activities.map(activity => ({
-    value: activity.id,
+    id: activity.id,
     label: activity.title,
   }));
 
   return (
-    <SingleCombobox
+    <ComboboxField
       control={control}
-      name="activityId"
+      name={'activityId' as Path<T>}
       label="Activity"
       placeholder="Select activity..."
       options={options}

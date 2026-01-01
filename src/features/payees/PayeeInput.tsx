@@ -1,4 +1,4 @@
-import { SingleCombobox } from '@/components/SingleComboBox';
+import { ComboboxField } from '@/components/ComboBox';
 import { useMemo } from 'react';
 import type { Control, FieldValues, Path } from 'react-hook-form';
 import CreatePayeeDialog from './CreatePayeeDialog';
@@ -15,26 +15,29 @@ type PayeeInputProps<T extends FieldValues & HasPayeeId> = {
 export default function PayeeInput<T extends FieldValues & HasPayeeId>({
   control,
 }: PayeeInputProps<T>) {
-  const { data: payees = [] } = usePayees();
+  const { isPending, isError, error, data: payees = [] } = usePayees();
 
   const options = useMemo(
     () =>
       payees.map(payee => ({
-        value: payee.id,
+        id: payee.id,
         label: payee.name,
       })),
     [payees]
   );
 
   return (
-    <SingleCombobox
+    <ComboboxField
       control={control}
       name={'payeeId' as Path<T>}
       label="Payee"
       placeholder="Select payee..."
       options={options}
+      isPending={isPending}
+      isError={isError}
+      errorMessage={error?.message}
     >
       <CreatePayeeDialog />
-    </SingleCombobox>
+    </ComboboxField>
   );
 }
