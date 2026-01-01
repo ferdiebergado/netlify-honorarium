@@ -85,6 +85,17 @@ export type Focal = {
   name: string;
 };
 
+export type Position = {
+  id: number;
+  name: string;
+};
+
+export const positionSchema = z.object({
+  name: z.string().min(1, 'Name is required.'),
+});
+
+export type PositionFormValues = z.infer<typeof positionSchema>;
+
 export type Role = {
   id: number;
   name: string;

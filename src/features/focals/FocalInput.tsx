@@ -1,5 +1,5 @@
 import { ComboboxField } from '@/components/ComboBox';
-import type { FC } from 'react';
+import { useMemo, type FC } from 'react';
 import type { ActivityHookForm } from '../../features/activities/activity';
 import { useFocals } from './focal';
 
@@ -10,10 +10,14 @@ type FocalInputProps = {
 const FocalInput: FC<FocalInputProps> = ({ form }) => {
   const { isPending, isError, error, data: focals = [] } = useFocals();
 
-  const options = focals.map(focal => ({
-    id: focal.id,
-    label: focal.name,
-  }));
+  const options = useMemo(
+    () =>
+      focals.map(({ id, name }) => ({
+        id,
+        label: name,
+      })),
+    [focals]
+  );
 
   return (
     <ComboboxField
