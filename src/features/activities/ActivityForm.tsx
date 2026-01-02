@@ -33,6 +33,19 @@ export default function ActivityForm({
   isSuccess,
   isError,
 }: ActivityFormProps) {
+  const maskCode = (value: string): string => {
+    const prefix = 'AC-';
+    let v = value.toUpperCase();
+
+    v = v.replace(/[^A-Z0-9-]/g, '');
+
+    if (!v.startsWith(prefix)) {
+      v = prefix;
+    }
+
+    return v;
+  };
+
   const handleSubmit = (formData: ActivityFormValues) => {
     setIsDialogOpen(false);
 
@@ -136,6 +149,10 @@ export default function ActivityForm({
                 aria-invalid={fieldState.invalid}
                 placeholder="AC-25-BLD-TLD-BEC-000"
                 autoComplete="off"
+                onChange={e => {
+                  const masked = maskCode(e.target.value);
+                  field.onChange(masked);
+                }}
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
