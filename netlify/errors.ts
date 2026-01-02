@@ -1,39 +1,54 @@
 class HTTPError extends Error {
   statusCode: number;
+  error: string;
 
-  constructor(statusCode: number, msg: string) {
+  constructor(statusCode: number, msg: string, error = 'Unspecified error') {
     super(msg);
     this.statusCode = statusCode;
+    this.error = error;
 
-    Object.setPrototypeOf(this, HTTPError.prototype);
+    this.name = new.target.name;
+    Object.setPrototypeOf(this, new.target.prototype);
   }
 }
 
 export class ValidationError extends HTTPError {
-  readonly name = 'ValidationError';
-
   constructor() {
     super(400, 'Invalid input');
+  }
+}
 
-    Object.setPrototypeOf(this, ValidationError.prototype);
+export class BadRequestError extends HTTPError {
+  constructor(error: string) {
+    super(400, 'Bad Request', error);
+  }
+}
+
+export class UnauthorizedError extends HTTPError {
+  constructor(error: string) {
+    super(401, 'Unauthorized', error);
   }
 }
 
 export class NotFoundError extends HTTPError {
-  readonly name = 'NotFoundError';
-
   constructor() {
     super(404, 'Resource not found.');
+  }
+}
 
-    Object.setPrototypeOf(this, NotFoundError.prototype);
+export class InternalServerError extends HTTPError {
+  constructor() {
+    super(500, 'Internal server error');
   }
 }
 
 export function errorResponse(error: unknown) {
-  console.error(error);
+  if (error instanceof HTTPError) {
+    console.error(error.error);
 
-  if (error instanceof HTTPError)
     return Response.json({ message: error.message }, { status: error.statusCode });
+  }
 
+  console.error(error);
   return Response.json({ message: 'An unknown error occurred.' }, { status: 500 });
 }
