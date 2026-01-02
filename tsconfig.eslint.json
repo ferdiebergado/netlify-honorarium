@@ -3,5 +3,5 @@
   "compilerOptions": {
     "strictNullChecks": true
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "netlify/functions/**/*.ts"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "netlify/**/*.ts"]
 }

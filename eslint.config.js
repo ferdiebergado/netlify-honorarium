@@ -52,7 +52,7 @@ export default defineConfig([
   // Netlify Functions / Server Code
   // --------------------------------------------------
   {
-    files: ['netlify/functions/**/*.{ts,js}'],
+    files: ['netlify/**/*.{ts,js}'],
     extends: [js.configs.recommended, tseslint.configs.strictTypeChecked, eslintConfigPrettier],
     languageOptions: {
       ecmaVersion: 2020,
