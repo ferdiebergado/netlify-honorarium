@@ -1,16 +1,17 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Field, FieldDescription, FieldGroup } from '@/components/ui/field';
-import { useLogin } from '@/features/auth/google';
 import { IconLoader, IconOvalVerticalFilled } from '@tabler/icons-react';
+import { useState } from 'react';
 import Loader from './Loader';
 import { Toaster } from './ui/sonner';
 
 export default function LoginPage() {
-  const { isPending, mutate: login } = useLogin();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = () => {
-    login();
+    setIsLoading(true);
+    window.location.href = '/api/oauth/google/login';
   };
 
   return (
@@ -39,7 +40,7 @@ export default function LoginPage() {
                           fill="currentColor"
                         />
                       </svg>
-                      {isPending ? <Loader text="Redirecting to Google..." /> : 'Login with Google'}
+                      {isLoading ? <Loader text="Logging in..." /> : 'Login with Google'}
                     </Button>
                   </Field>
 

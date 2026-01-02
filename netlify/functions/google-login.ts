@@ -4,7 +4,7 @@ import crypto from 'crypto';
 import { oauth2Client, scopes } from '../google';
 
 export const config: Config = {
-  method: 'POST',
+  method: 'GET',
   path: '/api/oauth/google/login',
 };
 
@@ -36,12 +36,11 @@ export default () => {
     state: state,
   });
 
-  return Response.json(
-    { data: authorizationUrl },
-    {
-      headers: {
-        'Set-Cookie': setCookieHeader,
-      },
-    }
-  );
+  return Response.json(null, {
+    headers: {
+      Location: authorizationUrl,
+      'Set-Cookie': setCookieHeader,
+    },
+    status: 307,
+  });
 };
