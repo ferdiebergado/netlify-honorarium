@@ -25,6 +25,8 @@ type PaymentRow = {
   honorarium: number;
   role: string;
   payment_id: number;
+  account_id: number;
+  salary_id: number;
 };
 
 const fullActivitySql = `
@@ -52,6 +54,8 @@ SELECT
   pay.net_honorarium,
   pay.tax_rate,
   pay.honorarium,
+  pay.account_id,
+  pay.salary_id,
 
   r.name        AS role
 FROM activities a 
@@ -94,6 +98,9 @@ function rowsToActivity(rows: PaymentRow[]): Activity {
       name: row.payee,
       position: row.payee_position,
       office: row.payee_office,
+      accounts: [],
+      salaries: [],
+      tins: [],
     };
 
     const existingPayee = payees.find(p => p.id === payee.id);
@@ -109,6 +116,9 @@ function rowsToActivity(rows: PaymentRow[]): Activity {
       payee: row.payee,
       role: row.role,
       id: row.payment_id,
+      payeeId: row.payee_id,
+      accountId: row.account_id,
+      salaryId: row.salary_id,
     };
 
     payments.push(payment);

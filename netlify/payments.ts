@@ -22,9 +22,12 @@ export type PaymentRow = {
   focal: string;
   position: string;
   tin: string;
+  account_id: number;
   bank: string;
   account_details: Buffer;
+  salary_id: number;
   salary: number;
+  payee_id: number;
 };
 
 export const paymentsSql = `
@@ -48,8 +51,10 @@ SELECT
     f.name          AS focal,
     pos.name        AS position,
     t.tin,
+    acc.id          AS account_id,
     acc.details     AS account_details,
     b.name          AS bank,
+    s.id            AS salary_id,
     s.salary
 FROM payments pay
 JOIN payees p ON p.id = pay.payee_id
@@ -84,6 +89,9 @@ export async function getPayments(activityId: number | null): Promise<Payment[]>
     startDate: row.start_date,
     endDate: row.end_date,
     accountDetails: row.account_details,
+    payeeId: row.payee_id,
+    accountId: row.account_id,
+    salaryId: row.salary_id,
   }));
 
   const paymentsWithAccount: Payment[] = tempData.map(payment => {

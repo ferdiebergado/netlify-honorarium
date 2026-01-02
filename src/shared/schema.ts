@@ -176,6 +176,7 @@ export type PaymentFormValues = z.infer<typeof paymentSchema>;
 
 export type Payment = {
   id: number;
+  payeeId: number;
   payee: string;
   activity: string;
   role: string;
@@ -192,10 +193,12 @@ export type Payment = {
   focal: string;
   position: string;
   tin: string;
+  accountId: number;
   bank: string;
   bankBranch: string;
   accountName: string;
   accountNo: string;
+  salaryId: number;
   salary: number;
 };
 
@@ -209,4 +212,7 @@ export type PaymentData = Pick<
   | 'payee'
   | 'role'
   | 'id'
+  | 'payeeId'
+  | 'accountId'
+  | 'salaryId'
 >;

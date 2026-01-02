@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/table';
 import { formatMoney } from '@/lib/utils';
 import type { PaymentData } from '@/shared/schema';
+import PaymentDropdownMenu from './PaymentDropdownMenu';
 
 type PaymentsTableProps = {
   payments: PaymentData[];
@@ -25,6 +26,7 @@ export default function PaymentsTable({ payments }: PaymentsTableProps) {
           <TableHead className="text-right font-bold">Honorarium</TableHead>
           <TableHead className="text-right font-bold">Tax (%)</TableHead>
           <TableHead className="text-right font-bold">Net Honorarium</TableHead>
+          <TableHead></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -38,6 +40,9 @@ export default function PaymentsTable({ payments }: PaymentsTableProps) {
               <TableCell className="text-right">{formatMoney(payment.honorarium)}</TableCell>
               <TableCell className="text-right">{payment.taxRate}</TableCell>
               <TableCell className="text-right">{formatMoney(payment.netHonorarium)}</TableCell>
+              <TableCell>
+                <PaymentDropdownMenu payment={payment} />
+              </TableCell>
             </TableRow>
           ))
         ) : (
