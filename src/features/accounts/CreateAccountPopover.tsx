@@ -49,7 +49,6 @@ export default function CreateAccountPopover({ payeeId }: CreateAccountPopover) 
         <h2 className="text-muted-foreground">Create a new account.</h2>
         <AccountForm
           form={form}
-          values={formData}
           onSubmit={createAccount}
           loadingMsg="Creating account..."
           setIsDialogOpen={setIsOpen}
