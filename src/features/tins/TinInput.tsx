@@ -1,9 +1,9 @@
 import { SelectField } from '@/components/SelectField';
 import { useEffect, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
+import { usePayees } from '../payees/payee';
 import type { PaymentHookForm } from '../payments/payments';
 import CreateTinPopover from './CreateTinPopover';
-import { usePayeeTins } from './tins';
 
 type TinInputProps = {
   form: PaymentHookForm;
@@ -15,16 +15,18 @@ export default function TinInput({ form }: TinInputProps) {
     name: 'payeeId',
   });
 
-  const { isPending, isError, error, data: tins = [] } = usePayeeTins(payeeId.toString());
+  const { isPending, isError, error, data: payees = [] } = usePayees();
 
-  const options = useMemo(
-    () =>
-      tins.map(tin => ({
+  const payee = payees.find(payee => payee.id === payeeId);
+
+  const options = useMemo(() => {
+    if (payee && payee.tins && payee.tins.length > 0)
+      return payee.tins.map(tin => ({
         value: tin.id,
         label: tin.tin,
-      })),
-    [tins]
-  );
+      }));
+    return [];
+  }, [payee]);
 
   useEffect(() => {
     form.setValue('tinId', 0);

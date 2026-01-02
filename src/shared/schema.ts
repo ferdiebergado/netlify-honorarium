@@ -59,7 +59,12 @@ export type Payee = {
   name: string;
   position: string;
   office: string;
+  salaries: Omit<Salary, 'payeeId'>[];
+  accounts: Omit<Account, 'payeeId' | 'payee'>[];
+  tins?: Omit<Tin, 'payeeId'>[];
 };
+
+export type PayeeData = Omit<Payee, 'position' | 'office'>;
 
 export const createPayeeSchema = z.object({
   name: z.string().min(1, 'Name is required.'),
@@ -83,6 +88,8 @@ export type Bank = {
 export type Focal = {
   id: number;
   name: string;
+  positionId: number;
+  position: string;
 };
 
 export const focalSchema = z.object({

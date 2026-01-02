@@ -1,9 +1,9 @@
 import { SelectField } from '@/components/SelectField';
 import { useEffect, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
+import { usePayees } from '../payees/payee';
 import type { PaymentHookForm } from '../payments/payments';
 import CreateSalaryPopover from './CreateSalaryPopover';
-import { useSalary } from './salaries';
 
 type SalaryInputProps = {
   form: PaymentHookForm;
@@ -15,16 +15,18 @@ export default function SalaryInput({ form }: SalaryInputProps) {
     name: 'payeeId',
   });
 
-  const { isPending, isError, error, data: salaries = [] } = useSalary(payeeId.toString());
+  const { isPending, isError, error, data: payees = [] } = usePayees();
 
-  const options = useMemo(
-    () =>
-      salaries.map(salary => ({
+  const payee = payees.find(payee => payee.id === payeeId);
+
+  const options = useMemo(() => {
+    if (payee && payee.salaries.length > 0)
+      return payee.salaries.map(salary => ({
         value: salary.id,
         label: salary.salary.toString(),
-      })),
-    [salaries]
-  );
+      }));
+    return [];
+  }, [payee]);
 
   useEffect(() => {
     form.setValue('salaryId', 0);

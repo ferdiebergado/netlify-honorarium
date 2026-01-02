@@ -2,7 +2,7 @@ import { SelectField } from '@/components/SelectField';
 import { useEffect, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
 import type { PaymentHookForm } from '../../features/payments/payments';
-import { usePayeeAccounts } from './accounts';
+import { usePayees } from '../payees/payee';
 import CreateAccountPopover from './CreateAccountPopover';
 
 type AccountInputProps = {
@@ -15,16 +15,18 @@ export default function AccountInput({ form }: AccountInputProps) {
     name: 'payeeId',
   });
 
-  const { isPending, isError, error, data: accounts = [] } = usePayeeAccounts(payeeId);
+  const { isPending, isError, error, data: payees = [] } = usePayees();
 
-  const options = useMemo(
-    () =>
-      accounts.map(({ id, accountNo, bank, bankBranch }) => ({
+  const payee = payees.find(payee => payee.id === payeeId);
+
+  const options = useMemo(() => {
+    if (payee && payee.accounts.length > 0)
+      return payee.accounts.map(({ id, accountNo, bank, bankBranch }) => ({
         value: id,
         label: `${bank} ${bankBranch} ${accountNo}`,
-      })),
-    [accounts]
-  );
+      }));
+    return [];
+  }, [payee]);
 
   useEffect(() => {
     form.setValue('accountId', 0);

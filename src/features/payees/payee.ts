@@ -2,7 +2,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import type { APIResponse } from '../../lib/api';
-import { createPayeeSchema, type CreatePayeeFormValues, type Payee } from '../../shared/schema';
+import {
+  createPayeeSchema,
+  type CreatePayeeFormValues,
+  type Payee,
+  type PayeeData,
+} from '../../shared/schema';
 
 const queryKey = 'payees';
 
@@ -38,7 +43,7 @@ export const useCreatePayee = () =>
 async function getPayees() {
   const res = await fetch('/api/payees');
 
-  const { message, data } = (await res.json()) as APIResponse<Payee[]>;
+  const { message, data } = (await res.json()) as APIResponse<PayeeData[]>;
 
   if (!res.ok) throw new Error(message);
 
