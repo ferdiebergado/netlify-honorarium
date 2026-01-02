@@ -24,7 +24,10 @@ export const activitySchema = z
     venueId: z.number().min(1, 'Venue is required.'),
     startDate: z.iso.date(),
     endDate: z.iso.date(),
-    code: z.string().min(17, 'Activity Code must be at least 17 characters.'),
+    code: z.stringFormat(
+      'activity code',
+      /^AC-\d{2}-[A-Z]{2,15}-[A-Z]{2,15}-[A-Z]{2,15}-(?:P\d+|\d+-\d+|\d+)$/
+    ),
     focalId: z.number().min(1, 'Focal Person is required.'),
   })
   .refine(data => new Date(data.endDate) >= new Date(data.startDate), {
