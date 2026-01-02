@@ -81,7 +81,7 @@ export function SelectField<T extends FieldValues>({
                   </SelectValue>
                 </SelectTrigger>
 
-                <SelectContent>
+                <SelectContent key={options.map(o => o.value).join(':')}>
                   <SelectSeparator />
                   {!isLoading &&
                     !isError &&
