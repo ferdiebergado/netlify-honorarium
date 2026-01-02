@@ -5,7 +5,6 @@ import { Separator } from '@/components/ui/separator';
 import { checkId } from '@/lib/utils';
 import { IconCalendar, IconMapPin, IconTag, IconUserStar } from '@tabler/icons-react';
 import { useParams } from 'react-router';
-import PayeesTable from '../payees/PayeesTable';
 import CertificationButton from '../payments/CertificationButton';
 import ComputationButton from '../payments/ComputationButton';
 import CreatePaymentDialog from '../payments/CreatePaymentDialog';
@@ -27,7 +26,7 @@ export default function ActivityPage() {
 
   if (isError) return <p className="text-destructive m-3">Error: {error.message}</p>;
 
-  const { title, venue, startDate, endDate, code, focal, payees, payments } = activity;
+  const { title, venue, startDate, endDate, code, focal, payments } = activity;
 
   return (
     <div className="flex flex-col gap-8">
@@ -43,7 +42,7 @@ export default function ActivityPage() {
         </div>
       </div>
       <div className="flex flex-row gap-6">
-        <Card className="w-1/3">
+        <Card className="w-1/2">
           <CardHeader>
             <CardTitle className="text-xl font-bold">Activity Details</CardTitle>
           </CardHeader>
@@ -98,16 +97,7 @@ export default function ActivityPage() {
             </div>
           </CardContent>
         </Card>
-
-        {/* PAYEES */}
-        <Card className="flex-1">
-          <CardHeader className="text-xl font-bold">Payees</CardHeader>
-          <CardContent>
-            <PayeesTable payees={payees ?? []} />
-          </CardContent>
-        </Card>
       </div>
-      {/* END PAYEES */}
 
       <Card>
         <CardHeader className="text-xl font-bold">Payments</CardHeader>
