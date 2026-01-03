@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 import App from './App';
 import AppToaster from './components/AppToaster';
 import FallbackPage from './components/FallbackPage';
+import { AuthProvider } from './features/auth/AuthProvider';
 import './index.css';
 
 const queryClient = new QueryClient({
@@ -37,7 +38,9 @@ createRoot(document.getElementById('root')!).render(
               )}
             >
               <AppToaster />
-              <App />
+              <AuthProvider>
+                <App />
+              </AuthProvider>
             </ErrorBoundary>
           )}
         </QueryErrorResetBoundary>

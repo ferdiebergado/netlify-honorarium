@@ -1,3 +1,4 @@
+import { useAuth, useLogout } from '@/features/auth/auth';
 import {
   IconCalendar,
   IconCurrencyPeso,
@@ -5,8 +6,10 @@ import {
   IconSettings,
   IconUsers,
 } from '@tabler/icons-react';
-import type { FC } from 'react';
+import { useCallback, type FC } from 'react';
 import { Link } from 'react-router';
+import Loader from './Loader';
+import { Button } from './ui/button';
 import {
   Sidebar,
   SidebarContent,
@@ -48,9 +51,16 @@ const items = [
 ];
 
 const AppSidebar: FC = () => {
+  const { user } = useAuth();
+  const { isPending, mutate: logout } = useLogout();
+
+  const handleLogout = useCallback(() => {
+    logout();
+  }, [logout]);
+
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader />
+      <SidebarHeader className="text-2xl font-semibold">HonorProS</SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
@@ -71,7 +81,12 @@ const AppSidebar: FC = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter>
+        Logged in as {user?.name}{' '}
+        <Button variant="link" onClick={handleLogout} disabled={isPending}>
+          {isPending ? <Loader text="Logging out..." /> : 'Logout'}
+        </Button>
+      </SidebarFooter>
     </Sidebar>
   );
 };

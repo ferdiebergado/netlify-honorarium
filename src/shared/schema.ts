@@ -214,3 +214,10 @@ export type PaymentData = Pick<
   | 'accountId'
   | 'salaryId'
 >;
+
+export type User = {
+  id: number;
+  name: string;
+  email: string;
+  picture: string;
+};

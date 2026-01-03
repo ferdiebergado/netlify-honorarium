@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Field, FieldDescription, FieldGroup } from '@/components/ui/field';
+import { login } from '@/features/auth/auth';
 import { IconOvalVerticalFilled } from '@tabler/icons-react';
 import { useState } from 'react';
 import Loader from './Loader';
@@ -10,7 +11,7 @@ export default function LoginPage() {
 
   const handleClick = () => {
     setIsLoading(true);
-    window.location.replace('/api/oauth/google/login');
+    login();
   };
 
   return (
