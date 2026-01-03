@@ -22,9 +22,8 @@ export default async (req: Request, ctx: Context) => {
 
     const sql = `
 UPDATE activities 
-SET title=?, venue_id=?, start_date=?, end_date=?, code=?, focal_id=?
-WHERE id=?
-`;
+SET title=?, venue_id=?, start_date=?, end_date=?, code=?, focal_id=?, updated_at=datetime('now')
+WHERE id=?`;
 
     const { rowsAffected } = await turso.execute(sql, [
       title,
