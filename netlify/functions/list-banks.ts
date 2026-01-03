@@ -9,7 +9,7 @@ export const config: Config = {
 
 export default async () => {
   try {
-    const sql = 'SELECT id, name FROM banks ORDER BY name';
+    const sql = 'SELECT id, name FROM banks WHERE deleted_at IS NULL ORDER BY name';
     const { rows } = await turso.execute(sql);
     return Response.json({ data: rows });
   } catch (error) {

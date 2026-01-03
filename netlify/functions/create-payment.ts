@@ -27,7 +27,7 @@ export default async (req: Request) => {
       tinId = null,
     } = payment;
 
-    const salarySql = 'SELECT salary FROM salaries WHERE id = ?';
+    const salarySql = 'SELECT salary FROM salaries WHERE deleted_at IS NULL AND id = ?';
 
     const { rows } = await turso.execute(salarySql, [salaryId]);
 
@@ -39,18 +39,18 @@ export default async (req: Request) => {
     const netHonorarium = honorarium - honorarium * (taxRate / 100);
 
     const sql = `
-INSERT INTO payments 
+INSERT INTO payments
 (
-  honorarium, 
-  salary_id, 
-  role_id, 
-  payee_id, 
-  activity_id, 
-  tax_rate, 
-  account_id, 
-  tin_id, 
-  net_honorarium, 
-  actual_honorarium, 
+  honorarium,
+  salary_id,
+  role_id,
+  payee_id,
+  activity_id,
+  tax_rate,
+  account_id,
+  tin_id,
+  net_honorarium,
+  actual_honorarium,
   hours_rendered
 )
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;

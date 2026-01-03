@@ -11,7 +11,7 @@ export default async () => {
   console.log('Getting focals...');
 
   try {
-    const query = 'SELECT * FROM focals ORDER BY name';
+    const query = 'SELECT id, name, position_id FROM focals WHERE deleted_at IS NULL ORDER BY name';
     const { rows } = await turso.execute(query);
 
     return Response.json({ data: rows });

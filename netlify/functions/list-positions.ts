@@ -11,7 +11,7 @@ export default async () => {
   console.log('Getting positions...');
 
   try {
-    const query = 'SELECT id, name FROM positions ORDER BY name';
+    const query = 'SELECT id, name FROM positions WHERE deleted_at IS NULL ORDER BY name';
     const { rows: data } = await turso.execute(query);
 
     return Response.json({ data });

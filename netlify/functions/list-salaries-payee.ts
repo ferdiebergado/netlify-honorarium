@@ -18,7 +18,8 @@ type SalaryRow = {
 export default async (_req: Request, ctx: Context) => {
   try {
     const payeeId = parseId(ctx.params.payee_id);
-    const sql = `SELECT id, payee_id, salary FROM salaries WHERE payee_id = ? ORDER BY salary DESC`;
+    const sql =
+      'SELECT id, payee_id, salary FROM salaries WHERE deleted_at IS NULL AND payee_id = ? ORDER BY salary DESC';
 
     const { rows } = await turso.execute(sql, [payeeId]);
 

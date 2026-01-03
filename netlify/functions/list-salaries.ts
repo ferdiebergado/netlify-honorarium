@@ -14,7 +14,7 @@ type SalaryRow = {
 
 export default async () => {
   try {
-    const query = `SELECT id, payee_id, salary FROM salaries`;
+    const query = `SELECT id, payee_id, salary FROM salaries WHERE deleted_at IS NULL`;
 
     const { rows } = await turso.execute(query);
 

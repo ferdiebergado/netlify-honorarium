@@ -9,7 +9,7 @@ export const config: Config = {
 
 export default async () => {
   try {
-    const query = `SELECT id, name FROM roles`;
+    const query = 'SELECT id, name FROM roles WHERE deleted_at IS NULL ORDER BY name';
 
     const { rows } = await turso.execute(query);
 

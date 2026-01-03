@@ -15,7 +15,7 @@ export const config: Config = {
 
 export default async () => {
   try {
-    const query = `SELECT id, payee_id, tin FROM tins`;
+    const query = 'SELECT id, payee_id, tin FROM tins WHERE deleted_at IS NULL';
 
     const { rows } = await turso.execute(query);
 

@@ -18,7 +18,8 @@ export const config: Config = {
 export default async (_req: Request, ctx: Context) => {
   try {
     const payeeId = parseId(ctx.params.payee_id);
-    const sql = `SELECT id, payee_id, tin FROM tins WHERE payee_id = ? ORDER BY tin`;
+    const sql =
+      'SELECT id, payee_id, tin FROM tins WHERE deleted_at IS NULL AND payee_id = ? ORDER BY tin';
 
     const { rows } = await turso.execute(sql, [payeeId]);
 
