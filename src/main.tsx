@@ -10,6 +10,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { BrowserRouter } from 'react-router';
 import { toast } from 'sonner';
 import App from './App';
+import AppToaster from './components/AppToaster';
 import FallbackPage from './components/FallbackPage';
 import './index.css';
 
@@ -35,6 +36,7 @@ createRoot(document.getElementById('root')!).render(
                 <FallbackPage resetErrorBoundary={resetErrorBoundary} />
               )}
             >
+              <AppToaster />
               <App />
             </ErrorBoundary>
           )}
