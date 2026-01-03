@@ -8,8 +8,11 @@ import {
   type CreateAccountFormValues,
 } from '../../shared/schema';
 
+const BASE_URL = '/api/accounts';
+const QUERY_KEY = 'accounts';
+
 async function getAccounts() {
-  const res = await fetch('/api/accounts');
+  const res = await fetch(BASE_URL);
 
   const { message, data } = (await res.json()) as APIResponse<Account[]>;
 
@@ -20,13 +23,13 @@ async function getAccounts() {
 
 export function useAccounts() {
   return useQuery({
-    queryKey: ['accounts'],
+    queryKey: [QUERY_KEY],
     queryFn: getAccounts,
   });
 }
 
 async function getPayeeAccounts(payeeId: number) {
-  const res = await fetch('/api/payees/' + payeeId.toString() + '/accounts');
+  const res = await fetch(`${BASE_URL}/${payeeId.toString()}/accounts`);
 
   const { message, data } = (await res.json()) as APIResponse<Account[]>;
 
@@ -37,7 +40,7 @@ async function getPayeeAccounts(payeeId: number) {
 
 export function usePayeeAccounts(payeeId: number) {
   return useQuery({
-    queryKey: ['accounts', payeeId],
+    queryKey: [QUERY_KEY, payeeId],
     queryFn: () => getPayeeAccounts(payeeId),
   });
 }
@@ -51,7 +54,7 @@ export function useAccountForm(defaultValues: CreateAccountFormValues) {
 export type AccountHookForm = ReturnType<typeof useAccountForm>;
 
 async function createAccount(formData: CreateAccountFormValues) {
-  const res = await fetch('/api/accounts', {
+  const res = await fetch(BASE_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

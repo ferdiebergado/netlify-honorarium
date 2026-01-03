@@ -5,8 +5,8 @@ import { useForm } from 'react-hook-form';
 import type { APIResponse } from '../../lib/api';
 import { activitySchema, type Activity, type ActivityFormValues } from '../../shared/schema';
 
-// TODO: const url = '/api/activities'
-const queryKey = 'activities';
+const BASE_URL = '/api/activities';
+const QUERY_KEY = 'activities';
 
 export const useActivityForm = (defaultValues: ActivityFormValues) =>
   useForm<ActivityFormValues>({
@@ -17,7 +17,7 @@ export const useActivityForm = (defaultValues: ActivityFormValues) =>
 export type ActivityHookForm = ReturnType<typeof useActivityForm>;
 
 async function getActivities(): Promise<Activity[]> {
-  const url = '/api/activities';
+  const url = BASE_URL;
   const res = await fetch(url);
 
   const { message, data } = (await res.json()) as APIResponse<Activity[]>;
@@ -29,7 +29,7 @@ async function getActivities(): Promise<Activity[]> {
 
 export const useActivities = () => {
   return useQuery({
-    queryKey: [queryKey],
+    queryKey: [QUERY_KEY],
     queryFn: getActivities,
   });
 };
@@ -37,7 +37,7 @@ export const useActivities = () => {
 async function createActivity(formData: ActivityFormValues) {
   console.debug('formData', formData);
 
-  const res = await fetch('/api/activities', {
+  const res = await fetch(BASE_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ export type UpdateActivityData = {
 async function updateActivity({ activityId, formData }: UpdateActivityData) {
   console.debug('formData', formData);
 
-  const res = await fetch('/api/activities/' + activityId.toString(), {
+  const res = await fetch(`${BASE_URL}/${activityId.toString()}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ export function useUpdateActivity() {
 }
 
 async function deleteActivity(id: number) {
-  const res = await fetch('/api/activities/' + id.toString(), {
+  const res = await fetch(`${BASE_URL}/${id.toString()}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ export function useDeleteActivity() {
 }
 
 async function getActivity(activityId: string): Promise<Activity> {
-  const url = '/api/activities/' + activityId;
+  const url = `${BASE_URL}/${activityId}`;
   const res = await fetch(url);
 
   const { message, data } = (await res.json()) as APIResponse<Activity>;
@@ -122,13 +122,13 @@ export const useActivity = (activityId: string) => {
   checkId(activityId);
 
   return useQuery({
-    queryKey: [queryKey, activityId],
+    queryKey: [QUERY_KEY, activityId],
     queryFn: () => getActivity(activityId),
   });
 };
 
 async function getFullActivity(activityId: string): Promise<Activity> {
-  const url = '/api/activities/' + activityId + '/payments';
+  const url = `${BASE_URL}/${activityId}/payments`;
   const res = await fetch(url);
 
   const { message, data } = (await res.json()) as APIResponse<Activity>;
@@ -140,7 +140,7 @@ async function getFullActivity(activityId: string): Promise<Activity> {
 
 export const useFullActivity = (activityId: string) => {
   return useQuery({
-    queryKey: [queryKey, activityId],
+    queryKey: [QUERY_KEY, activityId],
     queryFn: () => getFullActivity(activityId),
   });
 };

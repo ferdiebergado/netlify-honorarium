@@ -4,10 +4,11 @@ import { useForm } from 'react-hook-form';
 import type { APIResponse } from '../../lib/api';
 import { salarySchema, type Salary, type SalaryFormValues } from '../../shared/schema';
 
-const queryKey = 'salaries';
+const BASE_URL = '/api/salaries';
+const QUERY_KEY = 'salaries';
 
 async function getSalaries() {
-  const res = await fetch('/api/salaries');
+  const res = await fetch(BASE_URL);
   const { message, data } = (await res.json()) as APIResponse<Salary[]>;
 
   if (!res.ok) throw new Error(message);
@@ -17,13 +18,13 @@ async function getSalaries() {
 
 export function useSalaries() {
   return useQuery({
-    queryKey: [queryKey],
+    queryKey: [QUERY_KEY],
     queryFn: getSalaries,
   });
 }
 
 async function getSalary(payeeId: string) {
-  const res = await fetch('/api/payees/' + payeeId + '/salaries');
+  const res = await fetch(`${BASE_URL}/${payeeId}/salaries`);
   const { message, data } = (await res.json()) as APIResponse<Salary[]>;
 
   if (!res.ok) throw new Error(message);
@@ -33,7 +34,7 @@ async function getSalary(payeeId: string) {
 
 export function useSalary(payeeId: string) {
   return useQuery({
-    queryKey: [queryKey, payeeId],
+    queryKey: [QUERY_KEY, payeeId],
     queryFn: () => getSalary(payeeId),
   });
 }
@@ -48,7 +49,7 @@ export function useCreateSalaryForm(defaultValues: SalaryFormValues) {
 export type SalaryHookForm = ReturnType<typeof useCreateSalaryForm>;
 
 async function createSalary(formData: SalaryFormValues) {
-  const res = await fetch('/api/salaries', {
+  const res = await fetch(BASE_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

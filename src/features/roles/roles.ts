@@ -4,10 +4,11 @@ import { useForm } from 'react-hook-form';
 import type { APIResponse } from '../../lib/api';
 import { roleSchema, type Role, type RoleFormValues } from '../../shared/schema';
 
-const queryKey = 'roles';
+const BASE_URL = '/api/roles';
+const QUERY_KEY = 'roles';
 
 export async function getRoles() {
-  const res = await fetch('/api/roles');
+  const res = await fetch(BASE_URL);
   const { message, data } = (await res.json()) as APIResponse<Role[]>;
 
   if (!res.ok) throw new Error(message);
@@ -17,7 +18,7 @@ export async function getRoles() {
 
 export function useRoles() {
   return useQuery({
-    queryKey: [queryKey],
+    queryKey: [QUERY_KEY],
     queryFn: getRoles,
   });
 }
@@ -32,7 +33,7 @@ export function useRoleForm(defaultValues: RoleFormValues) {
 export type RoleHookForm = ReturnType<typeof useRoleForm>;
 
 async function createRole(formData: RoleFormValues) {
-  const res = await fetch('/api/roles', {
+  const res = await fetch(BASE_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

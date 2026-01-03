@@ -6,7 +6,8 @@ import { checkId, startDownload } from '../../lib/utils';
 import type { PaymentFormValues } from '../../shared/schema';
 import { paymentSchema, type Payment } from '../../shared/schema';
 
-const queryKey = 'payments';
+const BASE_URL = '/api/payments';
+const QUERY_KEY = 'payments';
 
 export function usePaymentForm(defaultValues: PaymentFormValues) {
   return useForm<PaymentFormValues>({
@@ -20,7 +21,7 @@ export type PaymentHookForm = ReturnType<typeof usePaymentForm>;
 async function createPayment(formData: PaymentFormValues) {
   console.debug('formData:', formData);
 
-  const res = await fetch('/api/payments', {
+  const res = await fetch(BASE_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -42,7 +43,7 @@ export function useCreatePayment() {
 }
 
 async function getPayments(activityId?: string) {
-  let url = '/api/payments';
+  let url = BASE_URL;
   if (activityId) url += '/' + activityId;
 
   const res = await fetch(url);
@@ -55,7 +56,7 @@ async function getPayments(activityId?: string) {
 
 export function usePayments(activityId?: string) {
   return useQuery({
-    queryKey: [queryKey, activityId],
+    queryKey: [QUERY_KEY, activityId],
     queryFn: () => getPayments(activityId),
   });
 }

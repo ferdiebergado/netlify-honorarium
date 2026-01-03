@@ -4,8 +4,11 @@ import { useForm } from 'react-hook-form';
 import type { APIResponse } from '../../lib/api';
 import { focalSchema, type Focal, type FocalFormValues } from '../../shared/schema';
 
+const BASE_URL = '/api/focals';
+const QUERY_KEY = 'focals';
+
 export async function getFocals() {
-  const res = await fetch('/api/focals');
+  const res = await fetch(BASE_URL);
   const { message, data } = (await res.json()) as APIResponse<Focal[]>;
 
   if (!res.ok) throw new Error(message);
@@ -15,7 +18,7 @@ export async function getFocals() {
 
 export function useFocals() {
   return useQuery({
-    queryKey: ['focals'],
+    queryKey: [QUERY_KEY],
     queryFn: getFocals,
   });
 }
@@ -30,7 +33,7 @@ export function useFocalForm(defaultValues: FocalFormValues) {
 export type FocalHookForm = ReturnType<typeof useFocalForm>;
 
 async function createFocal(formData: FocalFormValues) {
-  const res = await fetch('/api/focals', {
+  const res = await fetch(BASE_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

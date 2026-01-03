@@ -4,10 +4,11 @@ import { useForm } from 'react-hook-form';
 import type { APIResponse } from '../../lib/api';
 import { tinSchema, type Tin, type TinFormValues } from '../../shared/schema';
 
-const queryKey = 'tins';
+const BASE_URL = '/api/tins';
+const QUERY_KEY = 'tins';
 
 async function getTins() {
-  const res = await fetch('/api/tins');
+  const res = await fetch(BASE_URL);
   const { message, data } = (await res.json()) as APIResponse<Tin[]>;
 
   if (!res.ok) throw new Error(message);
@@ -17,13 +18,13 @@ async function getTins() {
 
 export function useTins() {
   return useQuery({
-    queryKey: [queryKey],
+    queryKey: [QUERY_KEY],
     queryFn: getTins,
   });
 }
 
 async function getPayeeTins(payeeId: string) {
-  const res = await fetch('/api/tins/' + payeeId);
+  const res = await fetch(`${BASE_URL}/${payeeId}`);
   const { message, data } = (await res.json()) as APIResponse<Tin[]>;
 
   if (!res.ok) throw new Error(message);
@@ -33,7 +34,7 @@ async function getPayeeTins(payeeId: string) {
 
 export function usePayeeTins(payeeId: string) {
   return useQuery({
-    queryKey: [queryKey, payeeId],
+    queryKey: [QUERY_KEY, payeeId],
     queryFn: () => getPayeeTins(payeeId),
   });
 }
@@ -48,7 +49,7 @@ export function useCreateTinForm(defaultValues: TinFormValues) {
 export type TinHookForm = ReturnType<typeof useCreateTinForm>;
 
 async function createTin(formData: TinFormValues) {
-  const res = await fetch('/api/tins', {
+  const res = await fetch(BASE_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

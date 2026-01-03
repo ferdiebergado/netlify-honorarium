@@ -4,6 +4,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 
+const BASE_URL = '/api/positions';
+const QUERY_KEY = 'positions';
+
 export function usePositionForm(defaultValues: PositionFormValues) {
   return useForm<PositionFormValues>({
     resolver: zodResolver(positionSchema),
@@ -14,7 +17,7 @@ export function usePositionForm(defaultValues: PositionFormValues) {
 export type PositionHookForm = ReturnType<typeof usePositionForm>;
 
 async function createPosition(formData: PositionFormValues) {
-  const res = await fetch('/api/positions', {
+  const res = await fetch(BASE_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -36,7 +39,7 @@ export function useCreatePosition() {
 }
 
 async function getPositions() {
-  const res = await fetch('/api/positions');
+  const res = await fetch(BASE_URL);
 
   const { message, data } = (await res.json()) as APIResponse<Position[]>;
 
@@ -47,7 +50,7 @@ async function getPositions() {
 
 export function usePositions() {
   return useQuery({
-    queryKey: ['positions'],
+    queryKey: [QUERY_KEY],
     queryFn: getPositions,
   });
 }
