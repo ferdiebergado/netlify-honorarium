@@ -2,7 +2,7 @@ import type { Config } from '@netlify/functions';
 import { parseCookie, stringifySetCookie, type SetCookie } from 'cookie';
 import { turso } from '../db';
 import { errorResponse, UnauthorizedError } from '../errors';
-import { SESSION_COOKIE_NAME } from './constants';
+import { SESSION_COOKIE_NAME } from '../constants';
 
 export const config: Config = {
   method: 'POST',

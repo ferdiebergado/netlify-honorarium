@@ -5,7 +5,7 @@ import { turso } from '../db';
 import { BadRequestError, errorResponse, InternalServerError, UnauthorizedError } from '../errors';
 import { googlePeopleAPI, oauth2Client, scopes, type GoogleUserInfo } from '../google';
 import { getClientIP } from '../lib';
-import { RANDOM_BYTES_SIZE, SESSION_COOKIE_NAME, SESSION_DURATION_HOURS } from './constants';
+import { RANDOM_BYTES_SIZE, SESSION_COOKIE_NAME, SESSION_DURATION_HOURS } from '../constants';
 
 export const config: Config = {
   method: 'GET',

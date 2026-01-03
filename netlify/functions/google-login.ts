@@ -2,7 +2,7 @@ import type { Config } from '@netlify/functions';
 import { stringifySetCookie } from 'cookie';
 import { randomBytes } from 'crypto';
 import { oauth2Client, scopes } from '../google';
-import { RANDOM_BYTES_SIZE } from './constants';
+import { RANDOM_BYTES_SIZE } from '../constants';
 
 export const config: Config = {
   method: 'GET',
