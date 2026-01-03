@@ -1,5 +1,5 @@
 import type { Config } from '@netlify/functions';
-import type { Account, PayeeData } from '../../src/shared/schema';
+import type { Account, Payee } from '../../src/shared/schema';
 import { turso } from '../db';
 import { errorResponse } from '../errors';
 import { deserializeDetails } from './list-accounts';
@@ -8,6 +8,8 @@ export const payeeSql = `
 SELECT 
     p.id,
     p.name,
+    p.position,
+    p.office,
     s.id        AS salary_id,
     s.salary,
     t.id        AS tin_id,
@@ -16,7 +18,7 @@ SELECT
     a.details,
     b.name      AS bank_name
 FROM payees p 
- JOIN salaries s ON s.payee_id = p.id 
+JOIN salaries s ON s.payee_id = p.id 
 LEFT JOIN tins t ON t.payee_id = p.id 
 LEFT JOIN accounts a ON a.payee_id = p.id 
 JOIN banks b ON b.id = a.bank_id`;
@@ -31,6 +33,8 @@ export type PayeeRow = {
   account_id: number;
   bank_name: string;
   details: Buffer;
+  position: string;
+  office: string;
 };
 
 export const config: Config = {
@@ -52,11 +56,23 @@ export default async () => {
   }
 };
 
-export function rowsToPayees(rows: PayeeRow[]): PayeeData[] {
-  const payeeMap = new Map<number, PayeeData>();
+export function rowsToPayees(rows: PayeeRow[]): Payee[] {
+  const payeeMap = new Map<number, Payee>();
 
   rows.forEach(row => {
-    const { id, salary, tin, bank_name, name, details, salary_id, tin_id, account_id } = row;
+    const {
+      id,
+      salary,
+      tin,
+      bank_name,
+      name,
+      details,
+      salary_id,
+      tin_id,
+      account_id,
+      position,
+      office,
+    } = row;
     const payee = payeeMap.get(id);
     const account: Omit<Account, 'payee' | 'payeeId'> = {
       id: account_id,
@@ -68,9 +84,11 @@ export function rowsToPayees(rows: PayeeRow[]): PayeeData[] {
     const payeeTin = tin && tin_id && { id: tin_id, tin };
 
     if (!payee) {
-      const payee: PayeeData = {
+      const payee: Payee = {
         id,
         name,
+        position,
+        office,
         salaries: [payeeSalary],
         accounts: [account],
       };

@@ -67,8 +67,6 @@ export type Payee = {
   tins?: Omit<Tin, 'payeeId'>[];
 };
 
-export type PayeeData = Omit<Payee, 'position' | 'office'>;
-
 export const createPayeeSchema = z.object({
   name: z.string().min(1, 'Name is required.'),
   office: z.string(),

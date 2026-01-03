@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { PayeeData } from '../src/shared/schema';
+import type { Payee } from '../src/shared/schema';
 import { rowsToPayees, type PayeeRow } from './functions/list-payees';
 import { encrypt } from './security';
 
@@ -9,6 +9,8 @@ describe('rowsToPayees', () => {
       {
         id: 1,
         name: 'agnis',
+        position: 'Student',
+        office: 'CNHS',
         salary: 13000,
         bank_name: 'LBP',
         details: encrypt(
@@ -26,6 +28,8 @@ describe('rowsToPayees', () => {
       {
         id: 1,
         name: 'agnis',
+        position: 'Student',
+        office: 'CNHS',
         salary: 13000,
         bank_name: 'BDO',
         details: encrypt(
@@ -45,10 +49,12 @@ describe('rowsToPayees', () => {
     ];
 
     const got = rowsToPayees(given);
-    const want: PayeeData[] = [
+    const want: Payee[] = [
       {
         id: 1,
         name: 'agnis',
+        position: 'Student',
+        office: 'CNHS',
         salaries: [{ salary: 13000, id: 1 }],
         accounts: [
           {
