@@ -1,7 +1,6 @@
 # Todo
 
 - Create typeguards for json responses
-- oauth
 - dark mode
 - CRUD
 - service layer
@@ -9,11 +8,7 @@
 - add right padding to error message
 - show alert on form errors instead of toast
 - classify by file each features
-- activity code input format
 - embedded TODOs
-- use derivedstate instead of useeffect
-- use context providers where applicable
-- mask account number when viewing
 - embed objects in schemas
 - separate query per action
 - payroll: splice row 2 if there is only 1 payee
@@ -23,10 +18,20 @@
 - do not use path aliases
 - payments total in table footer
 - autofill when salary/tin/account is only 1
-- ensure rows returned has deleted_at is null
+- baseurls for endpoints in features
+- terms and conditions from shadcn studio
+- update payment
 
 # Done
 
+- ensure rows returned has deleted_at is null
+- oauth
+- [X] mask account number when viewing
+- use context providers where applicable
+- use derivedstate instead of useeffect
+- manually set updated_at on update
+- extract toaster component
+- activity code input format
 - error page
 - 404 page
 - add payee
