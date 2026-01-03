@@ -9,7 +9,7 @@ export const config: Config = {
 
 export default async () => {
   try {
-    const query = 'SELECT * FROM venues WHERE deleted_at IS NULL ORDER BY name';
+    const query = 'SELECT id, name FROM venues WHERE deleted_at IS NULL ORDER BY name';
     const { rows } = await turso.execute(query);
 
     return Response.json({ data: rows });
