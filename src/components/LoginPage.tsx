@@ -1,17 +1,16 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Field, FieldDescription, FieldGroup } from '@/components/ui/field';
-import { IconLoader, IconOvalVerticalFilled } from '@tabler/icons-react';
+import { IconOvalVerticalFilled } from '@tabler/icons-react';
 import { useState } from 'react';
 import Loader from './Loader';
-import { Toaster } from './ui/sonner';
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = () => {
     setIsLoading(true);
-    window.location.href = '/api/oauth/google/login';
+    window.location.replace('/api/oauth/google/login');
   };
 
   return (
@@ -59,12 +58,6 @@ export default function LoginPage() {
           </FieldDescription>
         </div>
       </div>
-      <Toaster
-        position="top-right"
-        expand
-        richColors
-        icons={{ loading: <IconLoader size={18} className="animate-spin" /> }}
-      />
     </div>
   );
 }

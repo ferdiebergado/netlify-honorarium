@@ -117,3 +117,15 @@ export function parseId(id: string): number {
 
   return parsedId;
 }
+
+export function getClientIP(request: Request) {
+  const xForwardedFor = request.headers.get('x-forwarded-for');
+
+  if (xForwardedFor) {
+    // Take the first IP in the list (the original client)
+    return xForwardedFor.split(',')[0].trim();
+  }
+
+  // Fallback to platform-specific headers
+  return request.headers.get('cf-connecting-ip') || request.headers.get('x-real-ip') || '127.0.0.1';
+}

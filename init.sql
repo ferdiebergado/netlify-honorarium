@@ -50,9 +50,7 @@ CREATE TABLE IF NOT EXISTS accounts (
   id INTEGER PRIMARY KEY,
   payee_id INTEGER NOT NULL,
   bank_id INTEGER NOT NULL,
-  bank_branch TEXT NOT NULL,
-  account_no TEXT NOT NULL,
-  account_name TEXT NOT NULL,
+  details BLOB NOT NULL,
   created_at TEXT,
   updated_at TEXT,
   deleted_at TEXT,
@@ -117,164 +115,29 @@ CREATE TABLE IF NOT EXISTS tins (
   FOREIGN KEY (payee_id) REFERENCES payees (id)
 );
 
-CREATE TRIGGER IF NOT EXISTS focals_set_timestamps_after_insert
-AFTER INSERT ON focals
-FOR EACH ROW
-BEGIN
-    UPDATE focals
-    SET
-        created_at = COALESCE(NEW.created_at, CURRENT_TIMESTAMP),
-        updated_at = COALESCE(NEW.updated_at, CURRENT_TIMESTAMP)
-    WHERE id = NEW.id;
-END;
-CREATE TRIGGER IF NOT EXISTS positions_set_timestamps_after_insert
-AFTER INSERT ON positions
-FOR EACH ROW
-BEGIN
-    UPDATE positions
-    SET
-        created_at = COALESCE(NEW.created_at, CURRENT_TIMESTAMP),
-        updated_at = COALESCE(NEW.updated_at, CURRENT_TIMESTAMP)
-    WHERE id = NEW.id;
-END;
-CREATE TRIGGER IF NOT EXISTS venues_set_timestamps_after_insert
-AFTER INSERT ON venues
-FOR EACH ROW
-BEGIN
-    UPDATE venues
-    SET
-        created_at = COALESCE(NEW.created_at, CURRENT_TIMESTAMP),
-        updated_at = COALESCE(NEW.updated_at, CURRENT_TIMESTAMP)
-    WHERE id = NEW.id;
-END;
-CREATE TRIGGER IF NOT EXISTS venues_set_updated_at_after_update
-AFTER UPDATE ON venues
-FOR EACH ROW
-BEGIN
-    UPDATE venues
-    SET updated_at = CURRENT_TIMESTAMP
-    WHERE id = NEW.id;
-END;
-CREATE TRIGGER IF NOT EXISTS focals_set_updated_at_after_update
-AFTER UPDATE ON focals
-FOR EACH ROW
-BEGIN
-    UPDATE focals
-    SET updated_at = CURRENT_TIMESTAMP
-    WHERE id = NEW.id;
-END;
-CREATE TRIGGER IF NOT EXISTS banks_set_timestamps_after_insert
-AFTER INSERT ON banks
-FOR EACH ROW
-BEGIN
-    UPDATE banks
-    SET
-        created_at = COALESCE(NEW.created_at, CURRENT_TIMESTAMP),
-        updated_at = COALESCE(NEW.updated_at, CURRENT_TIMESTAMP)
-    WHERE id = NEW.id;
-END;
-CREATE TRIGGER IF NOT EXISTS banks_set_updated_at_after_update
-AFTER UPDATE ON banks
-FOR EACH ROW
-BEGIN
-    UPDATE banks
-    SET updated_at = CURRENT_TIMESTAMP
-    WHERE id = NEW.id;
-END;
-CREATE TRIGGER IF NOT EXISTS payees_set_timestamps_after_insert
-AFTER INSERT ON payees
-FOR EACH ROW
-BEGIN
-    UPDATE payees
-    SET
-        created_at = COALESCE(NEW.created_at, CURRENT_TIMESTAMP),
-        updated_at = COALESCE(NEW.updated_at, CURRENT_TIMESTAMP)
-    WHERE id = NEW.id;
-END;
-CREATE TRIGGER IF NOT EXISTS accounts_set_timestamps_after_insert
-AFTER INSERT ON accounts
-FOR EACH ROW
-BEGIN
-    UPDATE accounts
-    SET
-        created_at = COALESCE(NEW.created_at, CURRENT_TIMESTAMP),
-        updated_at = COALESCE(NEW.updated_at, CURRENT_TIMESTAMP)
-    WHERE id = NEW.id;
-END;
-CREATE TRIGGER IF NOT EXISTS activities_set_timestamps_after_insert 
-  AFTER INSERT ON activities 
-  FOR EACH ROW BEGIN
-UPDATE activities
-SET
-  created_at = COALESCE(NEW.created_at, CURRENT_TIMESTAMP),
-  updated_at = COALESCE(NEW.updated_at, CURRENT_TIMESTAMP)
-WHERE
-  id = NEW.id;
-END;
-CREATE TRIGGER IF NOT EXISTS salaries_set_timestamps_after_insert 
-  AFTER INSERT ON salaries 
-  FOR EACH ROW BEGIN
-UPDATE salaries
-SET
-  created_at = COALESCE(NEW.created_at, CURRENT_TIMESTAMP),
-  updated_at = COALESCE(NEW.updated_at, CURRENT_TIMESTAMP)
-WHERE
-  id = NEW.id;
-END;
-CREATE TRIGGER IF NOT EXISTS roles_set_timestamps_after_insert 
-  AFTER INSERT ON roles 
-  FOR EACH ROW BEGIN
-UPDATE roles
-SET
-  created_at = COALESCE(NEW.created_at, CURRENT_TIMESTAMP),
-  updated_at = COALESCE(NEW.updated_at, CURRENT_TIMESTAMP)
-WHERE
-  id = NEW.id;
-END;
-CREATE TRIGGER IF NOT EXISTS tins_set_timestamps_after_insert 
-  AFTER INSERT ON tins 
-  FOR EACH ROW BEGIN
-UPDATE tins
-SET
-  created_at = COALESCE(NEW.created_at, CURRENT_TIMESTAMP),
-  updated_at = COALESCE(NEW.updated_at, CURRENT_TIMESTAMP)
-WHERE
-  id = NEW.id;
-END;
-CREATE TRIGGER IF NOT EXISTS tins_set_updated_at_after_update 
-AFTER UPDATE ON tins 
-  FOR EACH ROW BEGIN
-UPDATE tins
-SET
-  updated_at = CURRENT_TIMESTAMP
-WHERE
-  id = NEW.id;
-END;
-CREATE TRIGGER IF NOT EXISTS payments_set_timestamps_after_insert 
-  AFTER INSERT ON payments 
-  FOR EACH ROW BEGIN
-UPDATE payments
-SET
-  created_at = COALESCE(NEW.created_at, CURRENT_TIMESTAMP),
-  updated_at = COALESCE(NEW.updated_at, CURRENT_TIMESTAMP)
-WHERE
-  id = NEW.id;
-END;
-CREATE TRIGGER IF NOT EXISTS payments_set_updated_at_after_update 
-AFTER UPDATE ON payments 
-  FOR EACH ROW BEGIN
-UPDATE payments
-SET
-  updated_at = CURRENT_TIMESTAMP
-WHERE
-  id = NEW.id;
-END;
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  picture TEXT NOT NULL,
+  last_login_at TEXT DEFAULT CURRENT_TIMESTAMP,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+  updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+  deleted_at TEXT 
+);
 
-ALTER TABLE accounts DROP COLUMN bank_branch;
-ALTER TABLE accounts DROP COLUMN account_name;
-ALTER TABLE accounts DROP COLUMN account_no;
-ALTER TABLE accounts ADD COLUMN details BLOB NOT NULL;
+CREATE TABLE IF NOT EXISTS sessions (
+    id INTEGER PRIMARY KEY,
+    session_id TEXT UNIQUE NOT NULL,
+    user_id INTEGER NOT NULL,
+    ip_address TEXT,
+    user_agent TEXT,
+    expires_at TEXT NOT NULL,
+    last_active_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TEXT,
+    is_revoked INTEGER DEFAULT 0 CHECK (is_revoked IN (0, 1)),
+    FOREIGN KEY (user_id) REFERENCES users (id)
+);
 
 COMMIT;
-
-
