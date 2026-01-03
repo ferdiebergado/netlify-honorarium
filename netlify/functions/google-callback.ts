@@ -5,6 +5,7 @@ import { turso } from '../db';
 import { BadRequestError, errorResponse, InternalServerError, UnauthorizedError } from '../errors';
 import { googlePeopleAPI, oauth2Client, scopes, type GoogleUserInfo } from '../google';
 import { getClientIP } from '../lib';
+import { RANDOM_BYTES_SIZE, SESSION_COOKIE_NAME, SESSION_DURATION_HOURS } from './constants';
 
 export const config: Config = {
   method: 'GET',
@@ -41,7 +42,7 @@ export default async (req: Request) => {
     const { sessionId, maxAge } = await createSession(userId, req);
 
     const sessionCookie = stringifySetCookie({
-      name: '__Secure-session',
+      name: SESSION_COOKIE_NAME,
       value: sessionId,
       path: '/',
       maxAge: maxAge,
@@ -66,14 +67,14 @@ async function addUser({ name, email, picture }: GoogleUserInfo): Promise<number
   console.log('Adding user...');
 
   const sql = `
-INSERT INTO 
-  users 
-    (name, email, picture) 
-VALUES 
-  (?, ?, ?) 
+INSERT INTO
+  users
+    (name, email, picture)
+VALUES
+  (?, ?, ?)
 ON CONFLICT(email)
   DO
-  UPDATE 
+  UPDATE
   SET last_login_at = CURRENT_TIMESTAMP
 RETURNING id`;
 
@@ -88,18 +89,18 @@ async function createSession(
 ): Promise<{ sessionId: string; maxAge: number }> {
   console.log('Creating session...');
 
-  const sessionId = randomBytes(32).toString('base64');
+  const sessionId = randomBytes(RANDOM_BYTES_SIZE).toString('base64');
   const userAgent = req.headers.get('User-Agent') ?? 'unknown';
   const ip = getClientIP(req);
   const now = new Date();
-  const expiresAt = new Date(now.setHours(now.getHours() + 24));
+  const expiresAt = new Date(now.setHours(now.getHours() + SESSION_DURATION_HOURS));
   const maxAge = Math.floor(expiresAt.getTime() / 1000);
 
   const sql = `
-INSERT INTO 
-  sessions 
-    (session_id, user_id, ip_address, user_agent, expires_at) 
-VALUES 
+INSERT INTO
+  sessions
+    (session_id, user_id, ip_address, user_agent, expires_at)
+VALUES
   (?, ?, ?, ?, ?)`;
 
   await turso.execute(sql, [sessionId, userId, ip, userAgent, expiresAt.toISOString()]);

@@ -1,6 +1,7 @@
 import { parseCookie } from 'cookie';
 import { turso } from './db';
 import { UnauthorizedError } from './errors';
+import { SESSION_COOKIE_NAME } from './functions/constants';
 
 type SessionRow = {
   user_id: number;
@@ -11,7 +12,7 @@ export async function authCheck(req: Request): Promise<number> {
   if (!cookieHeader) throw new UnauthorizedError('no cookie header');
 
   const cookies = parseCookie(cookieHeader);
-  const sessionId = cookies['__Secure-session'];
+  const sessionId = cookies[SESSION_COOKIE_NAME];
   if (!sessionId) throw new UnauthorizedError('no session cookie');
 
   const sql = 'SELECT user_id FROM sessions WHERE deleted_at IS NULL AND session_id = ?';

@@ -2,6 +2,7 @@ import type { Config } from '@netlify/functions';
 import { stringifySetCookie } from 'cookie';
 import { randomBytes } from 'crypto';
 import { oauth2Client, scopes } from '../google';
+import { RANDOM_BYTES_SIZE } from './constants';
 
 export const config: Config = {
   method: 'GET',
@@ -9,7 +10,7 @@ export const config: Config = {
 };
 
 export default () => {
-  const state = randomBytes(32).toString('hex');
+  const state = randomBytes(RANDOM_BYTES_SIZE).toString('hex');
 
   const stateCookie = stringifySetCookie({
     name: 'state',

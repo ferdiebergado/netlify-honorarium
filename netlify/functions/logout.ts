@@ -2,6 +2,7 @@ import type { Config } from '@netlify/functions';
 import { parseCookie, stringifySetCookie, type SetCookie } from 'cookie';
 import { turso } from '../db';
 import { errorResponse, UnauthorizedError } from '../errors';
+import { SESSION_COOKIE_NAME } from './constants';
 
 export const config: Config = {
   method: 'POST',
@@ -16,7 +17,7 @@ export default async (req: Request) => {
     if (!cookieHeader) throw new UnauthorizedError('no cookie header');
 
     const cookies = parseCookie(cookieHeader);
-    const sessionId = cookies['__Secure-session'];
+    const sessionId = cookies[SESSION_COOKIE_NAME];
     if (!sessionId) throw new UnauthorizedError('no session cookie');
 
     const sql = `UPDATE sessions SET deleted_at=datetime('now') WHERE session_id = ?`;
@@ -25,7 +26,7 @@ export default async (req: Request) => {
     if (rowsAffected === 0) throw new UnauthorizedError('session not found');
 
     const logoutCookie: SetCookie = {
-      name: '__Secure-session',
+      name: SESSION_COOKIE_NAME,
       value: '',
       maxAge: -1,
       path: '/',
