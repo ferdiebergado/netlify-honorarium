@@ -29,6 +29,8 @@ type ActivityRow = {
   salary_id: number;
   role_id: number;
   tin_id: number;
+  focal_positionId: number;
+  focal_position: string;
 };
 
 const fullActivitySql = `
@@ -61,9 +63,12 @@ SELECT
   pay.tin_id,
 
   r.id          AS role_id,
-  r.name        AS role
+  r.name        AS role,
+
+  pos.name      AS focal_position
 FROM activities a
 JOIN focals f ON f.id = a.focal_id
+JOIN positions pos ON pos.id = f.position_id
 JOIN venues v ON v.id = a.venue_id
 LEFT JOIN payments pay ON pay.activity_id = a.id
 LEFT JOIN payees p ON p.id = pay.payee_id
@@ -143,5 +148,7 @@ function rowsToActivity(rows: ActivityRow[]): Activity {
     focalId: firstRow.focal_id,
     payees,
     payments,
+    positionId: firstRow.focal_positionId,
+    position: firstRow.focal_position,
   };
 }

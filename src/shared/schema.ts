@@ -10,6 +10,8 @@ export type Activity = {
   code: string;
   focalId: number;
   focal: string;
+  positionId: number;
+  position: string;
   payees?: Payee[];
   payments?: PaymentData[];
 };

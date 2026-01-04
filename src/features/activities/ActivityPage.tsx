@@ -3,7 +3,7 @@ import SkeletonCard from '@/components/SkeletonCard';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { checkId } from '@/lib/utils';
-import { IconCalendar, IconMapPin, IconTag, IconUserStar } from '@tabler/icons-react';
+import { IconCalendar, IconMapPin, IconTag, IconUserCog, IconUserStar } from '@tabler/icons-react';
 import { useParams } from 'react-router';
 import CertificationButton from '../payments/CertificationButton';
 import ComputationButton from '../payments/ComputationButton';
@@ -26,7 +26,7 @@ export default function ActivityPage() {
 
   if (isError) return <p className="text-destructive m-3">Error: {error.message}</p>;
 
-  const { title, venue, startDate, endDate, code, focal, payments } = activity;
+  const { title, venue, startDate, endDate, code, focal, payments, position } = activity;
 
   return (
     <div className="flex flex-col gap-8">
@@ -44,7 +44,7 @@ export default function ActivityPage() {
       <div className="flex flex-row gap-6">
         <Card className="w-1/2">
           <CardHeader>
-            <CardTitle className="text-xl font-bold">Activity Details</CardTitle>
+            <CardTitle className="text-xl font-semibold">Activity Details</CardTitle>
           </CardHeader>
           <CardContent>
             <Separator className="my-2" />
@@ -94,13 +94,23 @@ export default function ActivityPage() {
                   <span className="text-foreground font-medium">{focal}</span>
                 </div>
               </div>
+
+              <div>
+                <div className="flex items-center justify-between text-sm">
+                  <div className="text-muted-foreground flex items-center gap-2">
+                    <IconUserCog className="h-4 w-4" />
+                    <span>Focal Position</span>
+                  </div>
+                  <span className="text-foreground">{position}</span>
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
       </div>
 
       <Card>
-        <CardHeader className="text-xl font-bold">Payments</CardHeader>
+        <CardHeader className="text-xl font-semibold">Payments</CardHeader>
         <CardContent>
           <PaymentsTable payments={payments ?? []} />
         </CardContent>
