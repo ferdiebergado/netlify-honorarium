@@ -10,7 +10,6 @@ import {
 } from '@/components/ui/input-group';
 import { useEffect } from 'react';
 import { Controller } from 'react-hook-form';
-import { toast } from 'sonner';
 import FocalInput from '../../features/focals/FocalInput';
 import VenueInput from '../../features/venues/VenueInput';
 import type { ActivityFormValues } from '../../shared/schema';
@@ -18,40 +17,36 @@ import { type ActivityHookForm } from './activity';
 
 type ActivityFormProps = {
   form: ActivityHookForm;
-  onSubmit: (data: ActivityFormValues) => Promise<{ message: string }>;
+  onSubmit: (data: ActivityFormValues) => void;
   setIsDialogOpen: (open: boolean) => void;
-  loadingMsg: string;
   isSuccess: boolean;
   isError: boolean;
 };
+
+function maskCode(value: string): string {
+  const prefix = 'AC-';
+  let v = value.toUpperCase();
+
+  v = v.replace(/[^A-Z0-9-]/g, '');
+
+  if (!v.startsWith(prefix)) {
+    v = prefix;
+  }
+
+  return v;
+}
 
 export default function ActivityForm({
   form,
   onSubmit,
   setIsDialogOpen,
-  loadingMsg,
   isSuccess,
   isError,
 }: ActivityFormProps) {
-  const maskCode = (value: string): string => {
-    const prefix = 'AC-';
-    let v = value.toUpperCase();
-
-    v = v.replace(/[^A-Z0-9-]/g, '');
-
-    if (!v.startsWith(prefix)) {
-      v = prefix;
-    }
-
-    return v;
-  };
-
   const handleSubmit = (formData: ActivityFormValues) => {
     setIsDialogOpen(false);
 
-    toast.promise(onSubmit(formData), {
-      loading: loadingMsg,
-    });
+    onSubmit(formData);
   };
 
   const handleReset = () => {

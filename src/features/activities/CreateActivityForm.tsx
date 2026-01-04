@@ -44,7 +44,6 @@ export default function CreateActivityForm() {
           form={form}
           onSubmit={createActivity}
           setIsDialogOpen={setIsDialogOpen}
-          loadingMsg="Creating Activity..."
           isSuccess={isSuccess}
           isError={isError}
         />
