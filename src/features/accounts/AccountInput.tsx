@@ -10,6 +10,8 @@ type AccountInputProps = {
 };
 
 export default function AccountInput({ form }: AccountInputProps) {
+  const fieldName = 'accountId';
+
   const payeeId = useWatch({
     control: form.control,
     name: 'payeeId',
@@ -29,12 +31,12 @@ export default function AccountInput({ form }: AccountInputProps) {
   }, [payee]);
 
   useEffect(() => {
-    form.setValue('accountId', 0);
+    form.setValue(fieldName, form.getValues(fieldName));
   }, [form, payeeId]);
 
   return (
     <SelectField
-      name="accountId"
+      name={fieldName}
       control={form.control}
       label="Bank Account"
       placeholder="Select account..."

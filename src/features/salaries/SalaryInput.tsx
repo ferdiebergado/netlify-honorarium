@@ -10,6 +10,8 @@ type SalaryInputProps = {
 };
 
 export default function SalaryInput({ form }: SalaryInputProps) {
+  const fieldName = 'salaryId';
+
   const payeeId = useWatch({
     control: form.control,
     name: 'payeeId',
@@ -29,12 +31,12 @@ export default function SalaryInput({ form }: SalaryInputProps) {
   }, [payee]);
 
   useEffect(() => {
-    form.setValue('salaryId', 0);
+    form.setValue(fieldName, form.getValues(fieldName));
   }, [form, payeeId]);
 
   return (
     <SelectField
-      name="salaryId"
+      name={fieldName}
       control={form.control}
       label="Basic Salary"
       placeholder="Select salary..."

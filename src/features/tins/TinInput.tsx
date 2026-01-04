@@ -10,6 +10,8 @@ type TinInputProps = {
 };
 
 export default function TinInput({ form }: TinInputProps) {
+  const fieldName = 'tinId';
+
   const payeeId = useWatch({
     control: form.control,
     name: 'payeeId',
@@ -29,12 +31,12 @@ export default function TinInput({ form }: TinInputProps) {
   }, [payee]);
 
   useEffect(() => {
-    form.setValue('tinId', 0);
+    form.setValue(fieldName, form.getValues(fieldName));
   }, [form, payeeId]);
 
   return (
     <SelectField
-      name="tinId"
+      name={fieldName}
       control={form.control}
       label="Tax Identification Number (TIN)"
       placeholder="Select TIN..."
