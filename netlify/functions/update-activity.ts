@@ -13,7 +13,7 @@ export default async (req: Request, ctx: Context) => {
   console.log('Updating activity...');
 
   try {
-    await authCheck(req);
+    const userId = await authCheck(req);
 
     const body = await req.json();
     const { error, data } = activitySchema.safeParse(body);
@@ -24,19 +24,23 @@ export default async (req: Request, ctx: Context) => {
     const { id } = ctx.params;
 
     const sql = `
-UPDATE activities
-SET title=?, venue_id=?, start_date=?, end_date=?, code=?, focal_id=?, updated_at=datetime('now')
-WHERE id=?`;
+UPDATE
+  activities
+SET
+  title=?,
+  venue_id=?,
+  start_date=?,
+  end_date=?,
+  code=?,
+  focal_id=?,
+  updated_at=datetime('now'),
+  updated_by=?
+WHERE
+  id=?`;
 
-    const { rowsAffected } = await turso.execute(sql, [
-      title,
-      venueId,
-      startDate,
-      endDate,
-      code,
-      focalId,
-      id,
-    ]);
+    const args = [title, venueId, startDate, endDate, code, focalId, userId, id];
+
+    const { rowsAffected } = await turso.execute(sql, args);
 
     if (rowsAffected === 0) throw new NotFoundError();
 

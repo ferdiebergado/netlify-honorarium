@@ -13,7 +13,7 @@ export const config: Config = {
 
 export default async (req: Request, ctx: Context) => {
   try {
-    await authCheck(req);
+    const userId = await authCheck(req);
 
     const paymentId = parseId(ctx.params.id);
 
@@ -58,7 +58,9 @@ SET
   tin_id=?,
   net_honorarium=?,
   actual_honorarium=?,
-  hours_rendered=?
+  hours_rendered=?,
+  updated_at=datetime('now'),
+  updated_by=?
 WHERE
   id = ?`;
 
@@ -74,6 +76,7 @@ WHERE
       netHonorarium,
       actualHonorarium,
       hoursRendered,
+      userId,
       paymentId,
     ];
 
