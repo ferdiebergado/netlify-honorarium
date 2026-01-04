@@ -8,13 +8,14 @@
     "build": "tsc -b && vite build",
     "lint": "eslint . --cache --cache-location .eslintcache",
     "preview": "vite preview",
-    "format": "pnpm exec prettier . --write",
+    "format": "prettier . --write",
     "turso-dump": "turso db shell honorarium .dump > dump.sql",
     "turso-migrate": "turso db shell honorarium < init.sql",
     "create-db": "sqlite3 local.db '.read init.sql'",
     "db": "sqlite3 -init .sqliterc local.db",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "typecheck": "tsc -b -noEmit"
   },
   "dependencies": {
     "@base-ui/react": "^1.0.0",
