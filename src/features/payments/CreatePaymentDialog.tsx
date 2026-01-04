@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/dialog';
 import { IconCirclePlus } from '@tabler/icons-react';
 import { useEffect, useMemo, useState } from 'react';
+import { toast } from 'sonner';
 import type { Activity, PaymentFormValues } from '../../shared/schema';
 import PaymentForm from './PaymentForm';
 import { useCreatePayment, usePaymentForm } from './payments';
@@ -34,6 +35,10 @@ export default function CreatePaymentDialog({ activity }: CreatePaymentDialogPro
   const form = usePaymentForm(formValues);
   const { isError, isSuccess, mutateAsync: createPayment } = useCreatePayment();
 
+  const handleSubmit = (formData: PaymentFormValues) => {
+    toast.promise(createPayment(formData), { loading: 'Creating payment...' });
+  };
+
   const handleClick = () => {
     setIsDialogOpen(true);
   };
@@ -54,8 +59,7 @@ export default function CreatePaymentDialog({ activity }: CreatePaymentDialogPro
         </DialogHeader>
         <PaymentForm
           form={form}
-          onSubmit={createPayment}
-          loadingMsg="Creating payment..."
+          onSubmit={handleSubmit}
           setIsDialogOpen={setIsDialogOpen}
           activity={activity}
           isSuccess={isSuccess}

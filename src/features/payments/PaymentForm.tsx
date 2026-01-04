@@ -4,7 +4,6 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field
 import { Input } from '@/components/ui/input';
 import { useEffect } from 'react';
 import { Controller } from 'react-hook-form';
-import { toast } from 'sonner';
 import AccountInput from '../../features/accounts/AccountInput';
 import PayeeInput from '../../features/payees/PayeeInput';
 import RoleInput from '../../features/roles/RoleInput';
@@ -16,9 +15,8 @@ import { type PaymentHookForm } from './payments';
 
 type PaymentFormProps = {
   form: PaymentHookForm;
-  onSubmit: (data: PaymentFormValues) => Promise<{ message: string }>;
+  onSubmit: (formData: PaymentFormValues) => void;
   setIsDialogOpen: (open: boolean) => void;
-  loadingMsg: string;
   activity?: Pick<Activity, 'id' | 'title'>;
   isSuccess: boolean;
   isError: boolean;
@@ -27,7 +25,6 @@ type PaymentFormProps = {
 export default function PaymentForm({
   form,
   onSubmit,
-  loadingMsg,
   setIsDialogOpen,
   activity,
   isSuccess,
@@ -35,9 +32,7 @@ export default function PaymentForm({
 }: PaymentFormProps) {
   const handleSubmit = (formData: PaymentFormValues) => {
     setIsDialogOpen(false);
-    toast.promise(onSubmit(formData), {
-      loading: loadingMsg,
-    });
+    onSubmit(formData);
   };
 
   const handleReset = () => {
