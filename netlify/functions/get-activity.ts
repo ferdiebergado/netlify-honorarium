@@ -1,4 +1,5 @@
 import type { Config, Context } from '@netlify/functions';
+import { authCheck } from '../auth-check';
 import { turso } from '../db';
 import { errorResponse, NotFoundError } from '../errors';
 import { parseId } from '../lib';
@@ -9,10 +10,12 @@ export const config: Config = {
   path: '/api/activities/:id',
 };
 
-export default async (_req: Request, ctx: Context) => {
-  console.log('Retrieving activity with id:', ctx.params.id);
+export default async (req: Request, ctx: Context) => {
+  console.log('Retrieving activity...');
 
   try {
+    await authCheck(req);
+
     const accountId = parseId(ctx.params.id);
 
     const sql = `${activitiesSql} WHERE a.id = ? AND a.deleted_at IS NULL`;

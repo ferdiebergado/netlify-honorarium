@@ -1,4 +1,5 @@
 import type { Config, Context } from '@netlify/functions';
+import { authCheck } from '../auth-check';
 import { turso } from '../db';
 import { errorResponse, NotFoundError } from '../errors';
 import { parseId } from '../lib';
@@ -9,8 +10,10 @@ export const config: Config = {
   path: '/api/accounts/:id',
 };
 
-export default async (_req: Request, ctx: Context) => {
+export default async (req: Request, ctx: Context) => {
   try {
+    await authCheck(req);
+
     const accountId = parseId(ctx.params.id);
 
     const sql = `${accountsSql} WHERE a.id = ?`;

@@ -1,4 +1,5 @@
 import type { Config } from '@netlify/functions';
+import { authCheck } from '../auth-check';
 import { turso } from '../db';
 import { errorResponse } from '../errors';
 
@@ -13,11 +14,13 @@ export const config: Config = {
   path: '/api/tins',
 };
 
-export default async () => {
+export default async (req: Request) => {
   try {
-    const query = 'SELECT id, payee_id, tin FROM tins WHERE deleted_at IS NULL';
+    await authCheck(req);
 
-    const { rows } = await turso.execute(query);
+    const sql = 'SELECT id, payee_id, tin FROM tins WHERE deleted_at IS NULL';
+
+    const { rows } = await turso.execute(sql);
 
     const data = (rows as unknown as TinRow[]).map(tin => ({
       ...tin,

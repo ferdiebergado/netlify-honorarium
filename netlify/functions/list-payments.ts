@@ -1,4 +1,5 @@
 import type { Config, Context } from '@netlify/functions';
+import { authCheck } from '../auth-check';
 import { errorResponse } from '../errors';
 import { parseId } from '../lib';
 import { getPayments } from '../payments';
@@ -8,8 +9,10 @@ export const config: Config = {
   path: '/api/payments',
 };
 
-export default async (_req: Request, ctx: Context) => {
+export default async (req: Request, ctx: Context) => {
   try {
+    await authCheck(req);
+
     const { activity_id } = ctx.params;
     const activityId = parseId(activity_id);
 

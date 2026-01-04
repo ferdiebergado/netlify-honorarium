@@ -1,4 +1,5 @@
 import type { Config, Context } from '@netlify/functions';
+import { authCheck } from '../auth-check';
 import { turso } from '../db';
 import { errorResponse } from '../errors';
 import { parseId } from '../lib';
@@ -9,10 +10,12 @@ export const config: Config = {
   path: '/api/payees/:id/accounts',
 };
 
-export default async (_req: Request, ctx: Context) => {
+export default async (req: Request, ctx: Context) => {
   console.log('Getting payee accounts...');
 
   try {
+    await authCheck(req);
+
     const payeeId = parseId(ctx.params.id);
 
     const sql = `${accountsSql} WHERE p.id = ?`;

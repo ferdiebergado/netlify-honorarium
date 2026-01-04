@@ -1,4 +1,5 @@
 import type { Config } from '@netlify/functions';
+import { authCheck } from '../auth-check';
 import { turso } from '../db';
 import { errorResponse } from '../errors';
 
@@ -7,8 +8,10 @@ export const config: Config = {
   path: '/api/roles',
 };
 
-export default async () => {
+export default async (req: Request) => {
   try {
+    await authCheck(req);
+
     const query = 'SELECT id, name FROM roles WHERE deleted_at IS NULL ORDER BY name';
 
     const { rows } = await turso.execute(query);

@@ -1,5 +1,6 @@
 import type { Config, Context } from '@netlify/functions';
 import { activitySchema } from '../../src/shared/schema';
+import { authCheck } from '../auth-check';
 import { turso } from '../db';
 import { errorResponse, NotFoundError, ValidationError } from '../errors';
 
@@ -12,6 +13,8 @@ export default async (req: Request, ctx: Context) => {
   console.log('Updating activity...');
 
   try {
+    await authCheck(req);
+
     const body = await req.json();
     const { error, data } = activitySchema.safeParse(body);
 
@@ -21,7 +24,7 @@ export default async (req: Request, ctx: Context) => {
     const { id } = ctx.params;
 
     const sql = `
-UPDATE activities 
+UPDATE activities
 SET title=?, venue_id=?, start_date=?, end_date=?, code=?, focal_id=?, updated_at=datetime('now')
 WHERE id=?`;
 

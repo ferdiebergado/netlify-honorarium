@@ -1,11 +1,12 @@
 import type { Config } from '@netlify/functions';
 import type { Account, Payee } from '../../src/shared/schema';
+import { authCheck } from '../auth-check';
 import { turso } from '../db';
 import { errorResponse } from '../errors';
 import { deserializeDetails } from './list-accounts';
 
 export const payeeSql = `
-SELECT 
+SELECT
     p.id,
     p.name,
     p.position,
@@ -17,10 +18,10 @@ SELECT
     a.id        AS account_id,
     a.details,
     b.name      AS bank_name
-FROM payees p 
-JOIN salaries s ON s.payee_id = p.id 
-LEFT JOIN tins t ON t.payee_id = p.id 
-LEFT JOIN accounts a ON a.payee_id = p.id 
+FROM payees p
+JOIN salaries s ON s.payee_id = p.id
+LEFT JOIN tins t ON t.payee_id = p.id
+LEFT JOIN accounts a ON a.payee_id = p.id
 JOIN banks b ON b.id = a.bank_id`;
 
 export type PayeeRow = {
@@ -42,9 +43,11 @@ export const config: Config = {
   path: '/api/payees',
 };
 
-export default async () => {
+export default async (req: Request) => {
   try {
-    const sql = `${payeeSql} ORDER BY p.name`;
+    await authCheck(req);
+
+    const sql = `${payeeSql} WHERE p.deleted_at IS NULL ORDER BY p.name`;
     const { rows } = await turso.execute(sql);
     const payeeRows = rows as unknown as PayeeRow[];
 

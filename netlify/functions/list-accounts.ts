@@ -1,5 +1,6 @@
 import type { Config } from '@netlify/functions';
 import type { Account } from '../../src/shared/schema';
+import { authCheck } from '../auth-check';
 import { turso } from '../db';
 import { errorResponse } from '../errors';
 import { toBuffer } from '../lib';
@@ -21,25 +22,34 @@ export type AccountDetails = {
 };
 
 export const accountsSql = `
-  SELECT 
+SELECT
   a.id,
   a.details,
-  p.id AS payee_id, 
+  p.id AS payee_id,
   p.name AS payee_name,
   b.id AS bank_id,
   b.name AS bank_name
-  FROM accounts a
-  JOIN payees p ON p.id = a.payee_id
-  JOIN banks b ON b.id = a.bank_id`;
+FROM
+  accounts a
+JOIN
+  payees p
+ON
+  p.id = a.payee_id
+JOIN
+  banks b
+ON
+  b.id = a.bank_id`;
 
 export const config: Config = {
   method: 'GET',
   path: '/api/accounts',
 };
 
-export default async () => {
+export default async (req: Request) => {
   try {
-    const { rows } = await turso.execute(accountsSql);
+    await authCheck(req);
+    const sql = `${accountsSql} WHERE a.deleted_at IS NULL ORDER BY payee_name`;
+    const { rows } = await turso.execute(sql);
 
     const data = (rows as unknown as AccountRow[]).map(rowToAccount);
 

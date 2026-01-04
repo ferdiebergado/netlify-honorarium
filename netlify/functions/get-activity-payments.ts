@@ -1,5 +1,6 @@
 import type { Config, Context } from '@netlify/functions';
 import type { Activity, Payee, PaymentData } from '../../src/shared/schema';
+import { authCheck } from '../auth-check';
 import { turso } from '../db';
 import { errorResponse } from '../errors';
 import { parseId } from '../lib';
@@ -80,8 +81,10 @@ export const config: Config = {
   path: '/api/activities/:id/payments',
 };
 
-export default async (_req: Request, ctx: Context) => {
+export default async (req: Request, ctx: Context) => {
   try {
+    await authCheck(req);
+
     const activityId = parseId(ctx.params.id);
 
     const { rows } = await turso.execute(fullActivitySql, [activityId]);

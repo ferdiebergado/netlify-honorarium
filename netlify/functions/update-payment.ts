@@ -1,5 +1,6 @@
 import type { Config, Context } from '@netlify/functions';
 import { paymentSchema } from '../../src/shared/schema';
+import { authCheck } from '../auth-check';
 import { turso } from '../db';
 import { errorResponse, NotFoundError, ValidationError } from '../errors';
 import { parseId } from '../lib';
@@ -12,6 +13,8 @@ export const config: Config = {
 
 export default async (req: Request, ctx: Context) => {
   try {
+    await authCheck(req);
+
     const paymentId = parseId(ctx.params.id);
 
     const body = await req.json();
