@@ -23,19 +23,6 @@ type ActivityFormProps = {
   isError: boolean;
 };
 
-function maskCode(value: string): string {
-  const prefix = 'AC-';
-  let v = value.toUpperCase();
-
-  v = v.replace(/[^A-Z0-9-]/g, '');
-
-  if (!v.startsWith(prefix)) {
-    v = prefix;
-  }
-
-  return v;
-}
-
 export default function ActivityForm({
   form,
   onSubmit,
@@ -80,7 +67,7 @@ export default function ActivityForm({
                 <InputGroupTextarea
                   {...field}
                   id="title"
-                  placeholder="Workshop on the Development of Idols"
+                  placeholder="Workshop on the Development of..."
                   rows={6}
                   className="min-h-24 resize-none"
                   aria-invalid={fieldState.invalid}
@@ -142,12 +129,8 @@ export default function ActivityForm({
                 {...field}
                 id="code"
                 aria-invalid={fieldState.invalid}
-                placeholder="AC-25-BLD-TLD-BEC-000"
+                placeholder="AC-25-BLD-TLD-BEC-001"
                 autoComplete="off"
-                onChange={e => {
-                  const masked = maskCode(e.target.value);
-                  field.onChange(masked);
-                }}
               />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
