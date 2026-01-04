@@ -26,7 +26,8 @@ export default function ActivityPage() {
 
   if (isError) return <p className="text-destructive m-3">Error: {error.message}</p>;
 
-  const { title, venue, startDate, endDate, code, focal, payments, position } = activity;
+  const { title, venue, startDate, endDate, code, focal, payments, position, fundCluster } =
+    activity;
 
   return (
     <div className="mt-8 flex flex-col gap-8">
@@ -42,7 +43,7 @@ export default function ActivityPage() {
         </div>
       </div>
       <div className="flex flex-row gap-6">
-        <Card className="sm:w-1/3">
+        <Card className="w-full lg:w-4/10">
           <CardHeader>
             <CardTitle className="text-xl font-semibold">Activity Details</CardTitle>
           </CardHeader>
@@ -74,7 +75,6 @@ export default function ActivityPage() {
 
               <Separator />
 
-              {/* Metadata Section */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-sm">
                   <div className="text-muted-foreground flex items-center gap-2">
@@ -82,6 +82,18 @@ export default function ActivityPage() {
                     <span>Activity Code</span>
                   </div>
                   <span className="bg-muted rounded px-2 py-0.5 font-mono font-medium">{code}</span>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-sm">
+                  <div className="text-muted-foreground flex items-center gap-2">
+                    <IconTag className="h-4 w-4" />
+                    <span>Fund Cluster</span>
+                  </div>
+                  <span className="bg-muted rounded px-2 py-0.5 font-mono font-medium">
+                    {fundCluster}
+                  </span>
                 </div>
               </div>
 

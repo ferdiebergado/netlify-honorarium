@@ -12,6 +12,7 @@ export type Activity = {
   focal: string;
   positionId: number;
   position: string;
+  fundCluster: string;
   payees?: Payee[];
   payments?: PaymentData[];
 };

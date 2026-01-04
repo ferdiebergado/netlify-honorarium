@@ -1,5 +1,6 @@
 import type { Config, Context } from '@netlify/functions';
 import type { Activity, Payee, PaymentData } from '../../src/shared/schema';
+import { getFundCluster } from '../activity';
 import { authCheck } from '../auth-check';
 import { turso } from '../db';
 import { errorResponse } from '../errors';
@@ -153,5 +154,6 @@ function rowsToActivity(rows: ActivityRow[]): Activity {
     payments,
     positionId: firstRow.focal_positionId,
     position: firstRow.focal_position,
+    fundCluster: getFundCluster(firstRow.code),
   };
 }
