@@ -9,6 +9,7 @@ import {
 import { useCallback, type FC } from 'react';
 import { Link } from 'react-router';
 import Loader from './Loader';
+import { Avatar, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
 import {
   Sidebar,
@@ -20,6 +21,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from './ui/sidebar';
 
 const items = [
@@ -53,6 +55,7 @@ const items = [
 const AppSidebar: FC = () => {
   const { user } = useAuth();
   const { isPending, mutate: logout } = useLogout();
+  const { open } = useSidebar();
 
   const handleLogout = useCallback(() => {
     logout();
@@ -60,7 +63,9 @@ const AppSidebar: FC = () => {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="text-2xl font-semibold">HonorProS</SidebarHeader>
+      <SidebarHeader className="text-primary text-center text-3xl font-extrabold">
+        {open ? 'HonorProS' : 'H'}
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
@@ -81,8 +86,13 @@ const AppSidebar: FC = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        Logged in as {user?.name}{' '}
+      <SidebarFooter className="my-2 flex items-center justify-center">
+        <div className="flex items-center justify-center gap-2">
+          <Avatar>
+            <AvatarImage src={user?.picture} />
+          </Avatar>
+          {open && user?.name}
+        </div>
         <Button variant="link" onClick={handleLogout} disabled={isPending}>
           {isPending ? <Loader text="Logging out..." /> : 'Logout'}
         </Button>
