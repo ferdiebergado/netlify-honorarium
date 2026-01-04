@@ -44,11 +44,10 @@ export default function UpdatePaymentDialog({
   const { isError, isSuccess, mutateAsync: updatePayment } = useUpdatePayment();
 
   const handleSubmit = useCallback(
-    () => (formData: PaymentFormValues) => {
+    (formData: PaymentFormValues) =>
       toast.promise(updatePayment({ id: payment.id, formData }), {
         loading: 'Updating payment...',
-      });
-    },
+      }),
     [payment.id, updatePayment]
   );
 

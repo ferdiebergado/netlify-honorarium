@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { IconFilePencil } from '@tabler/icons-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { Activity, ActivityFormValues } from '../../shared/schema';
 import { useActivityForm, useUpdateActivity } from './activity';
 import ActivityForm from './ActivityForm';
@@ -23,8 +23,10 @@ export default function UpdateActivityForm({ activity }: UpdateActivityProps) {
   const form = useActivityForm(activity);
   const { isSuccess, isError, mutateAsync: updateActivity } = useUpdateActivity();
 
-  const handleSubmit = (formData: ActivityFormValues) =>
-    updateActivity({ activityId: activity.id, formData });
+  const handleSubmit = useCallback(
+    (formData: ActivityFormValues) => updateActivity({ activityId: activity.id, formData }),
+    [activity.id, updateActivity]
+  );
 
   useEffect(() => {
     form.reset();
