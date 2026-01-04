@@ -1,6 +1,6 @@
 import type { Config, Context } from '@netlify/functions';
 import Excel from 'exceljs';
-import { parseActivityCode } from '../activity';
+import { getFundCluster } from '../activity';
 import { turso } from '../db';
 import { errorResponse, NotFoundError } from '../errors';
 import { toDateRange } from '../lib';
@@ -49,7 +49,7 @@ export default async (_req: Request, ctx: Context) => {
     if (isNaN(activityId)) throw new Error('invalid activity id');
 
     const sql = `
-SELECT 
+SELECT
 p.tax_rate,
 a.title         AS activity,
 a.start_date,
@@ -65,7 +65,7 @@ SUM(p.honorarium)  AS total_honorarium
 FROM payments p
 JOIN activities a ON a.id = p.activity_id
 JOIN payees pay ON pay.id = p.payee_id
-JOIN venues v ON v.id = a.venue_id 
+JOIN venues v ON v.id = a.venue_id
 JOIN accounts acc ON acc.id = p.account_id
 JOIN banks b ON b.id = acc.bank_id
 JOIN tins t ON t.id = p.tin_id
@@ -104,19 +104,21 @@ GROUP BY pay.id
 };
 
 async function createPayroll(payments: PayrollPayment[]) {
+  const sheetName = 'PAYROLL';
+
   const workbook = new Excel.Workbook();
   const buf = Buffer.from(payroll, 'base64');
   const arrayBuffer = buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
 
   await workbook.xlsx.load(arrayBuffer);
 
-  const sheet = workbook.getWorksheet('PAYROLL');
-  if (!sheet) throw new Error('Workbook does not have a sheet named PAYROLL.');
+  const sheet = workbook.getWorksheet(sheetName);
+  if (!sheet) throw new Error(`Workbook does not have a sheet named ${sheetName}.`);
 
-  const { year, program, appropriationType } = parseActivityCode(payments[0].activityCode);
+  const fundCluster = getFundCluster(payments[0].activityCode);
   const fundClusterCell = sheet.getCell('A7');
-  const fundCluster: string = `${fundClusterCell.text} ${year.toString()} ${program} ${appropriationType}`;
-  sheet.getCell('A7').value = fundCluster;
+  const fundClusterText = `${fundClusterCell.text} ${fundCluster}`;
+  sheet.getCell('A7').value = fundClusterText;
 
   const particularsCell = sheet.getCell('A9');
   particularsCell.value = `${particularsCell.text} ${payments[0].activity} held at ${payments[0].venue} on ${toDateRange(payments[0].startDate, payments[0].endDate)}`;

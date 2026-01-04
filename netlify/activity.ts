@@ -28,3 +28,9 @@ export function parseActivityCode(activityCode: string): FundCluster {
     mfoCode,
   };
 }
+
+export function getFundCluster(activityCode: string): string {
+  const { year, appropriationType, program } = parseActivityCode(activityCode);
+
+  return `${year.toString()} ${program} ${appropriationType}`;
+}
