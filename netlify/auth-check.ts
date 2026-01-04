@@ -1,7 +1,7 @@
 import { parseCookie } from 'cookie';
+import { SESSION_COOKIE_NAME } from './constants';
 import { turso } from './db';
 import { UnauthorizedError } from './errors';
-import { SESSION_COOKIE_NAME } from './functions/constants';
 
 type SessionRow = {
   user_id: number;
