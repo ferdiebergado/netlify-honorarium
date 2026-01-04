@@ -49,7 +49,7 @@ export default function CreatePaymentDialog({ activity }: CreatePaymentDialogPro
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <Button size="lg" className="bg-cyan-500" onClick={handleClick}>
+      <Button size="lg" className="font-semibold uppercase" onClick={handleClick}>
         <IconCirclePlus /> New Payment
       </Button>
       <DialogContent>
