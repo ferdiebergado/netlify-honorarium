@@ -4,7 +4,7 @@ import CreateActivityForm from './CreateActivityForm';
 export default function ActivitiesPage() {
   return (
     <>
-      <div className="mb-6 flex">
+      <div className="mt-8 mb-6 flex">
         <div className="flex flex-col px-3">
           <h1 className="text-2xl font-bold">Activities</h1>
           <h2 className="text-muted-foreground">List of Activities</h2>

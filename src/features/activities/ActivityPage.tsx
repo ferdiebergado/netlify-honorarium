@@ -29,7 +29,7 @@ export default function ActivityPage() {
   const { title, venue, startDate, endDate, code, focal, payments, position } = activity;
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="mt-8 flex flex-col gap-8">
       <div className="mb-6 flex">
         <div className="flex flex-col px-3">
           <h1 className="text-2xl font-bold">{title}</h1>
@@ -42,7 +42,7 @@ export default function ActivityPage() {
         </div>
       </div>
       <div className="flex flex-row gap-6">
-        <Card className="w-1/2">
+        <Card className="sm:w-1/3">
           <CardHeader>
             <CardTitle className="text-xl font-semibold">Activity Details</CardTitle>
           </CardHeader>
