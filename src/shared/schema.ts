@@ -177,12 +177,14 @@ export type Payment = {
   payeeId: number;
   payee: string;
   activity: string;
+  roleId: number;
   role: string;
   honorarium: number;
   updatedAt: string;
   hoursRendered: number;
   actualHonorarium: number;
   netHonorarium: number;
+  activityId: number;
   activityCode: string;
   taxRate: number;
   venue: string;
@@ -191,6 +193,7 @@ export type Payment = {
   focal: string;
   position: string;
   tin: string;
+  tinId: number;
   accountId: number;
   bank: string;
   bankBranch: string;
@@ -213,6 +216,10 @@ export type PaymentData = Pick<
   | 'payeeId'
   | 'accountId'
   | 'salaryId'
+  | 'activityId'
+  | 'roleId'
+  | 'activity'
+  | 'tinId'
 >;
 
 export type User = {

@@ -12,6 +12,7 @@ import type { PaymentData } from '@/shared/schema';
 import { IconDotsVertical } from '@tabler/icons-react';
 import { useState } from 'react';
 import PaymentDetailsDialog from './PaymentDetailsDialog';
+import UpdatePaymentDialog from './UpdatePaymentDialog';
 
 type PaymentDropdownMenuProps = {
   payment: PaymentData;
@@ -19,6 +20,7 @@ type PaymentDropdownMenuProps = {
 
 export default function PaymentDropdownMenu({ payment }: PaymentDropdownMenuProps) {
   const [open, setOpen] = useState(false);
+  const [isUpdateOpen, setIsUpdateOpen] = useState(false);
 
   return (
     <>
@@ -41,7 +43,13 @@ export default function PaymentDropdownMenu({ payment }: PaymentDropdownMenuProp
             >
               Details
             </DropdownMenuItem>
-            <DropdownMenuItem>Update</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                setIsUpdateOpen(true);
+              }}
+            >
+              Update
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
           </DropdownMenuGroup>
@@ -49,6 +57,7 @@ export default function PaymentDropdownMenu({ payment }: PaymentDropdownMenuProp
       </DropdownMenu>
 
       <PaymentDetailsDialog open={open} onOpenChange={setOpen} payment={payment} />
+      <UpdatePaymentDialog open={isUpdateOpen} onOpenChange={setIsUpdateOpen} payment={payment} />
     </>
   );
 }

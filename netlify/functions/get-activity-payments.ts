@@ -4,7 +4,7 @@ import { turso } from '../db';
 import { errorResponse } from '../errors';
 import { parseId } from '../lib';
 
-type PaymentRow = {
+type ActivityRow = {
   id: number;
   title: string;
   code: string;
@@ -27,18 +27,20 @@ type PaymentRow = {
   payment_id: number;
   account_id: number;
   salary_id: number;
+  role_id: number;
+  tin_id: number;
 };
 
 const fullActivitySql = `
-SELECT 
+SELECT
   a.id,
   a.title,
-  a.code, 
+  a.code,
   a.start_date,
   a.end_date,
 
   v.id          AS venue_id,
-  v.name        AS venue, 
+  v.name        AS venue,
 
   f.id          AS focal_id,
   f.name        AS focal,
@@ -56,16 +58,17 @@ SELECT
   pay.honorarium,
   pay.account_id,
   pay.salary_id,
+  pay.tin_id,
 
+  r.id          AS role_id,
   r.name        AS role
-FROM activities a 
-JOIN focals f ON f.id = a.focal_id 
+FROM activities a
+JOIN focals f ON f.id = a.focal_id
 JOIN venues v ON v.id = a.venue_id
-LEFT JOIN payments pay ON pay.activity_id = a.id 
+LEFT JOIN payments pay ON pay.activity_id = a.id
 LEFT JOIN payees p ON p.id = pay.payee_id
 LEFT JOIN roles r ON r.id = pay.role_id
-WHERE a.id = ? AND a.deleted_at IS NULL
-`;
+WHERE a.id = ? AND a.deleted_at IS NULL`;
 
 export const config: Config = {
   method: 'GET',
@@ -77,7 +80,7 @@ export default async (_req: Request, ctx: Context) => {
     const activityId = parseId(ctx.params.id);
 
     const { rows } = await turso.execute(fullActivitySql, [activityId]);
-    const data = rowsToActivity(rows as unknown as PaymentRow[]);
+    const data = rowsToActivity(rows as unknown as ActivityRow[]);
 
     return Response.json({ data });
   } catch (error) {
@@ -85,7 +88,7 @@ export default async (_req: Request, ctx: Context) => {
   }
 };
 
-function rowsToActivity(rows: PaymentRow[]): Activity {
+function rowsToActivity(rows: ActivityRow[]): Activity {
   const payees: Payee[] = [];
   const payments: PaymentData[] = [];
   const firstRow = rows[0];
@@ -119,6 +122,10 @@ function rowsToActivity(rows: PaymentRow[]): Activity {
       payeeId: row.payee_id,
       accountId: row.account_id,
       salaryId: row.salary_id,
+      activityId: row.id,
+      roleId: row.role_id,
+      activity: row.title,
+      tinId: row.tin_id,
     };
 
     payments.push(payment);

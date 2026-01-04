@@ -151,3 +151,30 @@ export function usePayroll() {
     mutationFn: (activityId: string) => genPayroll(activityId),
   });
 }
+
+async function updatePayment(id: number, formData: PaymentFormValues) {
+  const url = `${BASE_URL}/${id.toString()}`;
+  console.debug('url:', url);
+  console.debug('formData:', formData);
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formData),
+  });
+
+  const { message } = (await res.json()) as APIResponse;
+
+  if (!res.ok) throw new Error(message);
+
+  return { message };
+}
+
+export function useUpdatePayment() {
+  return useMutation({
+    mutationFn: ({ id, formData }: { id: number; formData: PaymentFormValues }) =>
+      updatePayment(id, formData),
+  });
+}
