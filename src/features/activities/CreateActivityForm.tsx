@@ -37,7 +37,7 @@ export default function CreateActivityForm() {
       </Button>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>New Activity</DialogTitle>
+          <DialogTitle className="text-lg font-semibold">New Activity</DialogTitle>
           <DialogDescription>Create a new activity.</DialogDescription>
         </DialogHeader>
         <ActivityForm
