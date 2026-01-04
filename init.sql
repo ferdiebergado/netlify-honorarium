@@ -15,6 +15,8 @@ CREATE TABLE IF NOT EXISTS activities (
   deleted_at TEXT,
   created_by INTEGER NOT NULL,
   updated_by INTEGER NOT NULL,
+  deleted_by INTEGER,
+  FOREIGN KEY (deleted_by) REFERENCES users (id),
   FOREIGN KEY (updated_by) REFERENCES users (id),
   FOREIGN KEY (created_by) REFERENCES users (id),
   FOREIGN KEY (venue_id) REFERENCES venues (id),
@@ -29,6 +31,8 @@ CREATE TABLE IF NOT EXISTS venues (
   deleted_at TEXT,
   created_by INTEGER NOT NULL,
   updated_by INTEGER NOT NULL,
+  deleted_by INTEGER,
+  FOREIGN KEY (deleted_by) REFERENCES users (id),
   FOREIGN KEY (updated_by) REFERENCES users (id),
   FOREIGN KEY (created_by) REFERENCES users (id),
 );
@@ -41,6 +45,8 @@ CREATE TABLE IF NOT EXISTS positions (
   deleted_at TEXT,
   created_by INTEGER NOT NULL,
   updated_by INTEGER NOT NULL,
+  deleted_by INTEGER,
+  FOREIGN KEY (deleted_by) REFERENCES users (id),
   FOREIGN KEY (updated_by) REFERENCES users (id),
   FOREIGN KEY (created_by) REFERENCES users (id)
 );
@@ -53,8 +59,10 @@ CREATE TABLE IF NOT EXISTS focals (
   updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
   deleted_at TEXT,
   created_by INTEGER NOT NULL,
-  FOREIGN KEY (created_by) REFERENCES users (id),
   updated_by INTEGER NOT NULL,
+  deleted_by INTEGER,
+  FOREIGN KEY (deleted_by) REFERENCES users (id),
+  FOREIGN KEY (created_by) REFERENCES users (id),
   FOREIGN KEY (updated_by) REFERENCES users (id),
   FOREIGN KEY (position_id) REFERENCES positions (id)
 );
@@ -69,6 +77,8 @@ CREATE TABLE IF NOT EXISTS payees (
   deleted_at TEXT,
   created_by INTEGER NOT NULL,
   updated_by INTEGER NOT NULL,
+  deleted_by INTEGER,
+  FOREIGN KEY (deleted_by) REFERENCES users (id),
   FOREIGN KEY (updated_by) REFERENCES users (id),
   FOREIGN KEY (created_by) REFERENCES users (id)
 );
@@ -83,6 +93,8 @@ CREATE TABLE IF NOT EXISTS accounts (
   deleted_at TEXT,
   created_by INTEGER NOT NULL,
   updated_by INTEGER NOT NULL,
+  deleted_by INTEGER,
+  FOREIGN KEY (deleted_by) REFERENCES users (id),
   FOREIGN KEY (updated_by) REFERENCES users (id),
   FOREIGN KEY (created_by) REFERENCES users (id),
   FOREIGN KEY (payee_id) REFERENCES payees (id),
@@ -97,6 +109,8 @@ CREATE TABLE IF NOT EXISTS banks (
   deleted_at TEXT,
   created_by INTEGER NOT NULL,
   updated_by INTEGER NOT NULL,
+  deleted_by INTEGER,
+  FOREIGN KEY (deleted_by) REFERENCES users (id),
   FOREIGN KEY (updated_by) REFERENCES users (id),
   FOREIGN KEY (created_by) REFERENCES users (id)
 );
@@ -110,6 +124,8 @@ CREATE TABLE IF NOT EXISTS salaries (
   deleted_at TEXT,
   created_by INTEGER NOT NULL,
   updated_by INTEGER NOT NULL,
+  deleted_by INTEGER,
+  FOREIGN KEY (deleted_by) REFERENCES users (id),
   FOREIGN KEY (updated_by) REFERENCES users (id),
   FOREIGN KEY (created_by) REFERENCES users (id),
   FOREIGN KEY (payee_id) REFERENCES payees (id)
@@ -123,6 +139,8 @@ CREATE TABLE IF NOT EXISTS roles (
   deleted_at TEXT,
   created_by INTEGER NOT NULL,
   updated_by INTEGER NOT NULL,
+  deleted_by INTEGER,
+  FOREIGN KEY (deleted_by) REFERENCES users (id),
   FOREIGN KEY (updated_by) REFERENCES users (id),
   FOREIGN KEY (created_by) REFERENCES users (id)
 );
@@ -145,6 +163,8 @@ CREATE TABLE IF NOT EXISTS payments (
   deleted_at TEXT,
   created_by INTEGER NOT NULL,
   updated_by INTEGER NOT NULL,
+  deleted_by INTEGER,
+  FOREIGN KEY (deleted_by) REFERENCES users (id),
   FOREIGN KEY (updated_by) REFERENCES users (id),
   FOREIGN KEY (created_by) REFERENCES users (id),
   FOREIGN KEY (activity_id) REFERENCES activities (id),
@@ -163,6 +183,8 @@ CREATE TABLE IF NOT EXISTS tins (
   deleted_at TEXT,
   created_by INTEGER NOT NULL,
   updated_by INTEGER NOT NULL,
+  deleted_by INTEGER,
+  FOREIGN KEY (deleted_by) REFERENCES users (id),
   FOREIGN KEY (updated_by) REFERENCES users (id),
   FOREIGN KEY (created_by) REFERENCES users (id),
   FOREIGN KEY (payee_id) REFERENCES payees (id)
