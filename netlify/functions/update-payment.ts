@@ -41,8 +41,11 @@ export default async (req: Request, ctx: Context) => {
 
     const [{ salary }] = rows as unknown as { salary: number }[];
 
-    const { actualHonorarium, hoursRendered } = computeHonorarium(honorarium, salary);
-    const netHonorarium = honorarium - honorarium * (taxRate / 100);
+    const { actualHonorarium, hoursRendered, netHonorarium } = computeHonorarium(
+      honorarium,
+      salary,
+      taxRate
+    );
 
     const sql = `
 UPDATE

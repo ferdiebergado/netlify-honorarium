@@ -28,32 +28,48 @@ export type PaymentRow = {
   salary_id: number;
   salary: number;
   payee_id: number;
+  activity_id: number;
+  role_id: number;
+  tin_id: number;
 };
 
 export const paymentsSql = `
-SELECT 
-    pay.id, 
-    pay.honorarium, 
+SELECT
+    pay.id,
+    pay.honorarium,
     pay.hours_rendered,
     pay.actual_honorarium,
     pay.net_honorarium,
-    pay.updated_at, 
+    pay.updated_at,
     pay.tax_rate,
+
     p.id            AS payee_id,
-    p.name          AS payee, 
+    p.name          AS payee,
     p.office        AS payee_office,
-    a.title         AS activity, 
+
+    a.title         AS activity,
+    a.id            AS activity_id,
     a.code          AS activity_code,
     a.start_date,
-    a.end_date,     
+    a.end_date,
+
+    r.id            AS role_id,
     r.name          AS role,
+
     v.name          AS venue,
+
     f.name          AS focal,
+
     pos.name        AS position,
+
+    t.id            AS tin_id,
     t.tin,
+
     acc.id          AS account_id,
     acc.details     AS account_details,
+
     b.name          AS bank,
+
     s.id            AS salary_id,
     s.salary
 FROM payments pay
@@ -92,6 +108,9 @@ export async function getPayments(activityId: number | null): Promise<Payment[]>
     payeeId: row.payee_id,
     accountId: row.account_id,
     salaryId: row.salary_id,
+    activityId: row.activity_id,
+    roleId: row.role_id,
+    tinId: row.tin_id,
   }));
 
   const paymentsWithAccount: Payment[] = tempData.map(payment => {
@@ -109,13 +128,14 @@ export async function getPayments(activityId: number | null): Promise<Payment[]>
 export type Honorarium = {
   hoursRendered: number;
   actualHonorarium: number;
+  netHonorarium: number;
 };
 
 export function getMaxSalary(salary: number) {
   return salary > SG29 ? SG29 : salary;
 }
 
-export function computeHonorarium(honorarium: number, salary: number): Honorarium {
+export function computeHonorarium(honorarium: number, salary: number, taxRate: number): Honorarium {
   const maxSalary = getMaxSalary(salary);
 
   let hoursRendered = 1;
@@ -129,8 +149,11 @@ export function computeHonorarium(honorarium: number, salary: number): Honorariu
     hoursRendered++;
   }
 
+  const netHonorarium = honorarium - honorarium * (taxRate / 100);
+
   return {
     hoursRendered,
     actualHonorarium: roundMoney(actualHonorarium),
+    netHonorarium: roundMoney(netHonorarium),
   };
 }
