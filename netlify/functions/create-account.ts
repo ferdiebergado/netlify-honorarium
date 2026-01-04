@@ -1,5 +1,6 @@
 import type { Config } from '@netlify/functions';
 import { createAccountSchema } from '../../src/shared/schema';
+import { authCheck } from '../auth-check';
 import { turso } from '../db';
 import { errorResponse, ValidationError } from '../errors';
 import { encrypt } from '../security';
@@ -12,6 +13,8 @@ export const config: Config = {
 
 export default async (req: Request) => {
   try {
+    const userId = await authCheck(req);
+
     const body = await req.json();
     const { error, data } = createAccountSchema.safeParse(body);
 
@@ -22,8 +25,8 @@ export default async (req: Request) => {
     const details: AccountDetails = { bankBranch, accountName, accountNo };
     const encryptedDetails = encrypt(Buffer.from(JSON.stringify(details), 'utf-8'));
 
-    const sql = 'INSERT INTO accounts (payee_id, bank_id, details) VALUES (?, ?, ?)';
-    await turso.execute(sql, [payeeId, bankId, encryptedDetails]);
+    const sql = 'INSERT INTO accounts (payee_id, bank_id, details, created_by) VALUES (?, ?, ?, ?)';
+    await turso.execute(sql, [payeeId, bankId, encryptedDetails, userId]);
 
     return Response.json({ message: 'Account created.' }, { status: 201 });
   } catch (error) {

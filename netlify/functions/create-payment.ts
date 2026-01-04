@@ -1,5 +1,6 @@
 import type { Config } from '@netlify/functions';
 import { paymentSchema } from '../../src/shared/schema';
+import { authCheck } from '../auth-check';
 import { turso } from '../db';
 import { errorResponse, NotFoundError, ValidationError } from '../errors';
 import { computeHonorarium } from '../payments';
@@ -11,6 +12,8 @@ export const config: Config = {
 
 export default async (req: Request) => {
   try {
+    const userId = await authCheck(req);
+
     const body = await req.json();
     const { error, data: payment } = paymentSchema.safeParse(body);
 
@@ -39,21 +42,24 @@ export default async (req: Request) => {
     const netHonorarium = honorarium - honorarium * (taxRate / 100);
 
     const sql = `
-INSERT INTO payments
-(
-  honorarium,
-  salary_id,
-  role_id,
-  payee_id,
-  activity_id,
-  tax_rate,
-  account_id,
-  tin_id,
-  net_honorarium,
-  actual_honorarium,
-  hours_rendered
-)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+INSERT INTO
+  payments
+    (
+      honorarium,
+      salary_id,
+      role_id,
+      payee_id,
+      activity_id,
+      tax_rate,
+      account_id,
+      tin_id,
+      net_honorarium,
+      actual_honorarium,
+      hours_rendered,
+      created_by
+    )
+VALUES
+    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
     const args = [
       honorarium,
@@ -67,6 +73,7 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
       netHonorarium,
       actualHonorarium,
       hoursRendered,
+      userId,
     ];
 
     await turso.execute(sql, args);
