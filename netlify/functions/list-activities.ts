@@ -1,5 +1,6 @@
 import type { Config } from '@netlify/functions';
 import type { Activity } from '../../src/shared/schema';
+import { getFundCluster } from '../activity';
 import { authCheck } from '../auth-check';
 import { turso } from '../db';
 import { errorResponse } from '../errors';
@@ -82,5 +83,6 @@ export function rowToActivity(row: ActivityRow): Activity {
     code: row.code,
     positionId: row.position_id,
     position: row.position,
+    fundCluster: getFundCluster(row.code),
   };
 }
