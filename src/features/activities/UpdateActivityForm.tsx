@@ -50,7 +50,6 @@ export default function UpdateActivityForm({ activity }: UpdateActivityProps) {
           form={form}
           onSubmit={handleSubmit}
           setIsDialogOpen={setIsDialogOpen}
-          loadingMsg="Updating Activity..."
           isSuccess={isSuccess}
           isError={isError}
         />
