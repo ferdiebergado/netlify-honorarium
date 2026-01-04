@@ -50,7 +50,7 @@ export default function PaymentForm({
 
   useEffect(() => {
     if (isSuccess) form.reset();
-  });
+  }, [isSuccess, form]);
 
   return (
     <form id="payment-form" onSubmit={form.handleSubmit(handleSubmit)}>
@@ -118,10 +118,10 @@ export default function PaymentForm({
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="tax">Withholding Tax Rate (%)</FieldLabel>
+                <FieldLabel htmlFor={field.name}>Withholding Tax Rate (%)</FieldLabel>
                 <Input
                   {...field}
-                  id="tax"
+                  id={field.name}
                   aria-invalid={fieldState.invalid}
                   placeholder="10"
                   autoComplete="off"
