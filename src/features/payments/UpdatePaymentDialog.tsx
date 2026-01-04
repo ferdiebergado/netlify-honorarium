@@ -52,7 +52,8 @@ export default function UpdatePaymentDialog({
   );
 
   useEffect(() => {
-    form.reset();
+    console.log('formValues:', formValues);
+    form.reset(formValues);
   }, [formValues, form]);
 
   return (

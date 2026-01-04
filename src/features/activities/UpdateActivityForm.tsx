@@ -29,7 +29,7 @@ export default function UpdateActivityForm({ activity }: UpdateActivityProps) {
   );
 
   useEffect(() => {
-    form.reset();
+    form.reset(activity);
   }, [activity, form]);
 
   return (
