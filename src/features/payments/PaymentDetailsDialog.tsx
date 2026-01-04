@@ -48,12 +48,13 @@ export default function PaymentDetailsDialog({
 }: PaymentDetailsDialogProps) {
   const { isPending, isError, error, isSuccess, data: payee } = usePayee(payment.payeeId);
 
-  const { account, salary } = useMemo(
+  const { account, salary, tin } = useMemo(
     () => ({
       account: payee?.accounts.find(a => a.id === payment.accountId),
       salary: payee?.salaries.find(s => s.id === payment.salaryId),
+      tin: payee?.tins?.find(t => t.id === payment.tinId),
     }),
-    [payee, payment.salaryId, payment.accountId]
+    [payee, payment.salaryId, payment.accountId, payment.tinId]
   );
 
   return (
@@ -192,6 +193,17 @@ export default function PaymentDetailsDialog({
                     </div>
                   </div>
                 </>
+              )}
+              {tin && (
+                <div className="space-y-1">
+                  <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
+                    TIN
+                  </p>
+                  <div className="flex items-center gap-2 text-sm">
+                    <IconNumber123 className="h-4 w-4 opacity-70" />
+                    <span>{tin.tin}</span>
+                  </div>
+                </div>
               )}
             </div>
           </div>
