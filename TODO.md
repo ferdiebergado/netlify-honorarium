@@ -18,15 +18,31 @@
 - do not use path aliases
 - payments total in table footer
 - autofill when salary/tin/account is only 1
-- baseurls for endpoints in features
 - terms and conditions from shadcn studio
-- update payment
+- keystocamel (frm frontend)
+- full text Search
+- user roles
+- remove hidden input, pass it directly to mutationfn
+- salaryschema, remove payeeId
 
 # Done
 
+- extract honorarium computation
+- test computehonorarium
+- fund cluster in activity details
+- alert dialog for delete activity
+- deleted_by
+- last_updated_by
+- new activity and new payment button set to default style
+- update payment
+- created_by column
+- tailwindcss as dev dep
+- add authcheck
+- activity details: add focal position
+- baseurls for endpoints in features
 - ensure rows returned has deleted_at is null
 - oauth
-- [X] mask account number when viewing
+- [x] mask account number when viewing
 - use context providers where applicable
 - use derivedstate instead of useeffect
 - manually set updated_at on update
