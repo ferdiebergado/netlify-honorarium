@@ -116,7 +116,6 @@ CREATE TABLE IF NOT EXISTS banks (
 );
 
 CREATE TABLE IF NOT EXISTS salaries (
-  id INTEGER PRIMARY KEY,
   payee_id INTEGER NOT NULL,
   salary REAL NOT NULL,
   created_at TEXT DEFAULT CURRENT_TIMESTAMP,
@@ -128,7 +127,8 @@ CREATE TABLE IF NOT EXISTS salaries (
   FOREIGN KEY (deleted_by) REFERENCES users (id),
   FOREIGN KEY (updated_by) REFERENCES users (id),
   FOREIGN KEY (created_by) REFERENCES users (id),
-  FOREIGN KEY (payee_id) REFERENCES payees (id)
+  FOREIGN KEY (payee_id) REFERENCES payees (id),
+  PRIMARY KEY (payee_id, salary)
 );
 
 CREATE TABLE IF NOT EXISTS roles (
@@ -216,3 +216,5 @@ CREATE TABLE IF NOT EXISTS sessions (
 );
 
 COMMIT;
+
+PRAGMA foreign_keys = ON;
