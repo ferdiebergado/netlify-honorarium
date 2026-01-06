@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
 import { usePayees } from '../payees/payee';
 import type { PaymentHookForm } from '../payments/payments';
-import CreateSalaryPopover from './CreateSalaryPopover';
+import CreateSalaryForm from './CreateSalaryForm';
 
 type SalaryInputProps = {
   form: PaymentHookForm;
@@ -31,8 +31,12 @@ export default function SalaryInput({ form }: SalaryInputProps) {
   }, [payee]);
 
   useEffect(() => {
-    form.setValue(fieldName, form.getValues(fieldName));
-  }, [form, payeeId]);
+    let fieldValue = form.getValues(fieldName);
+
+    if (options.length === 1) fieldValue = options[0].value;
+
+    form.setValue(fieldName, fieldValue);
+  }, [form, options, payeeId]);
 
   return (
     <SelectField
@@ -46,7 +50,7 @@ export default function SalaryInput({ form }: SalaryInputProps) {
       isError={isError}
       error={error}
     >
-      <CreateSalaryPopover payeeId={payeeId} />
+      <CreateSalaryForm payeeId={payeeId} />
     </SelectField>
   );
 }
