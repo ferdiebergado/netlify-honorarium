@@ -132,7 +132,6 @@ export type Salary = {
 };
 
 export const salarySchema = z.object({
-  payeeId: z.number().min(1, 'Payee is required.'),
   salary: z.number().min(1, 'Salary is required'),
 });
 

@@ -48,13 +48,14 @@ export function useCreateSalaryForm(defaultValues: SalaryFormValues) {
 
 export type SalaryHookForm = ReturnType<typeof useCreateSalaryForm>;
 
-async function createSalary(formData: SalaryFormValues) {
+async function createSalary(payeeId: number, formData: SalaryFormValues) {
+  const payload = { payeeId, formData };
   const res = await fetch(BASE_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(formData),
+    body: JSON.stringify(payload),
   });
 
   const { message } = (await res.json()) as APIResponse;
@@ -64,8 +65,13 @@ async function createSalary(formData: SalaryFormValues) {
   return { message };
 }
 
+type CreateSalaryParams = {
+  payeeId: number;
+  formData: SalaryFormValues;
+};
+
 export function useCreateSalary() {
   return useMutation({
-    mutationFn: createSalary,
+    mutationFn: ({ payeeId, formData }: CreateSalaryParams) => createSalary(payeeId, formData),
   });
 }
