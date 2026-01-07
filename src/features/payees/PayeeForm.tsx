@@ -149,7 +149,7 @@ export default function PayeeForm({
             name="tin"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
+              <Field className="w-fit shrink-0" data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="tin">Tax Identification Number (TIN)</FieldLabel>
                 <Input
                   {...field}
