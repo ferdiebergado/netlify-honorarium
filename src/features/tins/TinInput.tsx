@@ -31,8 +31,12 @@ export default function TinInput({ form }: TinInputProps) {
   }, [payee]);
 
   useEffect(() => {
-    form.setValue(fieldName, form.getValues(fieldName));
-  }, [form, payeeId]);
+    let fieldValue = form.getValues(fieldName);
+
+    if (options.length === 1) fieldValue = options[0].value;
+
+    form.setValue(fieldName, fieldValue);
+  }, [form, options, payeeId]);
 
   return (
     <SelectField
