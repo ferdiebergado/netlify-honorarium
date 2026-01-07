@@ -53,6 +53,8 @@ const items = [
 ];
 
 const AppSidebar: FC = () => {
+  const appName = import.meta.env.VITE_APP_TITLE;
+
   const { user } = useAuth();
   const { isPending, mutate: logout } = useLogout();
   const { open } = useSidebar();
@@ -64,7 +66,7 @@ const AppSidebar: FC = () => {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="text-primary text-center text-3xl font-extrabold">
-        {open ? 'HonorProS' : 'H'}
+        {open ? appName : appName[0]}
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
