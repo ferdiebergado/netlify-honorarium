@@ -53,13 +53,14 @@ export function useAccountForm(defaultValues: CreateAccountFormValues) {
 }
 export type AccountHookForm = ReturnType<typeof useAccountForm>;
 
-async function createAccount(formData: CreateAccountFormValues) {
+async function createAccount(payeeId: number, formData: CreateAccountFormValues) {
+  const payload = { payeeId, formData };
   const res = await fetch(BASE_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(formData),
+    body: JSON.stringify(payload),
   });
 
   const { message } = (await res.json()) as { message: string };
@@ -69,8 +70,13 @@ async function createAccount(formData: CreateAccountFormValues) {
   return { message };
 }
 
+type CreateAccountData = {
+  payeeId: number;
+  formData: CreateAccountFormValues;
+};
+
 export function useCreateAccount() {
   return useMutation({
-    mutationFn: createAccount,
+    mutationFn: ({ payeeId, formData }: CreateAccountData) => createAccount(payeeId, formData),
   });
 }

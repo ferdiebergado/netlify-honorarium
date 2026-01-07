@@ -91,7 +91,7 @@ export default function CreateTinForm({ payeeId }: CreateTinFormProps) {
                 Reset
               </Button>
 
-              <Button type="submit" form="tin-form">
+              <Button type="submit" form="tin-form" disabled={isPending}>
                 {isPending ? <Loader text="Saving..." /> : 'Submit'}
               </Button>
             </div>

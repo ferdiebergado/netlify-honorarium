@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
 import type { PaymentHookForm } from '../../features/payments/payments';
 import { usePayees } from '../payees/payee';
-import CreateAccountPopover from './CreateAccountPopover';
+import CreateAccountForm from './CreateAccountForm';
 
 type AccountInputProps = {
   form: PaymentHookForm;
@@ -46,7 +46,7 @@ export default function AccountInput({ form }: AccountInputProps) {
       isError={isError}
       error={error}
     >
-      <CreateAccountPopover payeeId={payeeId} />
+      <CreateAccountForm payeeId={payeeId} />
     </SelectField>
   );
 }
