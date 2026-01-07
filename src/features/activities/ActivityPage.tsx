@@ -1,8 +1,8 @@
 import BackButton from '@/components/BackButton';
 import SkeletonCard from '@/components/SkeletonCard';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { checkId } from '@/lib/utils';
+import { checkId, formatMoney } from '@/lib/utils';
 import { IconCalendar, IconMapPin, IconTag, IconUserCog, IconUserStar } from '@tabler/icons-react';
 import { useParams } from 'react-router';
 import CertificationButton from '../payments/CertificationButton';
@@ -25,9 +25,10 @@ export default function ActivityPage() {
   if (isPending) return <SkeletonCard />;
 
   if (isError) return <p className="text-destructive m-3">Error: {error.message}</p>;
-
   const { title, venue, startDate, endDate, code, focal, payments, position, fundCluster } =
     activity;
+
+  const totalPayments = payments?.reduce((sum, val) => (sum += val.honorarium), 0);
 
   return (
     <div className="mt-8 flex flex-col gap-8">
@@ -126,6 +127,12 @@ export default function ActivityPage() {
         <CardContent>
           <PaymentsTable payments={payments ?? []} />
         </CardContent>
+
+        {totalPayments && (
+          <CardFooter>
+            <h3 className="text-base font-medium">Total: {formatMoney(totalPayments)}</h3>
+          </CardFooter>
+        )}
       </Card>
 
       <div className="flex items-center justify-between">
