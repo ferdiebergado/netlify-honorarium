@@ -91,7 +91,7 @@ export default function CreateSalaryForm({ payeeId }: CreateSalaryFormProps) {
               )}
             />
 
-            <div className="flex w-full justify-end gap-2">
+            <Field orientation="horizontal" className="justify-end">
               <Button type="button" variant="outline" onClick={handleCancel}>
                 Cancel
               </Button>
@@ -103,7 +103,7 @@ export default function CreateSalaryForm({ payeeId }: CreateSalaryFormProps) {
               <Button type="submit" form="salary-form">
                 {isPending ? <Loader text="Saving..." /> : 'Submit'}
               </Button>
-            </div>
+            </Field>
           </FieldGroup>
         </form>
       </PopoverContent>
