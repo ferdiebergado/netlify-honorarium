@@ -2,6 +2,7 @@ import BackButton from '@/components/BackButton';
 import SkeletonCard from '@/components/SkeletonCard';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
 import { checkId, formatMoney } from '@/lib/utils';
 import { IconCalendar, IconMapPin, IconTag, IconUserCog, IconUserStar } from '@tabler/icons-react';
 import { useParams } from 'react-router';
@@ -22,7 +23,19 @@ export default function ActivityPage() {
 
   const { isPending, isError, error, data: activity } = useFullActivity(activityId);
 
-  if (isPending) return <SkeletonCard />;
+  if (isPending)
+    return (
+      <>
+        <Card className="mt-36 flex h-80 w-4/10 flex-col gap-x-4 gap-y-8">
+          <div className="mx-8 flex flex-col gap-6">
+            <Skeleton className="h-9 w-1/4" />
+            <Skeleton className="h-28 w-9/10" />
+            <Skeleton className="h-9 w-3/7" />
+          </div>
+        </Card>
+        <SkeletonCard />;
+      </>
+    );
 
   if (isError) return <p className="text-destructive m-3">Error: {error.message}</p>;
   const { title, venue, startDate, endDate, code, focal, payments, position, fundCluster } =
