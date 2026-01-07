@@ -48,13 +48,15 @@ export function useCreateTinForm(defaultValues: TinFormValues) {
 
 export type TinHookForm = ReturnType<typeof useCreateTinForm>;
 
-async function createTin(formData: TinFormValues) {
+async function createTin(payeeId: number, formData: TinFormValues) {
+  const payload = { payeeId, formData };
+
   const res = await fetch(BASE_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(formData),
+    body: JSON.stringify(payload),
   });
 
   const { message } = (await res.json()) as APIResponse;
@@ -64,8 +66,13 @@ async function createTin(formData: TinFormValues) {
   return { message };
 }
 
+type CreateTinData = {
+  payeeId: number;
+  formData: TinFormValues;
+};
+
 export function useCreateTin() {
   return useMutation({
-    mutationFn: createTin,
+    mutationFn: ({ payeeId, formData }: CreateTinData) => createTin(payeeId, formData),
   });
 }

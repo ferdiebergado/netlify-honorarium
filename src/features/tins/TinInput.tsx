@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
 import { usePayees } from '../payees/payee';
 import type { PaymentHookForm } from '../payments/payments';
-import CreateTinPopover from './CreateTinPopover';
+import CreateTinForm from './CreateTinForm';
 
 type TinInputProps = {
   form: PaymentHookForm;
@@ -46,7 +46,7 @@ export default function TinInput({ form }: TinInputProps) {
       isError={isError}
       error={error}
     >
-      <CreateTinPopover payeeId={payeeId} />
+      <CreateTinForm payeeId={payeeId} />
     </SelectField>
   );
 }

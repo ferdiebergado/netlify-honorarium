@@ -6,28 +6,28 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { IconPlus } from '@tabler/icons-react';
 import { useCallback, useMemo, useState } from 'react';
 import { Controller } from 'react-hook-form';
-import type { SalaryFormValues } from '../../shared/schema';
-import { useCreateSalary, useCreateSalaryForm } from './salaries';
+import type { TinFormValues } from '../../shared/schema';
+import { useCreateTin, useCreateTinForm } from './tins';
 
-type CreateSalaryFormProps = {
+type CreateTinFormProps = {
   payeeId: number;
 };
 
-export default function CreateSalaryForm({ payeeId }: CreateSalaryFormProps) {
+export default function CreateTinForm({ payeeId }: CreateTinFormProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const formValues: SalaryFormValues = useMemo(
+  const formData: TinFormValues = useMemo(
     () => ({
-      salary: 0,
+      tin: '',
     }),
     []
   );
 
-  const form = useCreateSalaryForm(formValues);
-  const { isPending, isError, error, mutateAsync: createSalary } = useCreateSalary();
+  const form = useCreateTinForm(formData);
+  const { isPending, isError, error, mutateAsync: createTin } = useCreateTin();
 
-  const handleSubmit = (formValues: SalaryFormValues) => {
-    createSalary({ payeeId, formData: formValues });
+  const handleSubmit = (formData: TinFormValues) => {
+    createTin({ payeeId, formData });
     form.reset();
     setIsOpen(false);
   };
@@ -50,41 +50,32 @@ export default function CreateSalaryForm({ payeeId }: CreateSalaryFormProps) {
             variant="outline"
             className="text-muted-foreground text-center"
             disabled={!payeeId}
-            title="Click to add a salary."
+            title="Click to add a new TIN."
           >
             <IconPlus />
           </Button>
         }
       ></PopoverTrigger>
       <PopoverContent>
-        <h1 className="text-lg font-semibold">Add Basic Salary</h1>
-        <h2 className="text-muted-foreground">Add a new basic salary for the payee.</h2>
+        <h1 className="text-lg font-semibold">Add TIN</h1>
+        <h2 className="text-muted-foreground">Add a new tin for the payee.</h2>
 
         {isError && <p className="text-destructive">{error.message}</p>}
 
-        <form id="salary-form" onSubmit={form.handleSubmit(handleSubmit)}>
+        <form id="tin-form" onSubmit={form.handleSubmit(handleSubmit)}>
           <FieldGroup>
             <Controller
-              name="salary"
+              name="tin"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="salary">Basic Salary</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>Tax Identification Number (TIN)</FieldLabel>
                   <Input
                     {...field}
-                    id="salary"
+                    id={field.name}
                     aria-invalid={fieldState.invalid}
-                    placeholder="98000"
                     autoComplete="off"
-                    type="number"
-                    onChange={e => {
-                      const value = e.target.value;
-                      if (value === '') {
-                        field.onChange(0);
-                      } else {
-                        field.onChange(Number(value));
-                      }
-                    }}
+                    onChange={field.onChange}
                   />
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
@@ -100,7 +91,7 @@ export default function CreateSalaryForm({ payeeId }: CreateSalaryFormProps) {
                 Reset
               </Button>
 
-              <Button type="submit" form="salary-form">
+              <Button type="submit" form="tin-form">
                 {isPending ? <Loader text="Saving..." /> : 'Submit'}
               </Button>
             </div>

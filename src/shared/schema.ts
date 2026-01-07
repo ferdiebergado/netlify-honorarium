@@ -144,7 +144,6 @@ export type Tin = {
 };
 
 export const tinSchema = z.object({
-  payeeId: z.number().min(1, 'Payee is required.'),
   tin: z.string().min(1, 'TIN is required'),
 });
 
