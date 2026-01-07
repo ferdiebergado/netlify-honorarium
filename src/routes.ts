@@ -1,8 +1,8 @@
 import { lazy } from 'react';
 import type { RouteObject } from 'react-router';
 import AuthLayout from './components/AuthLayout';
+import Layout from './components/Layout';
 
-const Layout = lazy(() => import('@/components/Layout'));
 const ActivitiesPage = lazy(() => import('./features/activities/ActivitiesPage'));
 const PayeesPage = lazy(() => import('./features/payees/PayeesPage'));
 const PaymentsPage = lazy(() => import('./features/payments/PaymentsPage'));
