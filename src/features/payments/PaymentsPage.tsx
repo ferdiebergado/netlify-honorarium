@@ -1,11 +1,15 @@
-import CertificationButton from './CertificationButton';
-import ComputationButton from './ComputationButton';
+import SkeletonCard from '@/components/SkeletonCard';
 import CreatePaymentDialog from './CreatePaymentDialog';
-import ORSButton from './ORSButton';
 import PaymentList from './PaymentList';
-import PayrollButton from './PayrollButton';
+import { usePayments } from './payments';
 
 export default function PaymentsPage() {
+  const { isPending, isError, error, data: payments } = usePayments();
+
+  if (isPending) return <SkeletonCard />;
+
+  if (isError) return <p className="text-destructive">{error.message}</p>;
+
   return (
     <>
       <div className="mb-6 flex">
@@ -17,13 +21,7 @@ export default function PaymentsPage() {
           <CreatePaymentDialog />
         </div>
       </div>
-      <PaymentList />
-      <div className="flex items-center gap-1">
-        <CertificationButton />
-        <ComputationButton />
-        <ORSButton />
-        <PayrollButton />
-      </div>
+      <PaymentList payments={payments} />
     </>
   );
 }
