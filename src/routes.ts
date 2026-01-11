@@ -9,7 +9,7 @@ const PaymentsPage = lazy(() => import('./features/payments/PaymentsPage'));
 const ActivityPage = lazy(() => import('./features/activities/ActivityPage'));
 const LoginPage = lazy(() => import('@/components/LoginPage'));
 const AuthCallback = lazy(() => import('./features/auth/AuthCallback'));
-
+const Dashboard = lazy(() => import('./components/Dashboard'));
 const NotFoundPage = lazy(() => import('@/components/NotFoundPage'));
 
 export const routes = [
@@ -17,6 +17,10 @@ export const routes = [
     path: '/',
     Component: Layout,
     children: [
+      {
+        index: true,
+        Component: Dashboard,
+      },
       {
         path: 'activities/:activityId',
         Component: ActivityPage,

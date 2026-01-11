@@ -1,11 +1,5 @@
 import { useAuth, useLogout } from '@/features/auth/auth';
-import {
-  IconCalendar,
-  IconCurrencyPeso,
-  IconHome,
-  IconSettings,
-  IconUsers,
-} from '@tabler/icons-react';
+import { IconCalendar, IconDashboard } from '@tabler/icons-react';
 import { useCallback, type FC } from 'react';
 import { Link } from 'react-router';
 import Loader from './Loader';
@@ -26,29 +20,14 @@ import {
 
 const items = [
   {
-    title: 'Home',
+    title: 'Dashboard',
     url: '/',
-    icon: IconHome,
+    icon: IconDashboard,
   },
   {
     title: 'Activities',
     url: '/activities',
     icon: IconCalendar,
-  },
-  {
-    title: 'Payees',
-    url: '/payees',
-    icon: IconUsers,
-  },
-  {
-    title: 'Payments',
-    url: '/payments',
-    icon: IconCurrencyPeso,
-  },
-  {
-    title: 'Settings',
-    url: '/settings',
-    icon: IconSettings,
   },
 ];
 
@@ -65,7 +44,7 @@ const AppSidebar: FC = () => {
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="text-primary text-center text-3xl font-extrabold">
+      <SidebarHeader className="text-primary justify-center p-5 text-center text-3xl font-extrabold">
         {open ? appName : appName[0]}
       </SidebarHeader>
       <SidebarContent>
