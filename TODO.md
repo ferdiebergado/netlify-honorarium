@@ -4,29 +4,31 @@
 - dark mode
 - CRUD
 - service layer
-- specify columns in select statement
 - add right padding to error message
 - show alert on form errors instead of toast
 - classify by file each features
 - embedded TODOs
 - embed objects in schemas
-- separate query per action
 - payroll: splice row 2 if there is only 1 payee
 - check status 500 in front end
 - memoize decryption
 - form schemas: validate range and length
 - do not use path aliases
-- payments total in table footer
-- autofill when salary/tin/account is only 1
 - terms and conditions from shadcn studio
 - keystocamel (frm frontend)
-- full text Search
 - user roles
-- remove hidden input, pass it directly to mutationfn
-- salaryschema, remove payeeId
+- replace number input with text input
+- move data to schema (ex. CreateTinData)
 
 # Done
 
+- full text Search
+- login spinner
+- payments total in table footer
+- autofill when salary/tin/account is only 1
+- specify columns in select statement
+- remove hidden input, pass it directly to mutationfn
+- salaryschema, remove payeeId
 - extract honorarium computation
 - test computehonorarium
 - fund cluster in activity details
