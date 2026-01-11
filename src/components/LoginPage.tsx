@@ -21,12 +21,12 @@ export default function LoginPage() {
           <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
             <IconOvalVerticalFilled className="size-4" />
           </div>
-          HonorProS
+          {import.meta.env.VITE_APP_TITLE}
         </a>
         <div className="flex flex-col gap-6">
           <Card>
             <CardHeader className="text-center">
-              <CardTitle className="text-xl">Welcome back</CardTitle>
+              <CardTitle className="text-xl">Welcome</CardTitle>
               <CardDescription>Login with your Google account</CardDescription>
             </CardHeader>
             <CardContent>
