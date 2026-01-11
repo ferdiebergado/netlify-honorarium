@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS venues (
   deleted_by INTEGER,
   FOREIGN KEY (deleted_by) REFERENCES users (id),
   FOREIGN KEY (updated_by) REFERENCES users (id),
-  FOREIGN KEY (created_by) REFERENCES users (id),
+  FOREIGN KEY (created_by) REFERENCES users (id)
 );
 
 CREATE TABLE IF NOT EXISTS positions (
