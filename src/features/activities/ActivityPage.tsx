@@ -50,7 +50,7 @@ export default function ActivityPage() {
   const totalPayments = payments?.reduce((sum, { honorarium }) => sum + honorarium, 0) ?? 0;
 
   return (
-    <div className="mt-8 flex flex-col gap-8">
+    <div className="flex flex-col gap-8">
       <div className="mb-6 flex">
         <div className="flex flex-col px-3">
           <h1 className="text-2xl font-bold">{title}</h1>

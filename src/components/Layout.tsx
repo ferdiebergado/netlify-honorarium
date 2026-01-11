@@ -19,7 +19,7 @@ export default function Layout() {
     <SidebarProvider>
       <AppSidebar />
       <main className="mx-6 w-full">
-        <SidebarTrigger className="my-1" />
+        <SidebarTrigger className="mt-3 mb-12" />
         <Outlet />
       </main>
     </SidebarProvider>
