@@ -1,11 +1,11 @@
 import type { Config } from '@netlify/functions';
 import { parseCookie, stringifySetCookie } from 'cookie';
 import { randomBytes } from 'crypto';
+import { RANDOM_BYTES_SIZE, SESSION_COOKIE_NAME, SESSION_DURATION_HOURS } from '../constants';
 import { turso } from '../db';
 import { BadRequestError, errorResponse, InternalServerError, UnauthorizedError } from '../errors';
 import { googlePeopleAPI, oauth2Client, scopes, type GoogleUserInfo } from '../google';
 import { getClientIP } from '../lib';
-import { RANDOM_BYTES_SIZE, SESSION_COOKIE_NAME, SESSION_DURATION_HOURS } from '../constants';
 
 export const config: Config = {
   method: 'GET',
@@ -55,6 +55,9 @@ export default async (req: Request) => {
       headers: {
         Location: '/login/success',
         'Set-Cookie': sessionCookie,
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0',
       },
       status: 302,
     });

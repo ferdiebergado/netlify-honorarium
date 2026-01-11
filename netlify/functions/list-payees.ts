@@ -3,7 +3,18 @@ import type { Account, Payee } from '../../src/shared/schema';
 import { authCheck } from '../auth-check';
 import { turso } from '../db';
 import { errorResponse } from '../errors';
+import { keysToCamel } from '../lib';
 import { deserializeDetails } from './list-accounts';
+
+export type PayeeData = Omit<Payee, 'salaries' | 'accounts' | 'tins'> & {
+  salaryId: number;
+  salary: number;
+  tinId?: number;
+  tin?: string;
+  accountId: number;
+  bank: string;
+  details: Buffer;
+};
 
 export const payeeSql = `
 SELECT
@@ -17,26 +28,25 @@ SELECT
     t.tin,
     a.id        AS account_id,
     a.details,
-    b.name      AS bank_name
-FROM payees p
-JOIN salaries s ON s.payee_id = p.id
-LEFT JOIN tins t ON t.payee_id = p.id
-LEFT JOIN accounts a ON a.payee_id = p.id
-JOIN banks b ON b.id = a.bank_id`;
-
-export type PayeeRow = {
-  id: number;
-  name: string;
-  salary_id: number;
-  salary: number;
-  tin_id?: number;
-  tin?: string;
-  account_id: number;
-  bank_name: string;
-  details: Buffer;
-  position: string;
-  office: string;
-};
+    b.name      AS bank
+FROM 
+  payees p
+JOIN
+  salaries s 
+ON
+  s.payee_id = p.id
+LEFT JOIN 
+  tins t 
+ON 
+  t.payee_id = p.id
+LEFT JOIN 
+  accounts a
+ON
+  a.payee_id = p.id
+JOIN
+  banks b
+ON
+  b.id = a.bank_id`;
 
 export const config: Config = {
   method: 'GET',
@@ -49,9 +59,8 @@ export default async (req: Request) => {
 
     const sql = `${payeeSql} WHERE p.deleted_at IS NULL ORDER BY p.name`;
     const { rows } = await turso.execute(sql);
-    const payeeRows = rows as unknown as PayeeRow[];
 
-    const data = rowsToPayees(payeeRows);
+    const data = rowsToPayees(rows as unknown as PayeeData[]);
 
     return Response.json({ data });
   } catch (error) {
@@ -59,32 +68,22 @@ export default async (req: Request) => {
   }
 };
 
-export function rowsToPayees(rows: PayeeRow[]): Payee[] {
+export function rowsToPayees(rows: PayeeData[]): Payee[] {
   const payeeMap = new Map<number, Payee>();
 
   rows.forEach(row => {
-    const {
-      id,
-      salary,
-      tin,
-      bank_name,
-      name,
-      details,
-      salary_id,
-      tin_id,
-      account_id,
-      position,
-      office,
-    } = row;
+    const { id, salaryId, accountId, bank, salary, tinId, tin, name, position, office } =
+      keysToCamel(row) as PayeeData;
+
     const payee = payeeMap.get(id);
     const account: Omit<Account, 'payee' | 'payeeId'> = {
-      id: account_id,
-      bank: bank_name,
-      ...deserializeDetails(details),
+      id: accountId,
+      bank,
+      ...deserializeDetails(row.details),
     };
 
-    const payeeSalary = { salary, id: salary_id };
-    const payeeTin = tin && tin_id && { id: tin_id, tin };
+    const payeeSalary = { salary, id: salaryId };
+    const payeeTin = tin && tinId && { id: tinId, tin };
 
     if (!payee) {
       const payee: Payee = {

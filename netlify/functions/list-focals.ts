@@ -15,9 +15,9 @@ export default async (req: Request) => {
     await authCheck(req);
 
     const query = 'SELECT id, name, position_id FROM focals WHERE deleted_at IS NULL ORDER BY name';
-    const { rows } = await turso.execute(query);
+    const { rows: data } = await turso.execute(query);
 
-    return Response.json({ data: rows });
+    return Response.json({ data });
   } catch (error) {
     return errorResponse(error);
   }

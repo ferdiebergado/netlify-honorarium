@@ -1,18 +1,18 @@
 import { describe, expect, it } from 'vitest';
 import type { Payee } from '../src/shared/schema';
-import { rowsToPayees, type PayeeRow } from './functions/list-payees';
+import { rowsToPayees, type PayeeData } from './functions/list-payees';
 import { encrypt } from './security';
 
 describe('rowsToPayees', () => {
   it('returns payee data correctly', () => {
-    const given: PayeeRow[] = [
+    const given: PayeeData[] = [
       {
         id: 1,
         name: 'agnis',
         position: 'Student',
         office: 'CNHS',
         salary: 13000,
-        bank_name: 'LBP',
+        bank: 'LBP',
         details: encrypt(
           Buffer.from(
             JSON.stringify({
@@ -22,8 +22,8 @@ describe('rowsToPayees', () => {
             })
           )
         ),
-        salary_id: 1,
-        account_id: 1,
+        salaryId: 1,
+        accountId: 1,
       },
       {
         id: 1,
@@ -31,7 +31,7 @@ describe('rowsToPayees', () => {
         position: 'Student',
         office: 'CNHS',
         salary: 13000,
-        bank_name: 'BDO',
+        bank: 'BDO',
         details: encrypt(
           Buffer.from(
             JSON.stringify({
@@ -41,10 +41,10 @@ describe('rowsToPayees', () => {
             })
           )
         ),
-        tin_id: 1,
+        tinId: 1,
         tin: '1313',
-        salary_id: 1,
-        account_id: 2,
+        salaryId: 1,
+        accountId: 2,
       },
     ];
 

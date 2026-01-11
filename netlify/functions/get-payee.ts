@@ -3,7 +3,7 @@ import { authCheck } from '../auth-check';
 import { turso } from '../db';
 import { errorResponse } from '../errors';
 import { parseId } from '../lib';
-import { payeeSql, rowsToPayees, type PayeeRow } from './list-payees';
+import { payeeSql, rowsToPayees, type PayeeData } from './list-payees';
 
 export const config: Config = {
   method: 'GET',
@@ -22,9 +22,7 @@ export default async (req: Request, ctx: Context) => {
 
     const { rows } = await turso.execute(sql, [payeeId]);
 
-    const payeeRows = rows as unknown as PayeeRow[];
-
-    const data = rowsToPayees(payeeRows)[0];
+    const data = rowsToPayees(rows as unknown as PayeeData[])[0];
 
     return Response.json({ data });
   } catch (error) {

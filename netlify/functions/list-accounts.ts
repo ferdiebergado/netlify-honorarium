@@ -3,17 +3,8 @@ import type { Account } from '../../src/shared/schema';
 import { authCheck } from '../auth-check';
 import { turso } from '../db';
 import { errorResponse } from '../errors';
-import { toBuffer } from '../lib';
+import { keysToCamel, toBuffer } from '../lib';
 import { decrypt } from '../security';
-
-export type AccountRow = {
-  id: number;
-  details: Buffer;
-  payee_id: number;
-  payee_name: string;
-  bank_id: number;
-  bank_name: string;
-};
 
 export type AccountDetails = {
   bankBranch: string;
@@ -21,14 +12,16 @@ export type AccountDetails = {
   accountName: string;
 };
 
+export type RawAccount = Omit<Account, keyof AccountDetails> & { details: Buffer };
+
 export const accountsSql = `
 SELECT
   a.id,
   a.details,
   p.id AS payee_id,
-  p.name AS payee_name,
+  p.name AS payee,
   b.id AS bank_id,
-  b.name AS bank_name
+  b.name AS bank
 FROM
   accounts a
 JOIN
@@ -48,10 +41,10 @@ export const config: Config = {
 export default async (req: Request) => {
   try {
     await authCheck(req);
-    const sql = `${accountsSql} WHERE a.deleted_at IS NULL ORDER BY payee_name`;
+    const sql = `${accountsSql} WHERE a.deleted_at IS NULL ORDER BY payee`;
     const { rows } = await turso.execute(sql);
 
-    const data = (rows as unknown as AccountRow[]).map(rowToAccount);
+    const data = (rows as unknown as RawAccount[]).map(rowToAccount);
 
     return Response.json({ data });
   } catch (error) {
@@ -59,14 +52,12 @@ export default async (req: Request) => {
   }
 };
 
-export function rowToAccount(row: AccountRow): Account {
+export function rowToAccount(row: RawAccount): Account {
+  const account = keysToCamel(row) as Account;
   const details = deserializeDetails(row.details);
 
   return {
-    id: row.id,
-    payeeId: row.payee_id,
-    payee: row.payee_name,
-    bank: row.bank_name,
+    ...account,
     ...details,
   };
 }

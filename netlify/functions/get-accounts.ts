@@ -3,7 +3,7 @@ import { authCheck } from '../auth-check';
 import { turso } from '../db';
 import { errorResponse, NotFoundError } from '../errors';
 import { parseId } from '../lib';
-import { accountsSql, rowToAccount, type AccountRow } from './list-accounts';
+import { accountsSql, rowToAccount, type RawAccount } from './list-accounts';
 
 export const config: Config = {
   method: 'GET',
@@ -21,9 +21,7 @@ export default async (req: Request, ctx: Context) => {
 
     if (rows.length === 0) throw new NotFoundError();
 
-    const accountRows = rows as unknown as AccountRow[];
-
-    const data = accountRows.map(rowToAccount);
+    const data = (rows as unknown as RawAccount[]).map(rowToAccount);
 
     return Response.json({ data });
   } catch (error) {

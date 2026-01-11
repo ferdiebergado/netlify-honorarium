@@ -1,39 +1,10 @@
 import type { Config, Context } from '@netlify/functions';
-import type { Activity, Payee, PaymentData } from '../../src/shared/schema';
+import type { Activity, Payee, Payment, PaymentData } from '../../src/shared/schema';
 import { getFundCluster } from '../activity';
 import { authCheck } from '../auth-check';
 import { turso } from '../db';
 import { errorResponse } from '../errors';
-import { parseId } from '../lib';
-
-type ActivityRow = {
-  id: number;
-  title: string;
-  code: string;
-  start_date: string;
-  end_date: string;
-  venue_id: number;
-  venue: string;
-  focal_id: number;
-  focal: string;
-  payee_id: number;
-  payee: string;
-  payee_position: string;
-  payee_office: string;
-  hours_rendered: number;
-  actual_honorarium: number;
-  net_honorarium: number;
-  tax_rate: number;
-  honorarium: number;
-  role: string;
-  payment_id: number;
-  account_id: number;
-  salary_id: number;
-  role_id: number;
-  tin_id: number;
-  focal_positionId: number;
-  focal_position: string;
-};
+import { keysToCamel, parseId } from '../lib';
 
 const fullActivitySql = `
 SELECT
@@ -89,7 +60,7 @@ export default async (req: Request, ctx: Context) => {
     const activityId = parseId(ctx.params.id);
 
     const { rows } = await turso.execute(fullActivitySql, [activityId]);
-    const data = rowsToActivity(rows as unknown as ActivityRow[]);
+    const data = rowsToActivity(rows);
 
     return Response.json({ data });
   } catch (error) {
@@ -97,63 +68,116 @@ export default async (req: Request, ctx: Context) => {
   }
 };
 
-function rowsToActivity(rows: ActivityRow[]): Activity {
+type RawActivity = Activity &
+  Pick<
+    Payment,
+    | 'honorarium'
+    | 'hoursRendered'
+    | 'role'
+    | 'netHonorarium'
+    | 'actualHonorarium'
+    | 'taxRate'
+    | 'accountId'
+    | 'salaryId'
+    | 'roleId'
+    | 'tinId'
+  > & {
+    payeeId: number;
+    payee: string;
+    payeePosition: string;
+    payeeOffice: string;
+    paymentId: number;
+    focalPosition: string;
+  };
+
+function rowsToActivity(rows: unknown[]): Activity {
   const payees: Payee[] = [];
   const payments: PaymentData[] = [];
-  const firstRow = rows[0];
+  const {
+    id,
+    title,
+    venue,
+    venueId,
+    startDate,
+    endDate,
+    code,
+    focal,
+    focalId,
+    positionId,
+    focalPosition,
+  } = keysToCamel(rows[0]) as RawActivity;
 
   rows.forEach(row => {
-    if (!row.payee_id) return;
+    const {
+      payeeId,
+      payee,
+      payeePosition,
+      payeeOffice,
+      honorarium,
+      hoursRendered,
+      actualHonorarium,
+      taxRate,
+      netHonorarium,
+      role,
+      paymentId,
+      accountId,
+      salaryId,
+      id,
+      roleId,
+      title,
+      tinId,
+    } = keysToCamel(row) as RawActivity;
+    if (!payeeId) return;
 
-    const payee: Payee = {
-      id: row.payee_id,
-      name: row.payee,
-      position: row.payee_position,
-      office: row.payee_office,
+    const currentPayee: Payee = {
+      id: payeeId,
+      name: payee,
+      position: payeePosition,
+      office: payeeOffice,
       accounts: [],
       salaries: [],
       tins: [],
     };
 
-    const existingPayee = payees.find(p => p.id === payee.id);
+    const existingPayee = payees.find(p => p.id === currentPayee.id);
 
-    if (!existingPayee) payees.push(payee);
+    if (!existingPayee) payees.push(currentPayee);
 
     const payment: PaymentData = {
-      honorarium: row.honorarium,
-      hoursRendered: row.hours_rendered,
-      actualHonorarium: row.actual_honorarium,
-      taxRate: row.tax_rate,
-      netHonorarium: row.net_honorarium,
-      payee: row.payee,
-      role: row.role,
-      id: row.payment_id,
-      payeeId: row.payee_id,
-      accountId: row.account_id,
-      salaryId: row.salary_id,
-      activityId: row.id,
-      roleId: row.role_id,
-      activity: row.title,
-      tinId: row.tin_id,
+      honorarium,
+      hoursRendered,
+      actualHonorarium,
+      taxRate,
+      netHonorarium,
+      payee,
+      role,
+      id: paymentId,
+      payeeId,
+      accountId,
+      salaryId,
+      activityId: id,
+      roleId,
+      activity: title,
+      tinId,
     };
 
     payments.push(payment);
   });
 
   return {
-    id: firstRow.id,
-    title: firstRow.title,
-    venue: firstRow.venue,
-    venueId: firstRow.venue_id,
-    startDate: firstRow.start_date,
-    endDate: firstRow.end_date,
-    code: firstRow.code,
-    focal: firstRow.focal,
-    focalId: firstRow.focal_id,
+    id,
+    title,
+    venue,
+    venueId,
+    startDate,
+    endDate,
+    code,
+    focal,
+    focalId,
     payees,
     payments,
-    positionId: firstRow.focal_positionId,
-    position: firstRow.focal_position,
-    fundCluster: getFundCluster(firstRow.code),
+    positionId,
+    position: focalPosition,
+    fundCluster: getFundCluster(code),
   };
 }

@@ -3,7 +3,7 @@ import { authCheck } from '../auth-check';
 import { turso } from '../db';
 import { errorResponse } from '../errors';
 import { parseId } from '../lib';
-import { accountsSql, rowToAccount, type AccountRow } from './list-accounts';
+import { accountsSql, rowToAccount, type RawAccount } from './list-accounts';
 
 export const config: Config = {
   method: 'GET',
@@ -21,9 +21,7 @@ export default async (req: Request, ctx: Context) => {
     const sql = `${accountsSql} WHERE p.id = ?`;
     const { rows } = await turso.execute(sql, [payeeId]);
 
-    const accountRows = rows as unknown as AccountRow[];
-
-    const data = accountRows.map(rowToAccount);
+    const data = (rows as unknown as RawAccount[]).map(rowToAccount);
 
     return Response.json({ data });
   } catch (error) {

@@ -129,3 +129,21 @@ export function getClientIP(request: Request) {
   // Fallback to platform-specific headers
   return request.headers.get('cf-connecting-ip') || request.headers.get('x-real-ip') || '127.0.0.1';
 }
+
+function toCamel(s: string): string {
+  return s.replace(/_([a-z])/g, (_, c: string) => c.toUpperCase());
+}
+
+export function keysToCamel(input: unknown): unknown {
+  if (Array.isArray(input)) {
+    return input.map(v => keysToCamel(v)) as unknown;
+  }
+
+  if (input !== null && typeof input === 'object') {
+    return Object.fromEntries(
+      Object.entries(input as Record<string, unknown>).map(([k, v]) => [toCamel(k), keysToCamel(v)])
+    ) as unknown;
+  }
+
+  return input;
+}

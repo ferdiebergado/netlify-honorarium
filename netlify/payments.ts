@@ -1,37 +1,8 @@
 import type { Payment } from '../src/shared/schema';
 import { turso } from './db';
-import { deserializeDetails, type AccountDetails } from './functions/list-accounts';
-import { roundMoney } from './lib';
+import { deserializeDetails } from './functions/list-accounts';
+import { keysToCamel, roundMoney } from './lib';
 export const SG29 = 180492;
-
-export type PaymentRow = {
-  id: number;
-  updated_at: string;
-  payee: string;
-  activity: string;
-  role: string;
-  honorarium: number;
-  hours_rendered: number;
-  actual_honorarium: number;
-  net_honorarium: number;
-  activity_code: string;
-  tax_rate: number;
-  start_date: string;
-  end_date: string;
-  venue: string;
-  focal: string;
-  position: string;
-  tin: string;
-  account_id: number;
-  bank: string;
-  account_details: Buffer;
-  salary_id: number;
-  salary: number;
-  payee_id: number;
-  activity_id: number;
-  role_id: number;
-  tin_id: number;
-};
 
 export const paymentsSql = `
 SELECT
@@ -82,8 +53,7 @@ JOIN positions pos ON pos.id = f.position_id
 JOIN tins t ON t.id = pay.tin_id
 JOIN accounts acc ON acc.id = pay.account_id
 JOIN banks b ON b.id = acc.bank_id
-JOIN salaries s ON s.id = pay.salary_id
-`;
+JOIN salaries s ON s.id = pay.salary_id`;
 
 export async function getPayments(activityId: number | null): Promise<Payment[]> {
   let sql = paymentsSql;
@@ -92,37 +62,10 @@ export async function getPayments(activityId: number | null): Promise<Payment[]>
 
   const { rows } = await turso.execute(sql, [activityId]);
 
-  const tempData: Array<Omit<Payment, keyof AccountDetails> & { accountDetails: Buffer }> = (
-    rows as unknown as PaymentRow[]
-  ).map(row => ({
-    ...row,
-    updatedAt: row.updated_at,
-    hoursRendered: row.hours_rendered,
-    actualHonorarium: row.actual_honorarium,
-    netHonorarium: row.net_honorarium,
-    activityCode: row.activity_code,
-    taxRate: row.tax_rate,
-    startDate: row.start_date,
-    endDate: row.end_date,
-    accountDetails: row.account_details,
-    payeeId: row.payee_id,
-    accountId: row.account_id,
-    salaryId: row.salary_id,
-    activityId: row.activity_id,
-    roleId: row.role_id,
-    tinId: row.tin_id,
+  return rows.map(row => ({
+    ...(keysToCamel(row) as Payment),
+    accountDetails: deserializeDetails(row['account_details'] as unknown as Buffer),
   }));
-
-  const paymentsWithAccount: Payment[] = tempData.map(payment => {
-    const details = deserializeDetails(payment.accountDetails);
-
-    return {
-      ...payment,
-      ...details,
-    };
-  });
-
-  return paymentsWithAccount;
 }
 
 export type Honorarium = {

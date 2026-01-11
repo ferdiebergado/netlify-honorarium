@@ -14,9 +14,9 @@ export default async (req: Request) => {
 
     const query = 'SELECT id, name FROM roles WHERE deleted_at IS NULL ORDER BY name';
 
-    const { rows } = await turso.execute(query);
+    const { rows: data } = await turso.execute(query);
 
-    return Response.json({ data: rows });
+    return Response.json({ data });
   } catch (error) {
     return errorResponse(error);
   }

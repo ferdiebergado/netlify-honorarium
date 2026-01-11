@@ -1,9 +1,11 @@
 import type { Config, Context } from '@netlify/functions';
+import type { Activity } from '../../src/shared/schema';
+import { getFundCluster } from '../activity';
 import { authCheck } from '../auth-check';
 import { turso } from '../db';
 import { errorResponse, NotFoundError } from '../errors';
-import { parseId } from '../lib';
-import { activitiesSql, rowToActivity, type ActivityRow } from './list-activities';
+import { keysToCamel, parseId } from '../lib';
+import { activitiesSql } from './list-activities';
 
 export const config: Config = {
   method: 'GET',
@@ -23,9 +25,10 @@ export default async (req: Request, ctx: Context) => {
 
     if (rows.length === 0) throw new NotFoundError();
 
-    const accountRows = rows as unknown as ActivityRow[];
-
-    const data = rowToActivity(accountRows[0]);
+    const data = {
+      ...(keysToCamel(rows[0]) as Activity),
+      fundCluster: getFundCluster(rows[0].code as string),
+    };
 
     return Response.json({ data });
   } catch (error) {
