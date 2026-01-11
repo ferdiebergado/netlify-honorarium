@@ -4,7 +4,7 @@ import { getFundCluster } from '../activity';
 import { authCheck } from '../auth-check';
 import { turso } from '../db';
 import { errorResponse } from '../errors';
-import { keysToCamel, parseId } from '../lib';
+import { keysToCamel, parseId, toDateRange } from '../lib';
 
 const fullActivitySql = `
 SELECT
@@ -179,5 +179,6 @@ function rowsToActivity(rows: unknown[]): Activity {
     positionId,
     position: focalPosition,
     fundCluster: getFundCluster(code),
+    dateRange: toDateRange(startDate, endDate),
   };
 }

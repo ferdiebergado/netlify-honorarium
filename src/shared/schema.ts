@@ -15,6 +15,7 @@ export type Activity = {
   fundCluster: string;
   payees?: Payee[];
   payments?: PaymentData[];
+  dateRange: string;
 };
 
 // TODO: validate range and length

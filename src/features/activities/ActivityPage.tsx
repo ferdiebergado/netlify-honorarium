@@ -4,7 +4,14 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { checkId, formatMoney } from '@/lib/utils';
-import { IconCalendar, IconMapPin, IconTag, IconUserCog, IconUserStar } from '@tabler/icons-react';
+import {
+  IconBriefcase,
+  IconBuildingBank,
+  IconCalendar,
+  IconMapPin,
+  IconTag,
+  IconUserStar,
+} from '@tabler/icons-react';
 import { useParams } from 'react-router';
 import CertificationButton from '../payments/CertificationButton';
 import ComputationButton from '../payments/ComputationButton';
@@ -38,10 +45,9 @@ export default function ActivityPage() {
     );
 
   if (isError) return <p className="text-destructive m-3">Error: {error.message}</p>;
-  const { title, venue, startDate, endDate, code, focal, payments, position, fundCluster } =
-    activity;
+  const { title, venue, code, focal, payments, position, fundCluster, dateRange } = activity;
 
-  const totalPayments = payments?.reduce((sum, val) => (sum += val.honorarium), 0);
+  const totalPayments = payments?.reduce((sum, { honorarium }) => sum + honorarium, 0) ?? 0;
 
   return (
     <div className="mt-8 flex flex-col gap-8">
@@ -49,7 +55,10 @@ export default function ActivityPage() {
         <div className="flex flex-col px-3">
           <h1 className="text-2xl font-bold">{title}</h1>
           <h2 className="text-muted-foreground flex items-center gap-1">
-            <IconMapPin className="h-3 w-3" /> {venue}
+            <IconMapPin className="h-4 w-4" /> {venue}
+          </h2>
+          <h2 className="text-muted-foreground flex items-center gap-1">
+            <IconCalendar className="h-4 w-4" /> {dateRange}
           </h2>
         </div>
         <div className="flex flex-1 items-end justify-end px-3">
@@ -65,30 +74,6 @@ export default function ActivityPage() {
             <Separator className="my-2" />
 
             <div className="grid gap-4 py-4">
-              {/* Date Section */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
-                    Start Date
-                  </p>
-                  <div className="flex items-center gap-2 text-sm">
-                    <IconCalendar className="h-4 w-4 opacity-70" />
-                    <span>{startDate}</span>
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
-                    End Date
-                  </p>
-                  <div className="flex items-center gap-2 text-sm">
-                    <IconCalendar className="h-4 w-4 opacity-70" />
-                    <span>{endDate}</span>
-                  </div>
-                </div>
-              </div>
-
-              <Separator />
-
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-sm">
                   <div className="text-muted-foreground flex items-center gap-2">
@@ -102,7 +87,7 @@ export default function ActivityPage() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-sm">
                   <div className="text-muted-foreground flex items-center gap-2">
-                    <IconTag className="h-4 w-4" />
+                    <IconBuildingBank className="h-4 w-4" />
                     <span>Fund Cluster</span>
                   </div>
                   <span className="bg-muted rounded px-2 py-0.5 font-mono font-medium">
@@ -124,10 +109,10 @@ export default function ActivityPage() {
               <div>
                 <div className="flex items-center justify-between text-sm">
                   <div className="text-muted-foreground flex items-center gap-2">
-                    <IconUserCog className="h-4 w-4" />
+                    <IconBriefcase className="h-4 w-4" />
                     <span>Focal Position</span>
                   </div>
-                  <span className="text-foreground">{position}</span>
+                  <span className="text-foreground text-right">{position}</span>
                 </div>
               </div>
             </div>
@@ -141,7 +126,7 @@ export default function ActivityPage() {
           <PaymentsTable payments={payments ?? []} />
         </CardContent>
 
-        {totalPayments && (
+        {totalPayments > 0 && (
           <CardFooter>
             <h3 className="text-base font-medium">Total: {formatMoney(totalPayments)}</h3>
           </CardFooter>
