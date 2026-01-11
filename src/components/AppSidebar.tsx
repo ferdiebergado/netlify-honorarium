@@ -1,10 +1,7 @@
-import { useAuth, useLogout } from '@/features/auth/auth';
 import { IconCalendar, IconDashboard } from '@tabler/icons-react';
-import { useCallback, type FC } from 'react';
+import { type FC } from 'react';
 import { Link } from 'react-router';
-import Loader from './Loader';
-import { Avatar, AvatarImage } from './ui/avatar';
-import { Button } from './ui/button';
+import NavUser from './NavUser';
 import {
   Sidebar,
   SidebarContent,
@@ -34,13 +31,7 @@ const items = [
 const AppSidebar: FC = () => {
   const appName = import.meta.env.VITE_APP_TITLE;
 
-  const { user } = useAuth();
-  const { isPending, mutate: logout } = useLogout();
   const { open } = useSidebar();
-
-  const handleLogout = useCallback(() => {
-    logout();
-  }, [logout]);
 
   return (
     <Sidebar collapsible="icon">
@@ -67,16 +58,8 @@ const AppSidebar: FC = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="my-2 flex items-center justify-center">
-        <div className="flex items-center justify-center gap-2">
-          <Avatar>
-            <AvatarImage src={user?.picture} />
-          </Avatar>
-          {open && user?.name}
-        </div>
-        <Button variant="link" onClick={handleLogout} disabled={isPending}>
-          {isPending ? <Loader text="Logging out..." /> : 'Logout'}
-        </Button>
+      <SidebarFooter>
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   );
