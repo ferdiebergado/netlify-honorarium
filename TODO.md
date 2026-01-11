@@ -15,13 +15,13 @@
 - form schemas: validate range and length
 - do not use path aliases
 - terms and conditions from shadcn studio
-- keystocamel (frm frontend)
 - user roles
 - replace number input with text input
 - move data to schema (ex. CreateTinData)
 
 # Done
 
+- keystocamel (frm frontend)
 - full text Search
 - login spinner
 - payments total in table footer
