@@ -1,3 +1,4 @@
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -5,6 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from '@/components/ui/item';
 import { Skeleton } from '@/components/ui/skeleton';
 import { formatMoney } from '@/lib/utils';
 import type { PaymentData } from '@/shared/schema';
@@ -19,6 +21,7 @@ import {
   IconMoneybagMove,
   IconMoneybagMoveBack,
   IconMoneybagPlus,
+  IconNumber,
   IconNumber123,
   IconPercentage,
   IconUser,
@@ -59,154 +62,184 @@ export default function PaymentDetailsDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-1/2">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-lg font-semibold">Payment Details</DialogTitle>
-          <DialogDescription>View payees and payment details.</DialogDescription>
+          <DialogDescription>View payee, account and payment details.</DialogDescription>
         </DialogHeader>
         {isPending && <Skeleton className="w-1/3" />}
         {isError && <p>Error: {error.message}</p>}
         {isSuccess && (
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
-                  Payee
-                </p>
-                <div className="flex items-center gap-2 text-sm">
-                  <IconUser className="h-4 w-4 opacity-70" />
-                  <span>{payee.name}</span>
-                </div>
-              </div>
-              <div className="space-y-1">
-                <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
-                  Office
-                </p>
-                <div className="flex items-center gap-2 text-sm">
-                  <IconBuilding className="h-4 w-4 opacity-70" />
-                  <span>{payee.office}</span>
-                </div>
-              </div>
+          <>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base font-semibold">Payee</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Item>
+                  <ItemMedia>
+                    <IconUser />
+                  </ItemMedia>
+                  <ItemContent>
+                    <ItemTitle>{payee.name}</ItemTitle>
+                    <ItemDescription>Name</ItemDescription>
+                  </ItemContent>
+                </Item>
+                <div className="flex">
+                  <Item>
+                    <ItemMedia>
+                      <IconBuilding />
+                    </ItemMedia>
+                    <ItemContent>
+                      <ItemTitle>{payee.office}</ItemTitle>
+                      <ItemDescription>Office</ItemDescription>
+                    </ItemContent>
+                  </Item>
 
-              <div className="space-y-1">
-                <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
-                  Position
-                </p>
-                <div className="flex items-center gap-2 text-sm">
-                  <IconBriefcase className="h-4 w-4 opacity-70" />
-                  <span>{payee.position}</span>
+                  <Item>
+                    <ItemMedia>
+                      <IconBriefcase />
+                    </ItemMedia>
+                    <ItemContent>
+                      <ItemTitle>{payee.position}</ItemTitle>
+                      <ItemDescription>Position</ItemDescription>
+                    </ItemContent>
+                  </Item>
                 </div>
-              </div>
+                <div className="flex">
+                  {salary && (
+                    <Item>
+                      <ItemMedia>
+                        <IconMoneybag />
+                      </ItemMedia>
+                      <ItemContent>
+                        <ItemTitle>{formatMoney(salary.salary)}</ItemTitle>
+                        <ItemDescription>Basic Salary</ItemDescription>
+                      </ItemContent>
+                    </Item>
+                  )}
 
-              {salary && (
-                <div className="space-y-1">
-                  <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
-                    Salary
-                  </p>
-                  <div className="flex items-center gap-2 text-sm">
-                    <IconMoneybag className="h-4 w-4 opacity-70" />
-                    <span>{formatMoney(salary.salary)}</span>
+                  {tin && (
+                    <Item>
+                      <ItemMedia>
+                        <IconNumber />
+                      </ItemMedia>
+                      <ItemContent>
+                        <ItemTitle>{tin.tin}</ItemTitle>
+                        <ItemDescription>TIN</ItemDescription>
+                      </ItemContent>
+                    </Item>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+            {account && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base font-semibold">Account</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex">
+                    <Item>
+                      <ItemMedia>
+                        <IconBuildingBank />
+                      </ItemMedia>
+                      <ItemContent>
+                        <ItemTitle>{account.bank}</ItemTitle>
+                        <ItemDescription>Bank</ItemDescription>
+                      </ItemContent>
+                    </Item>
+                    <Item>
+                      <ItemMedia>
+                        <IconBuildingCottage />
+                      </ItemMedia>
+                      <ItemContent>
+                        <ItemTitle>{account.bankBranch}</ItemTitle>
+                        <ItemDescription>Bank Branch</ItemDescription>
+                      </ItemContent>
+                    </Item>
                   </div>
-                </div>
-              )}
-              <div className="space-y-1">
-                <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
-                  No. of hours rendered
-                </p>
-                <div className="flex items-center gap-2 text-sm">
-                  <IconClock className="h-4 w-4 opacity-70" />
-                  <span>{payment.hoursRendered}</span>
-                </div>
-              </div>
-              <div className="space-y-1">
-                <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
-                  Computed honorarium
-                </p>
-                <div className="flex items-center gap-2 text-sm">
-                  <IconMoneybagPlus className="h-4 w-4 opacity-70" />
-                  <span>{formatMoney(payment.actualHonorarium)}</span>
-                </div>
-              </div>
-              <div className="space-y-1">
-                <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
-                  Honorarium
-                </p>
-                <div className="flex items-center gap-2 text-sm">
-                  <IconMoneybagMove className="h-4 w-4 opacity-70" />
-                  <span>{formatMoney(payment.honorarium)}</span>
-                </div>
-              </div>
-              <div className="space-y-1">
-                <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
-                  Tax Rate
-                </p>
-                <div className="flex items-center gap-2 text-sm">
-                  <IconPercentage className="h-4 w-4 opacity-70" />
-                  <span>{payment.taxRate}</span>
-                </div>
-              </div>
-              <div className="space-y-1">
-                <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
-                  Net honorarium
-                </p>
-                <div className="flex items-center gap-2 text-sm">
-                  <IconMoneybagMoveBack className="h-4 w-4 opacity-70" />
-                  <span>{formatMoney(payment.netHonorarium)}</span>
-                </div>
-              </div>
-              {account && (
-                <>
-                  <div className="space-y-1">
-                    <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
-                      Bank
-                    </p>
-                    <div className="flex items-center gap-2 text-sm">
-                      <IconBuildingBank className="h-4 w-4 opacity-70" />
-                      <span>{account.bank}</span>
-                    </div>
+                  <div className="flex">
+                    <Item>
+                      <ItemMedia>
+                        <IconId />
+                      </ItemMedia>
+                      <ItemContent>
+                        <ItemTitle>{account.accountName}</ItemTitle>
+                        <ItemDescription>Account Name</ItemDescription>
+                      </ItemContent>
+                    </Item>
+                    <Item>
+                      <ItemMedia>
+                        <IconNumber123 />
+                      </ItemMedia>
+                      <ItemContent>
+                        <ItemTitle>{maskAccountNo(account.accountNo)}</ItemTitle>
+                        <ItemDescription>Account No.</ItemDescription>
+                      </ItemContent>
+                    </Item>
                   </div>
-                  <div className="space-y-1">
-                    <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
-                      Bank branch
-                    </p>
-                    <div className="flex items-center gap-2 text-sm">
-                      <IconBuildingCottage className="h-4 w-4 opacity-70" />
-                      <span>{account.bankBranch}</span>
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
-                      Account Name
-                    </p>
-                    <div className="flex items-center gap-2 text-sm">
-                      <IconId className="h-4 w-4 opacity-70" />
-                      <span>{account.accountName}</span>
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
-                      Account No.
-                    </p>
-                    <div className="flex items-center gap-2 text-sm">
-                      <IconNumber123 className="h-4 w-4 opacity-70" />
-                      <span>{maskAccountNo(account.accountNo)}</span>
-                    </div>
-                  </div>
-                </>
-              )}
-              {tin && (
-                <div className="space-y-1">
-                  <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
-                    TIN
-                  </p>
-                  <div className="flex items-center gap-2 text-sm">
-                    <IconNumber123 className="h-4 w-4 opacity-70" />
-                    <span>{tin.tin}</span>
-                  </div>
+                </CardContent>
+              </Card>
+            )}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base font-semibold">Payment</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex">
+                  <Item>
+                    <ItemMedia>
+                      <IconClock />
+                    </ItemMedia>
+                    <ItemContent>
+                      <ItemTitle>{payment.hoursRendered}</ItemTitle>
+                      <ItemDescription>Hours Rendered</ItemDescription>
+                    </ItemContent>
+                  </Item>
+
+                  <Item>
+                    <ItemMedia>
+                      <IconMoneybagPlus />
+                    </ItemMedia>
+                    <ItemContent>
+                      <ItemTitle>{formatMoney(payment.actualHonorarium)}</ItemTitle>
+                      <ItemDescription>Computed Honorarium</ItemDescription>
+                    </ItemContent>
+                  </Item>
                 </div>
-              )}
-            </div>
-          </div>
+                <div className="flex">
+                  <Item>
+                    <ItemMedia>
+                      <IconMoneybagMove />
+                    </ItemMedia>
+                    <ItemContent>
+                      <ItemTitle>{formatMoney(payment.honorarium)}</ItemTitle>
+                      <ItemDescription>Honorarium</ItemDescription>
+                    </ItemContent>
+                  </Item>
+                  <Item>
+                    <ItemMedia>
+                      <IconPercentage />
+                    </ItemMedia>
+                    <ItemContent>
+                      <ItemTitle>{payment.taxRate}</ItemTitle>
+                      <ItemDescription>Tax Rate</ItemDescription>
+                    </ItemContent>
+                  </Item>
+                </div>
+                <Item>
+                  <ItemMedia>
+                    <IconMoneybagMoveBack />
+                  </ItemMedia>
+                  <ItemContent>
+                    <ItemTitle>{formatMoney(payment.netHonorarium)}</ItemTitle>
+                    <ItemDescription>Net Honorarium</ItemDescription>
+                  </ItemContent>
+                </Item>
+              </CardContent>
+            </Card>
+          </>
         )}
       </DialogContent>
     </Dialog>
