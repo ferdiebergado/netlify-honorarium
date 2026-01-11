@@ -17,8 +17,6 @@ const months = [
 ];
 
 export function toDateRange(startDate: string, endDate: string): string {
-  console.debug('startDate:', startDate, 'endDate:', endDate);
-
   const start = new Date(startDate);
   const end = new Date(endDate);
 
