@@ -1,3 +1,4 @@
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import {
   MutationCache,
   QueryClient,
@@ -38,9 +39,11 @@ createRoot(document.getElementById('root')!).render(
               )}
             >
               <AppToaster />
-              <AuthProvider>
-                <App />
-              </AuthProvider>
+              <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+                <AuthProvider>
+                  <App />
+                </AuthProvider>
+              </GoogleOAuthProvider>
             </ErrorBoundary>
           )}
         </QueryErrorResetBoundary>

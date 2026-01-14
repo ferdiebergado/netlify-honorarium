@@ -8,6 +8,7 @@ interface ViteTypeOptions {
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 interface ImportMetaEnv {
   readonly VITE_APP_TITLE: string;
+  readonly VITE_GOOGLE_CLIENT_ID: string;
   // more env variables...
 }
 
