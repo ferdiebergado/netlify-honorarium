@@ -1,22 +1,16 @@
-import { useAuth } from '@/features/auth/auth';
 import { Navigate, Outlet, useLocation } from 'react-router';
+import { useAuth } from '../features/auth/auth';
 import AppSidebar from './AppSidebar';
+import Splash from './Splash';
 import { SidebarProvider, SidebarTrigger } from './ui/sidebar';
 
 export default function Layout() {
-  const app = import.meta.env.VITE_APP_TITLE;
-  const { isAuthenticated, isLoading, isError } = useAuth();
+  const { isLoading, user } = useAuth();
   const { pathname } = useLocation();
 
-  if (isLoading)
-    return (
-      <main className="bg-background flex h-screen items-center justify-center">
-        <h1 className="text-primary text-5xl font-extrabold">{app}</h1>
-      </main>
-    );
+  if (isLoading) return <Splash />;
 
-  if (isError || !isAuthenticated)
-    return <Navigate to="/login" replace state={{ intendedPath: pathname }} />;
+  if (!user) return <Navigate to="/login" replace state={{ from: pathname }} />;
 
   return (
     <SidebarProvider>

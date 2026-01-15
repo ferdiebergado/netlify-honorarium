@@ -1,18 +1,19 @@
-import { useMemo } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import { AuthContext, useMe } from './auth';
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const { isPending, isError, error, data: me } = useMe();
+type AuthProviderProps = {
+  children: ReactNode;
+};
+
+export function AuthProvider({ children }: AuthProviderProps) {
+  const { isPending, isFetching, data: me } = useMe();
 
   const value = useMemo(
     () => ({
       user: me ?? null,
-      isAuthenticated: !!me,
-      isLoading: isPending,
-      isError,
-      error,
+      isLoading: isPending || isFetching,
     }),
-    [me, isPending, isError, error]
+    [me, isPending, isFetching]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

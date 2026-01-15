@@ -1,17 +1,14 @@
 import type { APIResponse } from '@/lib/api';
 import type { User } from '@/shared/schema';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createContext, useContext } from 'react';
-import { useLocation, useNavigate } from 'react-router';
 
 const BASE_URL = '/api/auth';
+const QUERY_KEY = 'me';
 
 type AuthContextValue = {
   user: User | null;
-  isAuthenticated: boolean;
   isLoading: boolean;
-  isError: boolean;
-  error: Error | null;
 };
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
@@ -26,6 +23,8 @@ export function useAuth() {
 async function getMe() {
   const res = await fetch(`${BASE_URL}/me`);
 
+  if (res.status === 401) return null;
+
   const { message, data } = (await res.json()) as APIResponse<User>;
 
   if (!res.ok) throw new Error(message);
@@ -35,8 +34,9 @@ async function getMe() {
 
 export function useMe() {
   return useQuery({
-    queryKey: ['me'],
+    queryKey: [QUERY_KEY],
     queryFn: getMe,
+    staleTime: 5 * 60 * 1000,
     retry: false,
     throwOnError: false,
   });
@@ -55,12 +55,16 @@ async function logout() {
 }
 
 export function useLogout() {
-  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: logout,
-    onSuccess: () => {
-      navigate('/login', { replace: true });
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: [QUERY_KEY] });
+      queryClient.setQueryData([QUERY_KEY], null);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
     },
   });
 }
@@ -78,19 +82,8 @@ async function verifyIdToken(idToken: string) {
   return { message };
 }
 
-type LocationState = {
-  intendedPath?: string;
-};
-
 export function useIdToken() {
-  const location = useLocation();
-  const navigate = useNavigate();
-
   return useMutation({
     mutationFn: (idToken: string) => verifyIdToken(idToken),
-    onSuccess: () => {
-      const { intendedPath } = location.state as LocationState;
-      navigate(intendedPath ?? '/', { replace: true });
-    },
   });
 }
