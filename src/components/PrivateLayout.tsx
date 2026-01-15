@@ -4,7 +4,7 @@ import AppSidebar from './AppSidebar';
 import Splash from './Splash';
 import { SidebarProvider, SidebarTrigger } from './ui/sidebar';
 
-export default function Layout() {
+export default function PrivateLayout() {
   const { isLoading, user } = useAuth();
   const { pathname } = useLocation();
 

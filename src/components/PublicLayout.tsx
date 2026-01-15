@@ -6,7 +6,7 @@ type LocationState = {
   from?: string;
 };
 
-export default function AuthLayout() {
+export default function PublicLayout() {
   const { user, isLoading } = useAuth();
   const location = useLocation();
   const state = location.state as LocationState | null;
