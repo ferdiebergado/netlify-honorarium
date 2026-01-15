@@ -6,14 +6,14 @@ type AuthProviderProps = {
 };
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const { isPending, isFetching, data: me } = useMe();
+  const { isPending, data: me } = useMe();
 
   const value = useMemo(
     () => ({
       user: me ?? null,
-      isLoading: isPending || isFetching,
+      isLoading: isPending,
     }),
-    [me, isPending, isFetching]
+    [me, isPending]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
