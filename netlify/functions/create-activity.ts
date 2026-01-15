@@ -24,11 +24,11 @@ export default async (req: Request) => {
     const sql = `
 INSERT INTO
   activities
-    (title, venue_id, start_date, end_date, code, focal_id, created_by)
+    (title, venue_id, start_date, end_date, code, focal_id, created_by, updated_by)
 VALUES
-    (?, ?, ?, ?, ?, ?, ?)`;
+    (?, ?, ?, ?, ?, ?, ?, ?)`;
 
-    await turso.execute(sql, [title, venueId, startDate, endDate, code, focalId, userId]);
+    await turso.execute(sql, [title, venueId, startDate, endDate, code, focalId, userId, userId]);
 
     return Response.json({ message: 'Activity created.' });
   } catch (error) {

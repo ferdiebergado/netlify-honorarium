@@ -20,8 +20,9 @@ export default async (req: Request) => {
 
     const { name, positionId } = data;
 
-    const sql = 'INSERT INTO focals (name, position_id, created_by) VALUES (?, ?)';
-    await turso.execute(sql, [name, positionId, userId]);
+    const sql =
+      'INSERT INTO focals (name, position_id, created_by, updated_by) VALUES (?, ?, ?, ?)';
+    await turso.execute(sql, [name, positionId, userId, userId]);
 
     return Response.json({ message: 'Focal person created.' }, { status: 201 });
   } catch (error) {
