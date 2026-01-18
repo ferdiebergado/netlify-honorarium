@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { Payee } from '../src/shared/schema';
 import { rowsToPayees, type PayeeData } from './functions/list-payees';
-import { encrypt } from './security';
+import { serializeDetails } from './payee/account';
 
 describe('rowsToPayees', () => {
   it('returns payee data correctly', () => {
@@ -13,15 +13,11 @@ describe('rowsToPayees', () => {
         office: 'CNHS',
         salary: 13000,
         bank: 'LBP',
-        details: encrypt(
-          Buffer.from(
-            JSON.stringify({
-              accountName: 'agnis',
-              accountNo: '4444',
-              bankBranch: 'lantic',
-            })
-          )
-        ),
+        details: serializeDetails({
+          accountName: 'agnis',
+          accountNo: '4444',
+          bankBranch: 'lantic',
+        }),
         salaryId: 1,
         accountId: 1,
       },
@@ -32,15 +28,11 @@ describe('rowsToPayees', () => {
         office: 'CNHS',
         salary: 13000,
         bank: 'BDO',
-        details: encrypt(
-          Buffer.from(
-            JSON.stringify({
-              accountName: 'agnis',
-              accountNo: '5555',
-              bankBranch: 'milagrosa',
-            })
-          )
-        ),
+        details: serializeDetails({
+          accountName: 'agnis',
+          accountNo: '5555',
+          bankBranch: 'milagrosa',
+        }),
         tinId: 1,
         tin: '1313',
         salaryId: 1,
