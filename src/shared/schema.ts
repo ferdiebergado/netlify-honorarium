@@ -46,6 +46,7 @@ export type Account = {
   payeeId: number;
   payee: string;
   accountNo: string;
+  bankId: number;
   bank: string;
   bankBranch: string;
   accountName: string;
@@ -66,7 +67,7 @@ export type Payee = {
   position: string;
   office: string;
   salaries: Omit<Salary, 'payeeId'>[];
-  accounts: Omit<Account, 'payeeId' | 'payee'>[];
+  accounts: Omit<Account, 'payeeId' | 'payee' | 'bankId'>[];
   tins?: Omit<Tin, 'payeeId'>[];
 };
 
@@ -225,6 +226,7 @@ export type PaymentData = Pick<
 
 export type User = {
   id: number;
+  googleId: string;
   name: string;
   email: string;
   picture: string;
