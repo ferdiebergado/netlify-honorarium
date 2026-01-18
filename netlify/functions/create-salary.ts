@@ -1,30 +1,26 @@
-import type { Config } from '@netlify/functions';
+import type { Config, Context } from '@netlify/functions';
 import { salarySchema } from '../../src/shared/schema';
 import { authCheck } from '../auth-check';
-import { turso } from '../db';
 import { errorResponse, ValidationError } from '../errors';
 import { parseId } from '../lib';
+import { newSalary } from '../payee/service';
 
 export const config: Config = {
   method: 'POST',
-  path: '/api/salaries',
+  path: '/api/payees/:id/salaries',
 };
 
-export default async (req: Request) => {
+export default async (req: Request, ctx: Context) => {
   try {
+    const payeeId = parseId(ctx.params.id);
     const userId = await authCheck(req);
-    const { payeeId, formData } = (await req.json()) as {
-      payeeId: number;
-      formData: { salary: number };
-    };
-    const id = parseId(payeeId.toString());
+    const body = await req.json();
 
-    const { error, data } = salarySchema.safeParse(formData);
+    const { error, data } = salarySchema.safeParse(body);
 
     if (error) throw new ValidationError();
 
-    const sql = 'INSERT INTO salaries (payee_id, salary, created_by) VALUES (?, ?, ?)';
-    await turso.execute(sql, [id, data.salary, userId]);
+    await newSalary({ ...data, payeeId }, userId);
 
     return Response.json({ message: 'Salary created.' }, { status: 201 });
   } catch (error) {

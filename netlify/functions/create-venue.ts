@@ -1,7 +1,7 @@
 import type { Config } from '@netlify/functions';
 import { venueSchema } from '../../src/shared/schema';
+import { newVenue } from '../activity/service';
 import { authCheck } from '../auth-check';
-import { turso } from '../db';
 import { errorResponse, ValidationError } from '../errors';
 
 export const config: Config = {
@@ -18,8 +18,7 @@ export default async (req: Request) => {
 
     if (error) throw new ValidationError();
 
-    const sql = 'INSERT INTO venues (name, created_by) VALUES (?, ?)';
-    await turso.execute(sql, [data.name, userId]);
+    await newVenue(data, userId);
 
     return Response.json({ message: 'Venue created.' }, { status: 201 });
   } catch (error) {

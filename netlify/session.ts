@@ -1,6 +1,7 @@
 import { randomBytes } from 'crypto';
 import { RANDOM_BYTES_SIZE, SESSION_DURATION_HOURS } from './constants';
-import { turso } from './db';
+import { db, type Database } from './db';
+import { UnauthorizedError } from './errors';
 import { getClientIP } from './lib';
 
 export async function createSession(
@@ -23,7 +24,25 @@ INSERT INTO
 VALUES
   (?, ?, ?, ?, ?)`;
 
-  await turso.execute(sql, [sessionId, userId, ip, userAgent, expiresAt.toISOString()]);
+  await db.execute(sql, [sessionId, userId, ip, userAgent, expiresAt.toISOString()]);
 
   return { sessionId, maxAge };
+}
+
+export async function getSession(db: Database, sessionId: string): Promise<number> {
+  const sql = `
+SELECT
+  user_id
+FROM
+  sessions
+WHERE
+  deleted_at IS NULL
+AND
+  session_id = ?`;
+
+  const { rows } = await db.execute(sql, [sessionId]);
+
+  if (rows.length === 0) throw new UnauthorizedError('session not found');
+
+  return rows[0].user_id as number;
 }

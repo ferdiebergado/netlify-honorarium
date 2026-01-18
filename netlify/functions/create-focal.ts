@@ -1,8 +1,8 @@
 import type { Config } from '@netlify/functions';
 import { focalSchema } from '../../src/shared/schema';
 import { authCheck } from '../auth-check';
-import { turso } from '../db';
 import { errorResponse, ValidationError } from '../errors';
+import { newFocal } from '../focal/service';
 
 export const config: Config = {
   method: 'POST',
@@ -18,11 +18,7 @@ export default async (req: Request) => {
 
     if (error) throw new ValidationError();
 
-    const { name, positionId } = data;
-
-    const sql =
-      'INSERT INTO focals (name, position_id, created_by, updated_by) VALUES (?, ?, ?, ?)';
-    await turso.execute(sql, [name, positionId, userId, userId]);
+    await newFocal(data, userId);
 
     return Response.json({ message: 'Focal person created.' }, { status: 201 });
   } catch (error) {

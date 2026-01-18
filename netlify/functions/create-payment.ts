@@ -1,9 +1,8 @@
 import type { Config } from '@netlify/functions';
 import { paymentSchema } from '../../src/shared/schema';
 import { authCheck } from '../auth-check';
-import { turso } from '../db';
-import { errorResponse, NotFoundError, ValidationError } from '../errors';
-import { computeHonorarium } from '../payments';
+import { errorResponse, ValidationError } from '../errors';
+import { newPayment } from '../payment/service';
 
 export const config: Config = {
   method: 'POST',
@@ -15,71 +14,11 @@ export default async (req: Request) => {
     const userId = await authCheck(req);
 
     const body = await req.json();
-    const { error, data: payment } = paymentSchema.safeParse(body);
+    const { error, data } = paymentSchema.safeParse(body);
 
     if (error) throw new ValidationError();
 
-    const {
-      honorarium,
-      salaryId,
-      roleId,
-      payeeId,
-      activityId,
-      taxRate,
-      accountId,
-      tinId = null,
-    } = payment;
-
-    const salarySql = 'SELECT salary FROM salaries WHERE deleted_at IS NULL AND id = ?';
-
-    const { rows } = await turso.execute(salarySql, [salaryId]);
-
-    if (rows.length === 0) throw new NotFoundError();
-
-    const [{ salary }] = rows as unknown as { salary: number }[];
-
-    const { actualHonorarium, hoursRendered, netHonorarium } = computeHonorarium(
-      honorarium,
-      salary,
-      taxRate
-    );
-
-    const sql = `
-INSERT INTO
-  payments
-    (
-      honorarium,
-      salary_id,
-      role_id,
-      payee_id,
-      activity_id,
-      tax_rate,
-      account_id,
-      tin_id,
-      net_honorarium,
-      actual_honorarium,
-      hours_rendered,
-      created_by
-    )
-VALUES
-    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-
-    const args = [
-      honorarium,
-      salaryId,
-      roleId,
-      payeeId,
-      activityId,
-      taxRate,
-      accountId,
-      tinId,
-      netHonorarium,
-      actualHonorarium,
-      hoursRendered,
-      userId,
-    ];
-
-    await turso.execute(sql, args);
+    await newPayment(data, userId);
 
     return Response.json({ message: 'Payment created.' }, { status: 201 });
   } catch (error) {

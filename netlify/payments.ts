@@ -1,7 +1,7 @@
 import type { Payment } from '../src/shared/schema';
-import { turso } from './db';
-import { deserializeDetails } from './functions/list-accounts';
+import { db } from './db';
 import { keysToCamel, roundMoney } from './lib';
+import { deserializeDetails } from './payee/account';
 export const SG29 = 180492;
 
 export const paymentsSql = `
@@ -60,11 +60,11 @@ export async function getPayments(activityId: number | null): Promise<Payment[]>
 
   if (activityId) sql += ' WHERE pay.activity_id = ?';
 
-  const { rows } = await turso.execute(sql, [activityId]);
+  const { rows } = await db.execute(sql, [activityId]);
 
   return rows.map(row => ({
     ...(keysToCamel(row) as Payment),
-    accountDetails: deserializeDetails(row['account_details'] as unknown as Buffer),
+    accountDetails: deserializeDetails(row.account_details as unknown as Buffer),
   }));
 }
 

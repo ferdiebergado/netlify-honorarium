@@ -1,8 +1,8 @@
 import type { Config } from '@netlify/functions';
 import { positionSchema } from '../../src/shared/schema';
 import { authCheck } from '../auth-check';
-import { turso } from '../db';
 import { errorResponse, ValidationError } from '../errors';
+import { newPosition } from '../focal/position';
 
 export const config: Config = {
   method: 'POST',
@@ -18,8 +18,7 @@ export default async (req: Request) => {
 
     if (error) throw new ValidationError();
 
-    const sql = 'INSERT INTO positions (name, created_by) VALUES (?, ?)';
-    await turso.execute(sql, [data.name, userId]);
+    await newPosition(data.name, userId);
 
     return Response.json({ message: 'Position created.' }, { status: 201 });
   } catch (error) {

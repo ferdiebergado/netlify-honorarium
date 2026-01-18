@@ -1,30 +1,26 @@
-import type { Config } from '@netlify/functions';
-import { tinSchema, type TinFormValues } from '../../src/shared/schema';
+import type { Config, Context } from '@netlify/functions';
+import { tinSchema } from '../../src/shared/schema';
 import { authCheck } from '../auth-check';
-import { turso } from '../db';
 import { errorResponse, ValidationError } from '../errors';
 import { parseId } from '../lib';
+import { newTin } from '../payee/service';
 
 export const config: Config = {
   method: 'POST',
-  path: '/api/tins',
+  path: '/api/payees/:id/tins',
 };
 
-export default async (req: Request) => {
+export default async (req: Request, ctx: Context) => {
   try {
+    const payeeId = parseId(ctx.params.id);
     const userId = await authCheck(req);
 
-    const { payeeId, formData } = (await req.json()) as {
-      payeeId: number;
-      formData: TinFormValues;
-    };
-    const id = parseId(payeeId.toString());
-    const { error, data } = tinSchema.safeParse(formData);
+    const body = await req.json();
+    const { error, data } = tinSchema.safeParse(body);
 
     if (error) throw new ValidationError();
 
-    const sql = 'INSERT INTO tins (payee_id, tin, created_by) VALUES (?, ?, ?)';
-    await turso.execute(sql, [id, data.tin, userId]);
+    await newTin({ ...data, payeeId }, userId);
 
     return Response.json({ message: 'TIN created.' }, { status: 201 });
   } catch (error) {

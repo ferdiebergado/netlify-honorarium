@@ -1,7 +1,7 @@
 import type { Config } from '@netlify/functions';
 import { activitySchema } from '../../src/shared/schema';
+import { newActivity } from '../activity/service';
 import { authCheck } from '../auth-check';
-import { turso } from '../db';
 import { errorResponse, ValidationError } from '../errors';
 
 export const config: Config = {
@@ -16,21 +16,13 @@ export default async (req: Request) => {
     const userId = await authCheck(req);
 
     const body = await req.json();
-    const { error, data } = activitySchema.safeParse(body);
+    const { error, data: activity } = activitySchema.safeParse(body);
 
     if (error) throw new ValidationError();
 
-    const { title, venueId, startDate, endDate, code, focalId } = data;
-    const sql = `
-INSERT INTO
-  activities
-    (title, venue_id, start_date, end_date, code, focal_id, created_by, updated_by)
-VALUES
-    (?, ?, ?, ?, ?, ?, ?, ?)`;
+    await newActivity(activity, userId);
 
-    await turso.execute(sql, [title, venueId, startDate, endDate, code, focalId, userId, userId]);
-
-    return Response.json({ message: 'Activity created.' });
+    return Response.json({ message: 'Activity created.' }, { status: 201 });
   } catch (error) {
     return errorResponse(error);
   }
