@@ -18,9 +18,13 @@
 - user roles
 - replace number input with text input
 - move data to schema (ex. CreateTinData)
+- suspense
+- remove mutationcache
+- replace all mutateasync
 
 # Done
 
+- include updated_by on inserts
 - keystocamel (frm frontend)
 - full text Search
 - login spinner
