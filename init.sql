@@ -1,7 +1,3 @@
-PRAGMA foreign_keys = OFF;
-
-BEGIN TRANSACTION;
-
 CREATE TABLE IF NOT EXISTS activities (
   id INTEGER PRIMARY KEY,
   title TEXT NOT NULL,
@@ -218,7 +214,3 @@ CREATE TABLE IF NOT EXISTS sessions (
   is_revoked INTEGER DEFAULT 0 CHECK (is_revoked IN (0, 1)),
   FOREIGN KEY (user_id) REFERENCES users (id)
 );
-
-COMMIT;
-
-PRAGMA foreign_keys = ON;
