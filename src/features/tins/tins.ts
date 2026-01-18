@@ -49,14 +49,12 @@ export function useCreateTinForm(defaultValues: TinFormValues) {
 export type TinHookForm = ReturnType<typeof useCreateTinForm>;
 
 async function createTin(payeeId: number, formData: TinFormValues) {
-  const payload = { payeeId, formData };
-
-  const res = await fetch(BASE_URL, {
+  const res = await fetch(`/api/payees/${payeeId.toString()}/tins`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(formData),
   });
 
   const { message } = (await res.json()) as APIResponse;

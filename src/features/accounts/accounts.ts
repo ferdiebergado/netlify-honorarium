@@ -54,13 +54,12 @@ export function useAccountForm(defaultValues: CreateAccountFormValues) {
 export type AccountHookForm = ReturnType<typeof useAccountForm>;
 
 async function createAccount(payeeId: number, formData: CreateAccountFormValues) {
-  const payload = { payeeId, formData };
-  const res = await fetch(BASE_URL, {
+  const res = await fetch(`/api/payees/${payeeId.toString()}/accounts}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(formData),
   });
 
   const { message } = (await res.json()) as { message: string };

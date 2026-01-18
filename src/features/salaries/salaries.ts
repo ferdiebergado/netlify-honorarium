@@ -49,13 +49,12 @@ export function useCreateSalaryForm(defaultValues: SalaryFormValues) {
 export type SalaryHookForm = ReturnType<typeof useCreateSalaryForm>;
 
 async function createSalary(payeeId: number, formData: SalaryFormValues) {
-  const payload = { payeeId, formData };
-  const res = await fetch(BASE_URL, {
+  const res = await fetch(`/api/payees/${payeeId.toString()}/salaries`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(formData),
   });
 
   const { message } = (await res.json()) as APIResponse;
