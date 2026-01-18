@@ -1,7 +1,7 @@
 import type { Config, Context } from '@netlify/functions';
 import { activitySchema } from '../../src/shared/schema';
 import { authCheck } from '../auth-check';
-import { turso } from '../db';
+import { db } from '../db';
 import { errorResponse, NotFoundError, ValidationError } from '../errors';
 
 export const config: Config = {
@@ -40,7 +40,7 @@ WHERE
 
     const args = [title, venueId, startDate, endDate, code, focalId, userId, id];
 
-    const { rowsAffected } = await turso.execute(sql, args);
+    const { rowsAffected } = await db.execute(sql, args);
 
     if (rowsAffected === 0) throw new NotFoundError();
 

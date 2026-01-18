@@ -1,7 +1,7 @@
 import type { Config, Context } from '@netlify/functions';
 import { paymentSchema } from '../../src/shared/schema';
 import { authCheck } from '../auth-check';
-import { turso } from '../db';
+import { db } from '../db';
 import { errorResponse, NotFoundError, ValidationError } from '../errors';
 import { parseId } from '../lib';
 import { computeHonorarium } from '../payments';
@@ -35,7 +35,7 @@ export default async (req: Request, ctx: Context) => {
 
     const salarySql = 'SELECT salary FROM salaries WHERE deleted_at IS NULL AND id = ?';
 
-    const { rows } = await turso.execute(salarySql, [salaryId]);
+    const { rows } = await db.execute(salarySql, [salaryId]);
 
     if (rows.length === 0) throw new NotFoundError();
 
@@ -83,7 +83,7 @@ WHERE
       paymentId,
     ];
 
-    await turso.execute(sql, args);
+    await db.execute(sql, args);
 
     return Response.json({ message: 'Payment updated.' });
   } catch (error) {

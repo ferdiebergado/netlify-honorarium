@@ -1,6 +1,6 @@
 import type { Config, Context } from '@netlify/functions';
 import { authCheck } from '../auth-check';
-import { turso } from '../db';
+import { db } from '../db';
 import { errorResponse } from '../errors';
 import { parseId } from '../lib';
 import { payeeSql, rowsToPayees, type PayeeData } from './list-payees';
@@ -20,7 +20,7 @@ export default async (req: Request, ctx: Context) => {
 
     const sql = `${payeeSql} WHERE p.id = ?`;
 
-    const { rows } = await turso.execute(sql, [payeeId]);
+    const { rows } = await db.execute(sql, [payeeId]);
 
     const data = rowsToPayees(rows as unknown as PayeeData[])[0];
 

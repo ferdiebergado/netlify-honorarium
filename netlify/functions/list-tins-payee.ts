@@ -1,6 +1,6 @@
 import type { Config, Context } from '@netlify/functions';
 import { authCheck } from '../auth-check';
-import { turso } from '../db';
+import { db } from '../db';
 import { errorResponse } from '../errors';
 import { keysToCamel, parseId } from '../lib';
 
@@ -28,7 +28,7 @@ AND
 ORDER BY
   tin`;
 
-    const { rows } = await turso.execute(sql, [payeeId]);
+    const { rows } = await db.execute(sql, [payeeId]);
 
     const data = rows.map(tin => keysToCamel(tin));
 

@@ -2,7 +2,7 @@ import type { Config } from '@netlify/functions';
 import type { Activity } from '../../src/shared/schema';
 import { getFundCluster } from '../activity';
 import { authCheck } from '../auth-check';
-import { turso } from '../db';
+import { db } from '../db';
 import { errorResponse } from '../errors';
 import { keysToCamel } from '../lib';
 
@@ -48,7 +48,7 @@ export default async (req: Request) => {
 
     const sql = activitiesSql + ' WHERE a.deleted_at IS NULL ORDER BY a.created_at DESC';
 
-    const { rows } = await turso.execute(sql);
+    const { rows } = await db.execute(sql);
     const data = rows.map(row => ({
       ...(keysToCamel(row) as Activity),
       fundCluster: getFundCluster(row['code'] as string),

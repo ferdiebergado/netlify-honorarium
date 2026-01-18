@@ -1,6 +1,6 @@
 import type { Config, Context } from '@netlify/functions';
 import { authCheck } from '../auth-check';
-import { turso } from '../db';
+import { db } from '../db';
 import { errorResponse, NotFoundError } from '../errors';
 import { parseId } from '../lib';
 
@@ -16,7 +16,7 @@ export default async (req: Request, ctx: Context) => {
     const userId = await authCheck(req);
     const activityId = parseId(ctx.params.id);
     const sql = 'UPDATE activities SET deleted_at = CURRENT_TIMESTAMP, deleted_by=? WHERE id = ?';
-    const { rowsAffected } = await turso.execute(sql, [userId, activityId]);
+    const { rowsAffected } = await db.execute(sql, [userId, activityId]);
 
     if (rowsAffected === 0) throw new NotFoundError();
 

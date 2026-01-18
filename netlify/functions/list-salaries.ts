@@ -1,6 +1,6 @@
 import type { Config } from '@netlify/functions';
 import { authCheck } from '../auth-check';
-import { turso } from '../db';
+import { db } from '../db';
 import { errorResponse } from '../errors';
 import { keysToCamel } from '../lib';
 
@@ -23,7 +23,7 @@ FROM
 WHERE 
   deleted_at IS NULL`;
 
-    const { rows } = await turso.execute(sql);
+    const { rows } = await db.execute(sql);
 
     const data = rows.map(row => keysToCamel(row));
 

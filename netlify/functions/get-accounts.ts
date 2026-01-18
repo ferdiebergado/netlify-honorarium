@@ -1,6 +1,6 @@
 import type { Config, Context } from '@netlify/functions';
 import { authCheck } from '../auth-check';
-import { turso } from '../db';
+import { db } from '../db';
 import { errorResponse, NotFoundError } from '../errors';
 import { parseId } from '../lib';
 import { accountsSql, rowToAccount, type RawAccount } from './list-accounts';
@@ -17,7 +17,7 @@ export default async (req: Request, ctx: Context) => {
     const accountId = parseId(ctx.params.id);
 
     const sql = `${accountsSql} WHERE a.id = ?`;
-    const { rows } = await turso.execute(sql, [accountId]);
+    const { rows } = await db.execute(sql, [accountId]);
 
     if (rows.length === 0) throw new NotFoundError();
 

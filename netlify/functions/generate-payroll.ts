@@ -1,11 +1,11 @@
 import type { Config, Context } from '@netlify/functions';
 import Excel from 'exceljs';
 import { getFundCluster } from '../activity';
-import { turso } from '../db';
+import { db } from '../db';
 import { errorResponse, NotFoundError } from '../errors';
 import { toDateRange } from '../lib';
+import { deserializeDetails } from '../payee/account';
 import { payroll } from '../payroll';
-import { deserializeDetails } from './list-accounts';
 
 type PayrollRow = {
   activity: string;
@@ -73,7 +73,7 @@ WHERE p.activity_id = ?
 GROUP BY pay.id
 `;
 
-    const { rows } = await turso.execute(sql, [activityId]);
+    const { rows } = await db.execute(sql, [activityId]);
     const payments: PayrollPayment[] = (rows as unknown as PayrollRow[]).map(payment => ({
       ...payment,
       startDate: payment.start_date,

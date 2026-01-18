@@ -1,16 +1,10 @@
 import type { Config } from '@netlify/functions';
 import type { Account } from '../../src/shared/schema';
 import { authCheck } from '../auth-check';
-import { turso } from '../db';
+import { db } from '../db';
 import { errorResponse } from '../errors';
-import { keysToCamel, toBuffer } from '../lib';
-import { decrypt } from '../security';
-
-export type AccountDetails = {
-  bankBranch: string;
-  accountNo: string;
-  accountName: string;
-};
+import { keysToCamel } from '../lib';
+import { deserializeDetails, type AccountDetails } from '../payee/account';
 
 export type RawAccount = Omit<Account, keyof AccountDetails> & { details: Buffer };
 
@@ -42,7 +36,7 @@ export default async (req: Request) => {
   try {
     await authCheck(req);
     const sql = `${accountsSql} WHERE a.deleted_at IS NULL ORDER BY payee`;
-    const { rows } = await turso.execute(sql);
+    const { rows } = await db.execute(sql);
 
     const data = (rows as unknown as RawAccount[]).map(rowToAccount);
 
@@ -60,11 +54,4 @@ export function rowToAccount(row: RawAccount): Account {
     ...account,
     ...details,
   };
-}
-
-export function deserializeDetails(serialized: Buffer): AccountDetails {
-  const decrypted = decrypt(toBuffer(serialized));
-  const payload = decrypted.toString('utf-8');
-
-  return JSON.parse(payload) as AccountDetails;
 }

@@ -1,6 +1,6 @@
 import type { Config, Context } from '@netlify/functions';
 import { authCheck } from '../auth-check';
-import { turso } from '../db';
+import { db } from '../db';
 import { errorResponse } from '../errors';
 import { parseId } from '../lib';
 import { accountsSql, rowToAccount, type RawAccount } from './list-accounts';
@@ -19,7 +19,7 @@ export default async (req: Request, ctx: Context) => {
     const payeeId = parseId(ctx.params.id);
 
     const sql = `${accountsSql} WHERE p.id = ?`;
-    const { rows } = await turso.execute(sql, [payeeId]);
+    const { rows } = await db.execute(sql, [payeeId]);
 
     const data = (rows as unknown as RawAccount[]).map(rowToAccount);
 

@@ -2,7 +2,7 @@ import type { Config, Context } from '@netlify/functions';
 import type { Activity, Payee, Payment, PaymentData } from '../../src/shared/schema';
 import { getFundCluster } from '../activity';
 import { authCheck } from '../auth-check';
-import { turso } from '../db';
+import { db } from '../db';
 import { errorResponse } from '../errors';
 import { keysToCamel, parseId, toDateRange } from '../lib';
 
@@ -59,7 +59,7 @@ export default async (req: Request, ctx: Context) => {
 
     const activityId = parseId(ctx.params.id);
 
-    const { rows } = await turso.execute(fullActivitySql, [activityId]);
+    const { rows } = await db.execute(fullActivitySql, [activityId]);
     const data = rowsToActivity(rows);
 
     return Response.json({ data });

@@ -1,6 +1,6 @@
 import type { Config } from '@netlify/functions';
 import { authCheck } from '../auth-check';
-import { turso } from '../db';
+import { db } from '../db';
 import { errorResponse, NotFoundError } from '../errors';
 
 export const config: Config = {
@@ -23,7 +23,7 @@ FROM
 WHERE
   id = ?`;
 
-    const { rows } = await turso.execute(sql, [userId]);
+    const { rows } = await db.execute(sql, [userId]);
 
     if (rows.length === 0) throw new NotFoundError();
 

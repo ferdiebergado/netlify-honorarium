@@ -1,10 +1,10 @@
 import type { Config } from '@netlify/functions';
-import type { Account, Payee } from '../../src/shared/schema';
+import type { Payee } from '../../src/shared/schema';
 import { authCheck } from '../auth-check';
-import { turso } from '../db';
+import { db } from '../db';
 import { errorResponse } from '../errors';
 import { keysToCamel } from '../lib';
-import { deserializeDetails } from './list-accounts';
+import { deserializeDetails } from '../payee/account';
 
 export type PayeeData = Omit<Payee, 'salaries' | 'accounts' | 'tins'> & {
   salaryId: number;
@@ -58,7 +58,7 @@ export default async (req: Request) => {
     await authCheck(req);
 
     const sql = `${payeeSql} WHERE p.deleted_at IS NULL ORDER BY p.name`;
-    const { rows } = await turso.execute(sql);
+    const { rows } = await db.execute(sql);
 
     const data = rowsToPayees(rows as unknown as PayeeData[]);
 
@@ -76,7 +76,7 @@ export function rowsToPayees(rows: PayeeData[]): Payee[] {
       keysToCamel(row) as PayeeData;
 
     const payee = payeeMap.get(id);
-    const account: Omit<Account, 'payee' | 'payeeId'> = {
+    const account: Payee['accounts'][number] = {
       id: accountId,
       bank,
       ...deserializeDetails(row.details),

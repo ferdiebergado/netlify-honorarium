@@ -1,7 +1,7 @@
 import type { Config } from '@netlify/functions';
 import { parseCookie, stringifySetCookie, type SetCookie } from 'cookie';
 import { SESSION_COOKIE_NAME } from '../constants';
-import { turso } from '../db';
+import { db } from '../db';
 import { errorResponse, UnauthorizedError } from '../errors';
 
 export const config: Config = {
@@ -21,7 +21,7 @@ export default async (req: Request) => {
     if (!sessionId) throw new UnauthorizedError('no session cookie');
 
     const sql = `UPDATE sessions SET deleted_at=datetime('now') WHERE session_id = ?`;
-    const { rowsAffected } = await turso.execute(sql, [sessionId]);
+    const { rowsAffected } = await db.execute(sql, [sessionId]);
 
     if (rowsAffected === 0) throw new UnauthorizedError('session not found');
 

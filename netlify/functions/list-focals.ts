@@ -1,6 +1,6 @@
 import type { Config } from '@netlify/functions';
 import { authCheck } from '../auth-check';
-import { turso } from '../db';
+import { db } from '../db';
 import { errorResponse } from '../errors';
 
 export const config: Config = {
@@ -15,7 +15,7 @@ export default async (req: Request) => {
     await authCheck(req);
 
     const query = 'SELECT id, name, position_id FROM focals WHERE deleted_at IS NULL ORDER BY name';
-    const { rows: data } = await turso.execute(query);
+    const { rows: data } = await db.execute(query);
 
     return Response.json({ data });
   } catch (error) {

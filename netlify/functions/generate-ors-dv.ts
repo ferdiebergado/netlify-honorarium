@@ -1,7 +1,7 @@
 import type { Config, Context } from '@netlify/functions';
 import Excel from 'exceljs';
 import { parseActivityCode } from '../activity';
-import { turso } from '../db';
+import { db } from '../db';
 import { errorResponse, NotFoundError } from '../errors';
 import { toDateRange } from '../lib';
 import { ors } from '../ors';
@@ -53,7 +53,7 @@ JOIN venues v ON v.id = a.venue_id
 WHERE p.activity_id = ?
 `;
 
-    const { rows } = await turso.execute(sql, [activityId]);
+    const { rows } = await db.execute(sql, [activityId]);
     const payments: ORSPayment[] = (rows as unknown as ORSPaymentRow[]).map(payment => ({
       ...payment,
       startDate: payment.start_date,
