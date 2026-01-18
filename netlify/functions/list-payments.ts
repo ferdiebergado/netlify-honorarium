@@ -2,7 +2,7 @@ import type { Config, Context } from '@netlify/functions';
 import { authCheck } from '../auth-check';
 import { errorResponse } from '../errors';
 import { parseId } from '../lib';
-import { getPayments } from '../payments';
+import { getPayments } from '../payment/payments';
 
 export const config: Config = {
   method: 'GET',

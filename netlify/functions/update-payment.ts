@@ -4,7 +4,7 @@ import { authCheck } from '../auth-check';
 import { db } from '../db';
 import { errorResponse, NotFoundError, ValidationError } from '../errors';
 import { parseId } from '../lib';
-import { computeHonorarium } from '../payments';
+import { computeHonorarium } from '../payment/payments';
 
 export const config: Config = {
   method: 'POST',

@@ -7,9 +7,9 @@ import type {
 import { createActivity } from '../activity/repo';
 import type { Database } from '../db';
 import { createPayee } from '../payee/repo';
-import { computeHonorarium } from '../payments';
 import { createRole } from '../role/repo';
 import { assertTimestamps, assertUser, seedDb, setupTestDb, type BaseRow } from '../test-utils';
+import { computeHonorarium } from './payments';
 import { createPayment } from './repo';
 
 describe('createPayment', () => {

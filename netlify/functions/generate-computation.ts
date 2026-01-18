@@ -1,11 +1,10 @@
 import { mergeDocx } from '@benedicte/docx-merge';
 import type { Config, Context } from '@netlify/functions';
 import type { Payment } from '../../src/shared/schema';
-import { comp } from '../comp';
 import { errorResponse, NotFoundError } from '../errors';
-import { docxResponse, formatToPhp, toDateRange } from '../lib';
-import { getMaxSalary, getPayments } from '../payments';
-import { patchDoc } from '../word';
+import { docxResponse, formatToPhp, patchDoc, toDateRange } from '../lib';
+import { comp } from '../payment/comp';
+import { getMaxSalary, getPayments } from '../payment/payments';
 
 type ComputationPatches = {
   payee: string;

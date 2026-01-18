@@ -1,11 +1,17 @@
 import { mergeDocx } from '@benedicte/docx-merge';
 import type { Config, Context } from '@netlify/functions';
 import type { Payment } from '../../src/shared/schema';
-import { cert } from '../cert';
 import { errorResponse, NotFoundError } from '../errors';
-import { amountToWords, docxResponse, formatDate, formatToPhp, toDateRange } from '../lib';
-import { getPayments } from '../payments';
-import { patchDoc } from '../word';
+import {
+  amountToWords,
+  docxResponse,
+  formatDate,
+  formatToPhp,
+  patchDoc,
+  toDateRange,
+} from '../lib';
+import { cert } from '../payment/cert';
+import { getPayments } from '../payment/payments';
 
 type CertificationPatches = {
   payee: string;

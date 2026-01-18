@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import type { Payee } from '../src/shared/schema';
-import { rowsToPayees, type PayeeData } from './functions/list-payees';
-import { serializeDetails } from './payee/account';
+import type { Payee } from '../../src/shared/schema';
+import { rowsToPayees, type PayeeData } from '../functions/list-payees';
+import { serializeDetails } from './account';
 
 describe('rowsToPayees', () => {
   it('returns payee data correctly', () => {

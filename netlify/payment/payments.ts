@@ -1,7 +1,7 @@
-import type { Payment } from '../src/shared/schema';
-import { db } from './db';
-import { keysToCamel, roundMoney } from './lib';
-import { deserializeDetails } from './payee/account';
+import type { Payment } from '../../src/shared/schema';
+import { db } from '../db';
+import { keysToCamel, roundMoney } from '../lib';
+import { deserializeDetails } from '../payee/account';
 export const SG29 = 180492;
 
 export const paymentsSql = `

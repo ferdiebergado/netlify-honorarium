@@ -1,7 +1,7 @@
 import type { PaymentFormValues } from '../../src/shared/schema';
 import type { Database } from '../db';
 import { NotFoundError } from '../errors';
-import { computeHonorarium } from '../payments';
+import { computeHonorarium } from './payments';
 
 export async function createPayment(
   db: Database,
