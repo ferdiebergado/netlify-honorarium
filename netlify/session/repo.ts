@@ -1,7 +1,7 @@
 import { randomBytes } from 'crypto';
 import { RANDOM_BYTES_SIZE, SESSION_DURATION_HOURS } from '../constants';
 import { db, type Database } from '../db';
-import { UnauthorizedError } from '../errors';
+import { ResourceNotFoundError } from '../errors';
 import { getClientIP } from '../lib';
 
 export async function createSession(
@@ -20,7 +20,13 @@ export async function createSession(
   const sql = `
 INSERT INTO
   sessions
-    (session_id, user_id, ip_address, user_agent, expires_at)
+    (
+      session_id,
+      user_id,
+      ip_address,
+      user_agent,
+      expires_at
+    )
 VALUES
   (?, ?, ?, ?, ?)`;
 
@@ -42,7 +48,8 @@ AND
 
   const { rows } = await db.execute(sql, [sessionId]);
 
-  if (rows.length === 0) throw new UnauthorizedError('session not found');
+  if (rows.length === 0)
+    throw new ResourceNotFoundError(`Session with id: ${sessionId} does not exists.`);
 
   return rows[0].user_id as number;
 }
