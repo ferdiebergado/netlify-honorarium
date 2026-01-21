@@ -1,10 +1,10 @@
 import type { ActivityFormValues, VenueFormValues } from '../../src/shared/schema';
 import { db } from '../db';
-import { createActivity, softDeleteActivity } from './repo';
+import { create, softDelete, update } from './repo';
 import { createVenue } from './venue-repo';
 
 export async function newActivity(activity: ActivityFormValues, userId: number) {
-  await createActivity(db, activity, userId);
+  await create(db, activity, userId);
 }
 
 export async function newVenue(venue: VenueFormValues, userId: number) {
@@ -12,5 +12,9 @@ export async function newVenue(venue: VenueFormValues, userId: number) {
 }
 
 export async function deleteActivity(id: number, userId: number) {
-  await softDeleteActivity(db, id, userId);
+  await softDelete(db, id, userId);
+}
+
+export async function updateActivity(id: number, data: ActivityFormValues, userId: number) {
+  await update(db, id, data, userId);
 }

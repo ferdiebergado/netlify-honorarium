@@ -2,7 +2,7 @@ import type { ActivityFormValues } from '../../src/shared/schema';
 import { type Database } from '../db';
 import { ResourceNotFoundError } from '../errors';
 
-export async function createActivity(db: Database, data: ActivityFormValues, userId: number) {
+export async function create(db: Database, data: ActivityFormValues, userId: number) {
   const { title, venueId, startDate, endDate, code, focalId } = data;
   const sql = `
 INSERT INTO
@@ -38,7 +38,7 @@ RETURNING
   return rows[0].id as number;
 }
 
-export async function softDeleteActivity(db: Database, id: number, userId: number) {
+export async function softDelete(db: Database, id: number, userId: number) {
   const sql = `
 UPDATE
   activities
@@ -52,4 +52,42 @@ WHERE
 
   if (rowsAffected === 0)
     throw new ResourceNotFoundError(`Activity with id: ${id.toString()} not found.`);
+}
+
+export async function update(
+  db: Database,
+  id: number,
+  data: ActivityFormValues,
+  userId: number
+): Promise<void> {
+  const { title, venueId, startDate, endDate, code, focalId } = data;
+
+  const sql = `
+UPDATE
+  activities
+SET
+  title = ?,
+  venue_id = ?,
+  start_date = ?,
+  end_date = ?,
+  code = ?,
+  focal_id = ?,
+  updated_at = CURRENT_TIMESTAMP,
+  updated_by = ?
+WHERE
+  id = ?`;
+
+  const { rowsAffected } = await db.execute(sql, [
+    title,
+    venueId,
+    startDate,
+    endDate,
+    code,
+    focalId,
+    userId,
+    id,
+  ]);
+
+  if (rowsAffected === 0)
+    throw new ResourceNotFoundError(`Activity with id: ${id.toString()} does not exists.`);
 }
