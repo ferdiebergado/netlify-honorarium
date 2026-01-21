@@ -6,6 +6,7 @@ import { assertTimestamps, assertUser, seedDb, setupTestDb, type BaseRow } from 
 import { deserializeDetails } from './account';
 import {
   createPayee,
+  findPayeeAccounts,
   insertAccount,
   insertPayee,
   insertSalary,
@@ -16,6 +17,7 @@ import {
 
 const userId = 1;
 const bankId = 1;
+const tin = '4444556';
 
 const mockPayee: PayeeData = {
   name: 'Jimmy Basilio',
@@ -29,6 +31,13 @@ const mockAccountData: AccountData = {
   accountNo: '123456',
   payeeId: 0,
   bankId,
+};
+
+const mockPayeeData: CreatePayeeFormValues = {
+  ...mockPayee,
+  ...mockAccountData,
+  salary: 20000,
+  tin,
 };
 
 describe('payee-repo', () => {
@@ -136,15 +145,6 @@ describe('payee-repo', () => {
     it('should create payee and return the new ids', async () => {
       const startTime = Date.now();
 
-      const mockPayeeData: CreatePayeeFormValues = {
-        ...mockPayee,
-        salary: 20000,
-        bankId: 1,
-        bankBranch: 'Lantic',
-        accountName: 'Apolinario Mabini',
-        accountNo: '987654321',
-        tin: '4444556',
-      };
       const { payeeId, salaryId, accountId, tinId } = await runInTransaction(
         db as Client,
         createPayee,
@@ -167,6 +167,14 @@ describe('payee-repo', () => {
         expect(tinId).toBe(1);
         if (mockPayeeData.tin) assertTin(db, tinId, { tin: mockPayeeData.tin, payeeId }, startTime);
       }
+    });
+  });
+
+  describe('findPayeeAccounts', () => {
+    it('should return the accounts of the payee', async () => {
+      const { payeeId } = await createPayee(db, mockPayeeData, userId);
+      const accounts = await findPayeeAccounts(db, payeeId);
+      expect(accounts.length).toBe(1);
     });
   });
 });
