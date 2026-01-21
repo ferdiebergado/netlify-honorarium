@@ -2,7 +2,7 @@ import type { Config } from '@netlify/functions';
 import { venueSchema } from '../../src/shared/schema';
 import { newVenue } from '../activity/service';
 import { errorResponse, ValidationError } from '../errors';
-import { authCheck } from '../session';
+import { checkSession } from '../session';
 
 export const config: Config = {
   method: 'POST',
@@ -11,7 +11,7 @@ export const config: Config = {
 
 export default async (req: Request) => {
   try {
-    const userId = await authCheck(req);
+    const userId = await checkSession(req);
 
     const body = await req.json();
     const { error, data } = venueSchema.safeParse(body);

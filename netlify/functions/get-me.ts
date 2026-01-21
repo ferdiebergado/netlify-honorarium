@@ -1,7 +1,7 @@
 import type { Config } from '@netlify/functions';
 import { db } from '../db';
 import { errorResponse, NotFoundError } from '../errors';
-import { authCheck } from '../session';
+import { checkSession } from '../session';
 
 export const config: Config = {
   method: 'GET',
@@ -10,7 +10,7 @@ export const config: Config = {
 
 export default async (req: Request) => {
   try {
-    const userId = await authCheck(req);
+    const userId = await checkSession(req);
 
     const sql = `
 SELECT

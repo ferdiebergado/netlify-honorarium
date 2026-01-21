@@ -2,7 +2,7 @@ import type { Config, Context } from '@netlify/functions';
 import { errorResponse } from '../errors';
 import { parseId } from '../lib';
 import { getPayments } from '../payment/payments';
-import { authCheck } from '../session';
+import { checkSession } from '../session';
 
 export const config: Config = {
   method: 'GET',
@@ -11,7 +11,7 @@ export const config: Config = {
 
 export default async (req: Request, ctx: Context) => {
   try {
-    await authCheck(req);
+    await checkSession(req);
 
     const { activity_id } = ctx.params;
     const activityId = parseId(activity_id);

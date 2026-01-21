@@ -2,7 +2,7 @@ import type { Config, Context } from '@netlify/functions';
 import { db } from '../db';
 import { errorResponse } from '../errors';
 import { parseId } from '../lib';
-import { authCheck } from '../session';
+import { checkSession } from '../session';
 import { payeeSql, rowsToPayees, type PayeeData } from './list-payees';
 
 export const config: Config = {
@@ -14,7 +14,7 @@ export default async (req: Request, ctx: Context) => {
   console.log('Getting payee...');
 
   try {
-    await authCheck(req);
+    await checkSession(req);
 
     const payeeId = parseId(ctx.params.id);
 

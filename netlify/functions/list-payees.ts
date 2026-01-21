@@ -4,7 +4,7 @@ import { db } from '../db';
 import { errorResponse } from '../errors';
 import { keysToCamel } from '../lib';
 import { deserializeDetails } from '../payee/account';
-import { authCheck } from '../session';
+import { checkSession } from '../session';
 
 export type PayeeData = Omit<Payee, 'salaries' | 'accounts' | 'tins'> & {
   salaryId: number;
@@ -55,7 +55,7 @@ export const config: Config = {
 
 export default async (req: Request) => {
   try {
-    await authCheck(req);
+    await checkSession(req);
 
     const sql = `${payeeSql} WHERE p.deleted_at IS NULL ORDER BY p.name`;
     const { rows } = await db.execute(sql);

@@ -4,7 +4,7 @@ import { db } from '../db';
 import { errorResponse, NotFoundError, ValidationError } from '../errors';
 import { parseId } from '../lib';
 import { computeHonorarium } from '../payment/payments';
-import { authCheck } from '../session';
+import { checkSession } from '../session';
 
 export const config: Config = {
   method: 'POST',
@@ -13,7 +13,7 @@ export const config: Config = {
 
 export default async (req: Request, ctx: Context) => {
   try {
-    const userId = await authCheck(req);
+    const userId = await checkSession(req);
 
     const paymentId = parseId(ctx.params.id);
 

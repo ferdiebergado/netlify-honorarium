@@ -3,7 +3,7 @@ import { salarySchema } from '../../src/shared/schema';
 import { errorResponse, ValidationError } from '../errors';
 import { parseId } from '../lib';
 import { newSalary } from '../payee/service';
-import { authCheck } from '../session';
+import { checkSession } from '../session';
 
 export const config: Config = {
   method: 'POST',
@@ -13,7 +13,7 @@ export const config: Config = {
 export default async (req: Request, ctx: Context) => {
   try {
     const payeeId = parseId(ctx.params.id);
-    const userId = await authCheck(req);
+    const userId = await checkSession(req);
     const body = await req.json();
 
     const { error, data } = salarySchema.safeParse(body);

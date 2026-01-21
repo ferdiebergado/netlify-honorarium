@@ -2,7 +2,7 @@ import type { Config } from '@netlify/functions';
 import { activitySchema } from '../../src/shared/schema';
 import { newActivity } from '../activity/service';
 import { errorResponse, ValidationError } from '../errors';
-import { authCheck } from '../session';
+import { checkSession } from '../session';
 
 export const config: Config = {
   method: 'POST',
@@ -13,7 +13,7 @@ export default async (req: Request) => {
   console.log('Creating activity...');
 
   try {
-    const userId = await authCheck(req);
+    const userId = await checkSession(req);
 
     const body = await req.json();
     const { error, data: activity } = activitySchema.safeParse(body);

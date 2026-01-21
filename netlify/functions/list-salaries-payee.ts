@@ -2,7 +2,7 @@ import type { Config, Context } from '@netlify/functions';
 import { db } from '../db';
 import { errorResponse } from '../errors';
 import { keysToCamel, parseId } from '../lib';
-import { authCheck } from '../session';
+import { checkSession } from '../session';
 
 export const config: Config = {
   method: 'GET',
@@ -11,7 +11,7 @@ export const config: Config = {
 
 export default async (req: Request, ctx: Context) => {
   try {
-    await authCheck(req);
+    await checkSession(req);
 
     const payeeId = parseId(ctx.params.payee_id);
     const sql = `

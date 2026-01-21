@@ -4,7 +4,7 @@ import { getFundCluster } from '../activity/activity';
 import { db } from '../db';
 import { errorResponse } from '../errors';
 import { keysToCamel, parseId, toDateRange } from '../lib';
-import { authCheck } from '../session';
+import { checkSession } from '../session';
 
 const fullActivitySql = `
 SELECT
@@ -55,7 +55,7 @@ export const config: Config = {
 
 export default async (req: Request, ctx: Context) => {
   try {
-    await authCheck(req);
+    await checkSession(req);
 
     const activityId = parseId(ctx.params.id);
 

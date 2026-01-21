@@ -3,7 +3,7 @@ import { createAccountSchema } from '../../src/shared/schema';
 import { errorResponse, ValidationError } from '../errors';
 import { parseId } from '../lib';
 import { newAccount } from '../payee/account';
-import { authCheck } from '../session';
+import { checkSession } from '../session';
 
 export const config: Config = {
   method: 'POST',
@@ -13,7 +13,7 @@ export const config: Config = {
 export default async (req: Request, ctx: Context) => {
   try {
     const payeeId = parseId(ctx.params.payeeId);
-    const userId = await authCheck(req);
+    const userId = await checkSession(req);
 
     const body = await req.json();
     const { error, data } = createAccountSchema.safeParse(body);

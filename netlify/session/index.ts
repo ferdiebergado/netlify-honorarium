@@ -4,7 +4,7 @@ import { db } from '../db';
 import { UnauthorizedError } from '../errors';
 import { findSession } from './repo';
 
-export async function authCheck(req: Request): Promise<number> {
+export async function checkSession(req: Request): Promise<number> {
   const cookieHeader = req.headers.get('cookie');
   if (!cookieHeader) throw new UnauthorizedError('no cookie header');
 
