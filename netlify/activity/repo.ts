@@ -1,5 +1,6 @@
 import type { ActivityFormValues } from '../../src/shared/schema';
 import { type Database } from '../db';
+import { ResourceNotFoundError } from '../errors';
 
 export async function createActivity(db: Database, data: ActivityFormValues, userId: number) {
   const { title, venueId, startDate, endDate, code, focalId } = data;
@@ -35,4 +36,20 @@ RETURNING
   if (rows.length === 0) throw new Error('Failed to insert activity: no data returned.');
 
   return rows[0].id as number;
+}
+
+export async function softDeleteActivity(db: Database, id: number, userId: number) {
+  const sql = `
+UPDATE
+  activities
+SET
+  deleted_at = CURRENT_TIMESTAMP,
+  deleted_by = ?
+WHERE 
+  id = ?`;
+
+  const { rowsAffected } = await db.execute(sql, [userId, id]);
+
+  if (rowsAffected === 0)
+    throw new ResourceNotFoundError(`Activity with id: ${id.toString()} not found.`);
 }

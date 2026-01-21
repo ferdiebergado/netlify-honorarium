@@ -1,6 +1,6 @@
 import type { Config, Context } from '@netlify/functions';
-import { db } from '../db';
-import { errorResponse, NotFoundError } from '../errors';
+import { deleteActivity } from '../activity/service';
+import { errorResponse } from '../errors';
 import { parseId } from '../lib';
 import { authCheck } from '../session';
 
@@ -14,11 +14,9 @@ export default async (req: Request, ctx: Context) => {
 
   try {
     const userId = await authCheck(req);
-    const activityId = parseId(ctx.params.id);
-    const sql = 'UPDATE activities SET deleted_at = CURRENT_TIMESTAMP, deleted_by=? WHERE id = ?';
-    const { rowsAffected } = await db.execute(sql, [userId, activityId]);
+    const id = parseId(ctx.params.id);
 
-    if (rowsAffected === 0) throw new NotFoundError();
+    await deleteActivity(id, userId);
 
     return Response.json({ message: 'Activity deleted.' });
   } catch (error) {
