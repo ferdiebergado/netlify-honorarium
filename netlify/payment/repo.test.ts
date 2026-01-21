@@ -4,7 +4,7 @@ import type {
   CreatePayeeFormValues,
   PaymentFormValues,
 } from '../../src/shared/schema';
-import { createActivity } from '../activity/repo';
+import { create } from '../activity/repo';
 import type { Database } from '../db';
 import { createPayee } from '../payee/repo';
 import { createRole } from '../role/repo';
@@ -30,12 +30,12 @@ describe('createPayment', () => {
     const mockActivity: ActivityFormValues = {
       title: 'test',
       venueId: 1,
-      startDate: new Date().toISOString(),
-      endDate: new Date().toISOString(),
+      startDate: new Date(2026, 0, 21).toISOString(),
+      endDate: new Date(2026, 0, 23).toISOString(),
       code: 'AC-26-ABC-DEF-GHIJ-001',
       focalId: 1,
     };
-    const activityId = await createActivity(db, mockActivity, userId);
+    const activityId = await create(db, mockActivity, userId);
 
     const mockPayee: CreatePayeeFormValues = {
       name: 'Mr. Jones',
