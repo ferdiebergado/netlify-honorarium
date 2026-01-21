@@ -1,5 +1,5 @@
-import { type Database } from '.';
 import type { User } from '../../src/shared/schema';
+import type { Database } from '../db';
 
 export async function upsertUser(
   db: Database,

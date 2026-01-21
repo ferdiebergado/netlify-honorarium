@@ -1,4 +1,4 @@
-import type { Database } from '.';
+import type { Database } from '../db';
 
 export async function createBank(db: Database, name: string, userId: number): Promise<number> {
   const sql = `

@@ -5,9 +5,9 @@ import { expect } from 'vitest';
 import type { User } from '../src/shared/schema';
 import { createVenue } from './activity/venue-repo';
 import type { Database } from './db';
-import { upsertUser } from './db/user-repo';
 import { createPosition } from './focal/position-repo';
 import { createFocal } from './focal/repo';
+import { upsertUser } from './user/user-repo';
 
 const schemaPath = path.join(__dirname, '../init.sql');
 const schemaSql = readFileSync(schemaPath, { encoding: 'utf-8' });

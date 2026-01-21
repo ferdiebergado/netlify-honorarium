@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { type Database } from '.';
+import { type Database } from '../db';
 import { assertTimestamps, assertUser, seedDb, setupTestDb, type BaseRow } from '../test-utils';
 import { createBank } from './bank-repo';
 
