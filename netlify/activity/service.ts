@@ -22,13 +22,6 @@ export async function updateActivity(id: number, data: ActivityFormValues, userI
   await update(db, id, data, userId);
 }
 
-export function rowToActivity(row: Row): Activity {
-  return {
-    ...(keysToCamel(row) as Activity),
-    fundCluster: getFundCluster(row.code as string),
-  };
-}
-
 export async function findActivity(id: number): Promise<Activity> {
   const row = await find(db, id);
 
@@ -38,4 +31,11 @@ export async function findActivity(id: number): Promise<Activity> {
 export async function findActivities(): Promise<Activity[]> {
   const rows = await findAll(db);
   return rows.map(rowToActivity);
+}
+
+function rowToActivity(row: Row): Activity {
+  return {
+    ...(keysToCamel(row) as Activity),
+    fundCluster: getFundCluster(row.code as string),
+  };
 }
