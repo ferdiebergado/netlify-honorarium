@@ -91,3 +91,46 @@ WHERE
   if (rowsAffected === 0)
     throw new ResourceNotFoundError(`Activity with id: ${id.toString()} does not exists.`);
 }
+
+export const activitiesSql = `
+SELECT
+  a.id,
+  a.title,
+  a.code,
+  a.start_date,
+  a.end_date,
+
+  v.id        AS venue_id,
+  v.name      as venue,
+
+  f.id        AS focal_id,
+  f.name      AS focal,
+
+  p.id        AS position_id,
+  p.name      AS position
+FROM
+  activities a
+JOIN
+  focals f
+ON
+  f.id = a.focal_id
+JOIN
+  venues v
+ON
+  v.id = a.venue_id
+JOIN
+  positions p
+ON
+  p.id = f.position_id
+WHERE
+  a.deleted_at IS NULL`;
+
+export async function find(db: Database, id: number) {
+  const sql = `${activitiesSql} AND a.id = ?`;
+  const { rows } = await db.execute(sql, [id]);
+
+  if (rows.length === 0)
+    throw new ResourceNotFoundError(`Activity with id: ${id.toString()} does not exists.`);
+
+  return rows[0];
+}
