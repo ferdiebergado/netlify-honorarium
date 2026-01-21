@@ -2,13 +2,13 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { ActivityFormValues } from '../../src/shared/schema';
 import type { Database } from '../db';
 import { assertTimestamps, assertUser, seedDb, setupTestDb, type BaseRow } from '../test-utils';
-import { createActivity, softDeleteActivity } from './repo';
+import { create, softDelete, update } from './repo';
 
-describe('activity-repo', () => {
+describe('activity repo', () => {
   const mockActivity: ActivityFormValues = {
     title: 'Test workshop',
-    startDate: new Date().toISOString(),
-    endDate: new Date().toISOString(),
+    startDate: new Date(2026, 11, 26).toISOString(),
+    endDate: new Date(2026, 11, 26).toISOString(),
     code: 'AC-26-ABC-DEF-GHI-123',
     venueId: 1,
     focalId: 1,
@@ -16,6 +16,7 @@ describe('activity-repo', () => {
   const userId = 1;
 
   let db: Database;
+
   beforeEach(async () => {
     db = await setupTestDb();
     await seedDb(db);
@@ -25,11 +26,11 @@ describe('activity-repo', () => {
     db.close();
   });
 
-  describe('createActivity', () => {
+  describe('create', () => {
     it('should insert the activity and return the new ID', async () => {
       const startTime = Date.now();
 
-      const activityId = await createActivity(db, mockActivity, userId);
+      const activityId = await create(db, mockActivity, userId);
       expect(activityId).toBeTypeOf('number');
       expect(activityId).toBeGreaterThan(0);
 
@@ -51,15 +52,15 @@ describe('activity-repo', () => {
     it('should throw an error if the user does not exist', async () => {
       const nonExistentUserId = 999;
 
-      await expect(createActivity(db, mockActivity, nonExistentUserId)).rejects.toThrow();
+      await expect(create(db, mockActivity, nonExistentUserId)).rejects.toThrow();
     });
   });
 
-  describe('softDeleteActivity', () => {
+  describe('softDelete', () => {
     it('should soft delete the activity', async () => {
       const startTime = Date.now();
-      const id = await createActivity(db, mockActivity, userId);
-      await softDeleteActivity(db, id, userId);
+      const id = await create(db, mockActivity, userId);
+      await softDelete(db, id, userId);
 
       const sql = 'SELECT * FROM activities WHERE id = ?';
       const { rows } = await db.execute(sql, [id]);
@@ -71,6 +72,30 @@ describe('activity-repo', () => {
       const deletedAt = new Date(deletedAtColumn + 'Z');
       const diff = Math.abs(deletedAt.getTime() - startTime);
       expect(diff).toBeLessThan(1000);
+    });
+  });
+
+  describe('update', () => {
+    it('should soft delete the activity', async () => {
+      const startTime = Date.now();
+      const title = 'Test writeshop';
+
+      const id = await create(db, mockActivity, userId);
+      await update(db, id, { ...mockActivity, title }, userId);
+
+      const sql = 'SELECT * FROM activities WHERE id = ?';
+      const { rows } = await db.execute(sql, [id]);
+      expect(rows.length).toBe(1);
+
+      const activity = rows[0];
+      expect(activity.title).toBe(title);
+
+      const updatedAtCol = activity.updated_at as string;
+      const updatedAt = new Date(updatedAtCol + 'Z');
+      const diff = Math.abs(updatedAt.getTime() - startTime);
+      expect(diff).toBeLessThan(1000);
+
+      assertUser(activity as unknown as BaseRow, userId);
     });
   });
 });
