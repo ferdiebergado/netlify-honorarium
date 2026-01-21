@@ -1,10 +1,10 @@
 import type { Config, Context } from '@netlify/functions';
 import type { Activity, Payee, Payment, PaymentData } from '../../src/shared/schema';
 import { getFundCluster } from '../activity/activity';
-import { authCheck } from '../auth-check';
 import { db } from '../db';
 import { errorResponse } from '../errors';
 import { keysToCamel, parseId, toDateRange } from '../lib';
+import { authCheck } from '../session';
 
 const fullActivitySql = `
 SELECT

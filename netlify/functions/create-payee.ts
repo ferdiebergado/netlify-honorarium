@@ -1,8 +1,8 @@
 import type { Config } from '@netlify/functions';
 import { createPayeeSchema } from '../../src/shared/schema';
-import { authCheck } from '../auth-check';
 import { errorResponse, ValidationError } from '../errors';
 import { newPayee } from '../payee/service';
+import { authCheck } from '../session';
 
 export const config: Config = {
   method: 'POST',

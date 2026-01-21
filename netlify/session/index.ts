@@ -1,8 +1,8 @@
 import { parseCookie } from 'cookie';
-import { SESSION_COOKIE_NAME } from './constants';
-import { db } from './db';
-import { UnauthorizedError } from './errors';
-import { getSession } from './session';
+import { SESSION_COOKIE_NAME } from '../constants';
+import { db } from '../db';
+import { UnauthorizedError } from '../errors';
+import { getSession } from './repo';
 
 export async function authCheck(req: Request): Promise<number> {
   const cookieHeader = req.headers.get('cookie');

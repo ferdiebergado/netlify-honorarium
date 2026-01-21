@@ -1,8 +1,8 @@
 import type { Config, Context } from '@netlify/functions';
-import { authCheck } from '../auth-check';
 import { db } from '../db';
 import { errorResponse } from '../errors';
 import { parseId } from '../lib';
+import { authCheck } from '../session';
 import { payeeSql, rowsToPayees, type PayeeData } from './list-payees';
 
 export const config: Config = {

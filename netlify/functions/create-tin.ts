@@ -1,9 +1,9 @@
 import type { Config, Context } from '@netlify/functions';
 import { tinSchema } from '../../src/shared/schema';
-import { authCheck } from '../auth-check';
 import { errorResponse, ValidationError } from '../errors';
 import { parseId } from '../lib';
 import { newTin } from '../payee/service';
+import { authCheck } from '../session';
 
 export const config: Config = {
   method: 'POST',

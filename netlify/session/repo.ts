@@ -1,8 +1,8 @@
 import { randomBytes } from 'crypto';
-import { RANDOM_BYTES_SIZE, SESSION_DURATION_HOURS } from './constants';
-import { db, type Database } from './db';
-import { UnauthorizedError } from './errors';
-import { getClientIP } from './lib';
+import { RANDOM_BYTES_SIZE, SESSION_DURATION_HOURS } from '../constants';
+import { db, type Database } from '../db';
+import { UnauthorizedError } from '../errors';
+import { getClientIP } from '../lib';
 
 export async function createSession(
   userId: number,

@@ -1,8 +1,8 @@
 import type { Config, Context } from '@netlify/functions';
-import { authCheck } from '../auth-check';
 import { db } from '../db';
 import { errorResponse, NotFoundError } from '../errors';
 import { parseId } from '../lib';
+import { authCheck } from '../session';
 
 export const config: Config = {
   method: 'DELETE',

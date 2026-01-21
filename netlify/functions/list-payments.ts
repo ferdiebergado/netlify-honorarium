@@ -1,8 +1,8 @@
 import type { Config, Context } from '@netlify/functions';
-import { authCheck } from '../auth-check';
 import { errorResponse } from '../errors';
 import { parseId } from '../lib';
 import { getPayments } from '../payment/payments';
+import { authCheck } from '../session';
 
 export const config: Config = {
   method: 'GET',

@@ -1,10 +1,10 @@
 import type { Config, Context } from '@netlify/functions';
 import { paymentSchema } from '../../src/shared/schema';
-import { authCheck } from '../auth-check';
 import { db } from '../db';
 import { errorResponse, NotFoundError, ValidationError } from '../errors';
 import { parseId } from '../lib';
 import { computeHonorarium } from '../payment/payments';
+import { authCheck } from '../session';
 
 export const config: Config = {
   method: 'POST',

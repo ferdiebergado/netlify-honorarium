@@ -1,8 +1,8 @@
 import type { Config, Context } from '@netlify/functions';
 import { activitySchema } from '../../src/shared/schema';
-import { authCheck } from '../auth-check';
 import { db } from '../db';
 import { errorResponse, NotFoundError, ValidationError } from '../errors';
+import { authCheck } from '../session';
 
 export const config: Config = {
   method: 'PUT',

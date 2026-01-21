@@ -1,10 +1,10 @@
 import type { Config } from '@netlify/functions';
 import type { Account } from '../../src/shared/schema';
-import { authCheck } from '../auth-check';
 import { db } from '../db';
 import { errorResponse } from '../errors';
 import { keysToCamel } from '../lib';
 import { deserializeDetails, type AccountDetails } from '../payee/account';
+import { authCheck } from '../session';
 
 export type RawAccount = Omit<Account, keyof AccountDetails> & { details: Buffer };
 

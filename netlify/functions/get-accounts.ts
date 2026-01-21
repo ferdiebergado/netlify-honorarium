@@ -1,8 +1,8 @@
 import type { Config, Context } from '@netlify/functions';
-import { authCheck } from '../auth-check';
 import { db } from '../db';
 import { errorResponse, NotFoundError } from '../errors';
 import { parseId } from '../lib';
+import { authCheck } from '../session';
 import { accountsSql, rowToAccount, type RawAccount } from './list-accounts';
 
 export const config: Config = {

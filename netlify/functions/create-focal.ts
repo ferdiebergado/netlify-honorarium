@@ -1,8 +1,8 @@
 import type { Config } from '@netlify/functions';
 import { focalSchema } from '../../src/shared/schema';
-import { authCheck } from '../auth-check';
 import { errorResponse, ValidationError } from '../errors';
 import { newFocal } from '../focal/service';
+import { authCheck } from '../session';
 
 export const config: Config = {
   method: 'POST',

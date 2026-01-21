@@ -5,7 +5,7 @@ import { SESSION_COOKIE_NAME } from '../constants';
 import { db } from '../db';
 import { upsertUser } from '../db/user-repo';
 import { errorResponse, UnauthorizedError } from '../errors';
-import { createSession } from '../session';
+import { createSession } from '../session/repo';
 
 const clientId = process.env.GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(clientId);

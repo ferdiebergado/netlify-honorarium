@@ -1,8 +1,8 @@
 import type { Config } from '@netlify/functions';
-import { authCheck } from '../auth-check';
 import { db } from '../db';
 import { errorResponse } from '../errors';
 import { keysToCamel } from '../lib';
+import { authCheck } from '../session';
 
 export const config: Config = {
   method: 'GET',

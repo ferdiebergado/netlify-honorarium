@@ -1,10 +1,10 @@
 import type { Config, Context } from '@netlify/functions';
 import type { Activity } from '../../src/shared/schema';
 import { getFundCluster } from '../activity/activity';
-import { authCheck } from '../auth-check';
 import { db } from '../db';
 import { errorResponse, NotFoundError } from '../errors';
 import { keysToCamel, parseId } from '../lib';
+import { authCheck } from '../session';
 import { activitiesSql } from './list-activities';
 
 export const config: Config = {

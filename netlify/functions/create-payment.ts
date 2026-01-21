@@ -1,8 +1,8 @@
 import type { Config } from '@netlify/functions';
 import { paymentSchema } from '../../src/shared/schema';
-import { authCheck } from '../auth-check';
 import { errorResponse, ValidationError } from '../errors';
 import { newPayment } from '../payment/service';
+import { authCheck } from '../session';
 
 export const config: Config = {
   method: 'POST',

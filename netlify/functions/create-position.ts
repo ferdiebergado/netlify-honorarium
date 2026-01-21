@@ -1,8 +1,8 @@
 import type { Config } from '@netlify/functions';
 import { positionSchema } from '../../src/shared/schema';
-import { authCheck } from '../auth-check';
 import { errorResponse, ValidationError } from '../errors';
 import { newPosition } from '../focal/position';
+import { authCheck } from '../session';
 
 export const config: Config = {
   method: 'POST',

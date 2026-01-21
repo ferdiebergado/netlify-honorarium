@@ -1,10 +1,10 @@
 import type { Config } from '@netlify/functions';
 import type { Payee } from '../../src/shared/schema';
-import { authCheck } from '../auth-check';
 import { db } from '../db';
 import { errorResponse } from '../errors';
 import { keysToCamel } from '../lib';
 import { deserializeDetails } from '../payee/account';
+import { authCheck } from '../session';
 
 export type PayeeData = Omit<Payee, 'salaries' | 'accounts' | 'tins'> & {
   salaryId: number;

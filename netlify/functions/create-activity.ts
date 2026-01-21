@@ -1,8 +1,8 @@
 import type { Config } from '@netlify/functions';
 import { activitySchema } from '../../src/shared/schema';
 import { newActivity } from '../activity/service';
-import { authCheck } from '../auth-check';
 import { errorResponse, ValidationError } from '../errors';
+import { authCheck } from '../session';
 
 export const config: Config = {
   method: 'POST',
