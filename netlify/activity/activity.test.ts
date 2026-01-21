@@ -7,7 +7,7 @@ describe('parseActivityCode', () => {
     const got = parseActivityCode(activityCode);
     const want: FundCluster = {
       year: 2024,
-      appropriationType: 'Current',
+      appropriation: 'Current',
       program: 'FLO',
       mfoCode: '310300100003000',
     };
@@ -19,7 +19,7 @@ describe('parseActivityCode', () => {
     const got = parseActivityCode(activityCode);
     const want: FundCluster = {
       year: 2025,
-      appropriationType: 'Continuing',
+      appropriation: 'Continuing',
       program: 'FLO',
       mfoCode: '310300100003000',
     };
@@ -31,7 +31,7 @@ describe('parseActivityCode', () => {
     const got = parseActivityCode(activityCode);
     const want: FundCluster = {
       year: 2025,
-      appropriationType: 'Current',
+      appropriation: 'Current',
       program: 'FLO',
       mfoCode: '310300100003000',
     };
@@ -43,7 +43,7 @@ describe('parseActivityCode', () => {
     const got = parseActivityCode(activityCode);
     const want: FundCluster = {
       year: 2024,
-      appropriationType: 'Current',
+      appropriation: 'Current',
       program: 'BEC',
       mfoCode: '310100100003000',
     };
@@ -55,7 +55,7 @@ describe('parseActivityCode', () => {
     const got = parseActivityCode(activityCode);
     const want: FundCluster = {
       year: 2024,
-      appropriationType: 'Current',
+      appropriation: 'Current',
       program: 'BEC',
       mfoCode: '310100100003000',
     };

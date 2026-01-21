@@ -9,7 +9,7 @@ type Program = keyof typeof mfoCodes;
 
 export type FundCluster = {
   year: number;
-  appropriationType: Appropriation;
+  appropriation: Appropriation;
   program: Program;
   mfoCode: (typeof mfoCodes)[Program];
 };
@@ -20,17 +20,17 @@ export function parseActivityCode(activityCode: string): FundCluster {
 
   const program = pap as Program;
   const mfoCode = mfoCodes[program];
-  const appropriationType: Appropriation = code.startsWith('P') ? 'Continuing' : 'Current';
+  const appropriation: Appropriation = code.startsWith('P') ? 'Continuing' : 'Current';
   return {
     year: parseInt(year) + 2000,
-    appropriationType,
+    appropriation,
     program,
     mfoCode,
   };
 }
 
 export function getFundCluster(activityCode: string): string {
-  const { year, appropriationType, program } = parseActivityCode(activityCode);
+  const { year, appropriation, program } = parseActivityCode(activityCode);
 
-  return `${year.toString()} ${program} ${appropriationType}`;
+  return `${year.toString()} ${program} ${appropriation}`;
 }
