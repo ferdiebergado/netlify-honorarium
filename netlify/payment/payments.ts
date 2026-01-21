@@ -64,7 +64,7 @@ export async function getPayments(activityId: number | null): Promise<Payment[]>
 
   return rows.map(row => ({
     ...(keysToCamel(row) as Payment),
-    accountDetails: deserializeDetails(row.account_details as unknown as Buffer),
+    ...deserializeDetails(row.account_details as unknown as Buffer),
   }));
 }
 
