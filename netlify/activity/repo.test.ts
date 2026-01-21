@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { ActivityFormValues } from '../../src/shared/schema';
 import type { Database } from '../db';
 import { assertTimestamps, assertUser, seedDb, setupTestDb, type BaseRow } from '../test-utils';
-import { create, find, softDelete, update } from './repo';
+import { create, find, findAll, softDelete, update } from './repo';
 
 describe('activity repo', () => {
   const mockActivity: ActivityFormValues = {
@@ -110,6 +110,39 @@ describe('activity repo', () => {
       expect(activity.end_date).toBe(mockActivity.endDate);
       expect(activity.code).toBe(mockActivity.code);
       expect(activity.focal_id).toBe(mockActivity.focalId);
+    });
+  });
+
+  describe('findAll', () => {
+    it('should find and return all activities', async () => {
+      const mockActivity2: ActivityFormValues = {
+        title: 'test 2',
+        venueId: 1,
+        startDate: new Date(2026, 1, 10).toISOString(),
+        endDate: new Date(2026, 1, 13).toISOString(),
+        code: 'AC-26-MNO-PQR-STU-333',
+        focalId: 1,
+      };
+
+      const mockActivities = [mockActivity, mockActivity2];
+
+      mockActivities.forEach(async activity => await create(db, activity, userId));
+
+      const rows = await findAll(db);
+
+      expect(rows.length).toBe(mockActivities.length);
+
+      let i = 0;
+
+      rows.forEach(row => {
+        expect(row.title).toBe(mockActivities[i].title);
+        expect(row.venue_id).toBe(mockActivities[i].venueId);
+        expect(row.start_date).toBe(mockActivities[i].startDate);
+        expect(row.end_date).toBe(mockActivities[i].endDate);
+        expect(row.code).toBe(mockActivities[i].code);
+        expect(row.focal_id).toBe(mockActivities[i].focalId);
+        i++;
+      });
     });
   });
 });
