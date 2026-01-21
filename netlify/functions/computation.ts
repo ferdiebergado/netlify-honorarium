@@ -3,7 +3,7 @@ import type { Config, Context } from '@netlify/functions';
 import type { Payment } from '../../src/shared/schema';
 import { errorResponse, NotFoundError } from '../errors';
 import { docxResponse, formatToPhp, patchDoc, toDateRange } from '../lib';
-import { comp } from '../payment/comp';
+import { comp } from '../payment/computation';
 import { getMaxSalary, getPayments } from '../payment/payments';
 
 type ComputationPatches = {
