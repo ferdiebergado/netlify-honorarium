@@ -2,7 +2,7 @@ import type { Config, Context } from '@netlify/functions';
 import { createAccountSchema } from '../../src/shared/schema';
 import { errorResponse, ValidationError } from '../errors';
 import { parseId } from '../lib';
-import { newAccount } from '../payee/service';
+import { newAccount } from '../payee/account';
 import { authCheck } from '../session';
 
 export const config: Config = {
