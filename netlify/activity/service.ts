@@ -3,7 +3,7 @@ import type { Activity, ActivityFormValues, VenueFormValues } from '../../src/sh
 import { db } from '../db';
 import { keysToCamel } from '../lib';
 import { getFundCluster } from './activity';
-import { create, find, softDelete, update } from './repo';
+import { create, find, findAll, softDelete, update } from './repo';
 import { createVenue } from './venue-repo';
 
 export async function newActivity(activity: ActivityFormValues, userId: number) {
@@ -33,4 +33,9 @@ export async function findActivity(id: number): Promise<Activity> {
   const row = await find(db, id);
 
   return rowToActivity(row);
+}
+
+export async function findActivities(): Promise<Activity[]> {
+  const rows = await findAll(db);
+  return rows.map(rowToActivity);
 }

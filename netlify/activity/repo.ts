@@ -134,3 +134,11 @@ export async function find(db: Database, id: number) {
 
   return rows[0];
 }
+
+export async function findAll(db: Database) {
+  const sql = `${activitiesSql} ORDER BY a.created_at DESC`;
+
+  const { rows } = await db.execute(sql);
+
+  return rows;
+}
