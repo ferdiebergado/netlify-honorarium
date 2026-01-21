@@ -29,7 +29,7 @@ VALUES
   return { sessionId, maxAge };
 }
 
-export async function getSession(db: Database, sessionId: string): Promise<number> {
+export async function findSession(db: Database, sessionId: string): Promise<number> {
   const sql = `
 SELECT
   user_id

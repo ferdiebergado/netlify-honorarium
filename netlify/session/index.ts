@@ -2,7 +2,7 @@ import { parseCookie } from 'cookie';
 import { SESSION_COOKIE_NAME } from '../constants';
 import { db } from '../db';
 import { UnauthorizedError } from '../errors';
-import { getSession } from './repo';
+import { findSession } from './repo';
 
 export async function authCheck(req: Request): Promise<number> {
   const cookieHeader = req.headers.get('cookie');
@@ -12,5 +12,5 @@ export async function authCheck(req: Request): Promise<number> {
   const sessionId = cookies[SESSION_COOKIE_NAME];
   if (!sessionId) throw new UnauthorizedError('no session cookie');
 
-  return await getSession(db, sessionId);
+  return await findSession(db, sessionId);
 }
