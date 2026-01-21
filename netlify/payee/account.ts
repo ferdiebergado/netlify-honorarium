@@ -1,5 +1,8 @@
-import { toBuffer } from '../lib';
+import type { Account } from '../../src/shared/schema';
+import { db } from '../db';
+import { keysToCamel, toBuffer } from '../lib';
 import { decrypt, encrypt } from '../security';
+import { findPayeeAccounts, insertAccount, type AccountData } from './repo';
 
 export type AccountDetails = {
   bankBranch: string;
@@ -16,4 +19,25 @@ export function deserializeDetails(serialized: Buffer): AccountDetails {
   const payload = decrypted.toString('utf-8');
 
   return JSON.parse(payload) as AccountDetails;
+}
+
+export async function newAccount(account: AccountData, userId: number) {
+  await insertAccount(db, account, userId);
+}
+
+export type RawAccount = Omit<Account, keyof AccountDetails> & { details: Buffer };
+
+export function rowToAccount(row: RawAccount): Account {
+  const account = keysToCamel(row) as Account;
+  const details = deserializeDetails(row.details);
+
+  return {
+    ...account,
+    ...details,
+  };
+}
+
+export async function findAccounts(payeeId: number): Promise<Account[]> {
+  const rows = await findPayeeAccounts(db, payeeId);
+  return (rows as unknown as RawAccount[]).map(rowToAccount);
 }

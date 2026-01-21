@@ -1,9 +1,8 @@
 import type { Config, Context } from '@netlify/functions';
-import { db } from '../db';
 import { errorResponse } from '../errors';
 import { parseId } from '../lib';
+import { findAccounts } from '../payee/account';
 import { authCheck } from '../session';
-import { accountsSql, rowToAccount, type RawAccount } from './list-accounts';
 
 export const config: Config = {
   method: 'GET',
@@ -11,17 +10,14 @@ export const config: Config = {
 };
 
 export default async (req: Request, ctx: Context) => {
-  console.log('Getting payee accounts...');
+  console.log('Getting accounts of payee...');
 
   try {
     await authCheck(req);
 
     const payeeId = parseId(ctx.params.id);
 
-    const sql = `${accountsSql} WHERE p.id = ?`;
-    const { rows } = await db.execute(sql, [payeeId]);
-
-    const data = (rows as unknown as RawAccount[]).map(rowToAccount);
+    const data = await findAccounts(payeeId);
 
     return Response.json({ data });
   } catch (error) {

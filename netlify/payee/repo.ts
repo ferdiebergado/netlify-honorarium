@@ -6,6 +6,7 @@ import type {
   Tin,
 } from '../../src/shared/schema';
 import { type Database } from '../db';
+import { ResourceNotFoundError } from '../errors';
 import { serializeDetails, type AccountDetails } from './account';
 
 type NewPayee = {
@@ -158,4 +159,36 @@ RETURNING
   if (rows.length === 0) throw new Error('Failed to insert tin: no data returned.');
 
   return rows[0].id as number;
+}
+
+export async function findPayeeAccounts(db: Database, payeeId: number) {
+  const sql = `
+SELECT
+  a.id,
+  a.details,
+  p.id AS payee_id,
+  p.name AS payee,
+  b.id AS bank_id,
+  b.name AS bank
+FROM
+  accounts a
+JOIN
+  payees p
+ON
+  p.id = a.payee_id
+JOIN
+  banks b
+ON
+  b.id = a.bank_id
+WHERE
+  a.deleted_at IS NULL
+AND 
+  p.id = ?`;
+
+  const { rows } = await db.execute(sql, [payeeId]);
+
+  if (rows.length === 0)
+    throw new ResourceNotFoundError(`Payee with id: ${payeeId.toString()} has no active accounts.`);
+
+  return rows;
 }
