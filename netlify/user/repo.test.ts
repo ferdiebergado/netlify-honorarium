@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { User } from '../../src/shared/schema';
 import { type Database } from '../db';
 import { assertTimestamps, seedDb, setupTestDb, type BaseRow } from '../test-utils';
-import { upsertUser } from './user-repo';
+import { upsertUser } from './repo';
 
 describe('upsertUser', () => {
   let db: Database;

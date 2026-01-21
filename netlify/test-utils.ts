@@ -7,7 +7,7 @@ import { createVenue } from './activity/venue-repo';
 import type { Database } from './db';
 import { createPosition } from './focal/position-repo';
 import { createFocal } from './focal/repo';
-import { upsertUser } from './user/user-repo';
+import { upsertUser } from './user/repo';
 
 const schemaPath = path.join(__dirname, '../init.sql');
 const schemaSql = readFileSync(schemaPath, { encoding: 'utf-8' });

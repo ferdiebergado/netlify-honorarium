@@ -3,9 +3,9 @@ import { stringifySetCookie } from 'cookie';
 import { OAuth2Client, type TokenPayload } from 'google-auth-library';
 import { SESSION_COOKIE_NAME } from '../constants';
 import { db } from '../db';
-import { upsertUser } from '../db/user-repo';
 import { errorResponse, UnauthorizedError } from '../errors';
 import { createSession } from '../session/repo';
+import { upsertUser } from '../user/repo';
 
 const clientId = process.env.GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(clientId);
