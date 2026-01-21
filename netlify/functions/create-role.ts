@@ -1,6 +1,7 @@
 import type { Config } from '@netlify/functions';
 import { roleSchema } from '../../src/shared/schema';
 import { errorResponse, ValidationError } from '../errors';
+import { newRole } from '../role/service';
 import { authCheck } from '../session';
 
 export const config: Config = {
