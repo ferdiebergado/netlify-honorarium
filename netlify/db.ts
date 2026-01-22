@@ -24,6 +24,8 @@ export async function runInTransaction<TArgs extends unknown[], TReturn>(
   fn: (tx: Database, ...args: TArgs) => Promise<TReturn>,
   args: TArgs
 ): Promise<TReturn> {
+  console.log('Beginning transaction...');
+
   const tx = await db.transaction();
 
   try {
