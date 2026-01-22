@@ -2,10 +2,8 @@ import type { Config } from '@netlify/functions';
 import { stringifySetCookie } from 'cookie';
 import { OAuth2Client, type TokenPayload } from 'google-auth-library';
 import { SESSION_COOKIE_NAME } from '../constants';
-import { db } from '../db';
 import { errorResponse, UnauthorizedError } from '../errors';
-import { createSession } from '../session/repo';
-import { upsertUser } from '../user/repo';
+import { newSession } from '../session';
 
 const clientId = process.env.GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(clientId);
@@ -41,9 +39,8 @@ export default async (req: Request) => {
 
     if (iss !== 'https://accounts.google.com') throw new UnauthorizedError('Invalid issuer');
 
-    const userId = await upsertUser(db, { googleId: sub, name, email, picture });
-
-    const { sessionId, maxAge } = await createSession(userId, req);
+    const user = { googleId: sub, name, email, picture };
+    const { sessionId, maxAge } = await newSession(user, req);
 
     const sessionCookie = stringifySetCookie({
       name: SESSION_COOKIE_NAME,

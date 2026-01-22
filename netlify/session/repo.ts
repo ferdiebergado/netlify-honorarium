@@ -1,21 +1,11 @@
-import { randomBytes } from 'crypto';
-import { RANDOM_BYTES_SIZE, SESSION_DURATION_HOURS } from '../constants';
+import { setSessionDuration, type Session } from '.';
 import { db, type Database } from '../db';
 import { ResourceNotFoundError } from '../errors';
-import { getClientIP } from '../lib';
 
-export async function createSession(
-  userId: number,
-  req: Request
-): Promise<{ sessionId: string; maxAge: number }> {
+export async function createSession(session: Session): Promise<void> {
   console.log('Creating session...');
 
-  const sessionId = randomBytes(RANDOM_BYTES_SIZE).toString('base64');
-  const userAgent = req.headers.get('User-Agent') ?? 'unknown';
-  const ip = getClientIP(req);
-  const now = new Date();
-  const expiresAt = new Date(now.setHours(now.getHours() + SESSION_DURATION_HOURS));
-  const maxAge = Math.floor(expiresAt.getTime() / 1000);
+  const { userId, sessionId, expiresAt, userAgent, ip } = session;
 
   const sql = `
 INSERT INTO
@@ -31,8 +21,6 @@ VALUES
   (?, ?, ?, ?, ?)`;
 
   await db.execute(sql, [sessionId, userId, ip, userAgent, expiresAt.toISOString()]);
-
-  return { sessionId, maxAge };
 }
 
 export async function findSession(db: Database, sessionId: string): Promise<number> {
@@ -50,6 +38,29 @@ AND
 
   if (rows.length === 0)
     throw new ResourceNotFoundError(`Session with id: ${sessionId} does not exists.`);
+
+  return rows[0].user_id as number;
+}
+
+export async function touchSession(db: Database, sessionId: string): Promise<number> {
+  const sql = `
+UPDATE
+  sessions
+SET 
+  last_active_at = CURRENT_TIMESTAMP,
+  expires_at = ?
+WHERE 
+  deleted_at IS NULL
+AND
+  session_id = ?
+RETURNING
+  user_id`;
+
+  const { expiresAt } = setSessionDuration();
+  const { rows } = await db.execute(sql, [expiresAt.toISOString(), sessionId]);
+
+  if (rows.length === 0)
+    throw new ResourceNotFoundError(`session with id: ${sessionId} does not exists.`);
 
   return rows[0].user_id as number;
 }
