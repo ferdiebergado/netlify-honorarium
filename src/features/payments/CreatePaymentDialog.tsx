@@ -33,7 +33,7 @@ export default function CreatePaymentDialog({ activity }: CreatePaymentDialogPro
   );
 
   const form = usePaymentForm(formValues);
-  const { isError, isSuccess, mutateAsync: createPayment } = useCreatePayment();
+  const { isSuccess, mutateAsync: createPayment } = useCreatePayment();
 
   const handleSubmit = (formData: PaymentFormValues) => {
     toast.promise(createPayment(formData), { loading: 'Creating payment...' });
@@ -63,7 +63,6 @@ export default function CreatePaymentDialog({ activity }: CreatePaymentDialogPro
           setIsDialogOpen={setIsDialogOpen}
           activity={activity}
           isSuccess={isSuccess}
-          isError={isError}
         />
       </DialogContent>
     </Dialog>

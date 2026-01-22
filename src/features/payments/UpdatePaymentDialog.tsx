@@ -41,7 +41,7 @@ export default function UpdatePaymentDialog({
     title: payment.activity,
   };
   const form = usePaymentForm(formValues);
-  const { isError, isSuccess, mutateAsync: updatePayment } = useUpdatePayment();
+  const { isSuccess, mutateAsync: updatePayment } = useUpdatePayment();
 
   const handleSubmit = useCallback(
     (formData: PaymentFormValues) =>
@@ -69,7 +69,6 @@ export default function UpdatePaymentDialog({
           setIsDialogOpen={onOpenChange}
           activity={activity}
           isSuccess={isSuccess}
-          isError={isError}
         />
       </DialogContent>
     </Dialog>

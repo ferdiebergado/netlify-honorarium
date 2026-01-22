@@ -14,7 +14,7 @@ export default function CreateVenuePopover() {
   };
 
   const form = useVenueForm(formData);
-  const { isError, isSuccess, mutateAsync: createVenue } = useCreateVenue();
+  const { isSuccess, mutateAsync: createVenue } = useCreateVenue();
 
   const handleClick = () => {
     setIsOpen(true);
@@ -43,7 +43,6 @@ export default function CreateVenuePopover() {
           loadingMsg="Creating venue..."
           setIsPopoverOpen={setIsOpen}
           isSuccess={isSuccess}
-          isError={isError}
         />
       </PopoverContent>
     </Popover>

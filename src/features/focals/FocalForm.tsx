@@ -52,45 +52,43 @@ export default function FocalForm({
   }, [isSuccess, form]);
 
   return (
-    <form id="focal-form" onSubmit={form.handleSubmit(handleSubmit)}>
-      <FieldGroup>
-        {/*  NAME */}
-        <Controller
-          name="name"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={field.name}>Full Name</FieldLabel>
-              <Input
-                {...field}
-                id={field.name}
-                aria-invalid={fieldState.invalid}
-                placeholder="Enrique de Guzman"
-                autoComplete="off"
-                onChange={field.onChange}
-              />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-        {/* END OF NAME */}
+    <FieldGroup>
+      {/*  NAME */}
+      <Controller
+        name="name"
+        control={form.control}
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor={field.name}>Full Name</FieldLabel>
+            <Input
+              {...field}
+              id={field.name}
+              aria-invalid={fieldState.invalid}
+              placeholder="Enrique de Guzman"
+              autoComplete="off"
+              onChange={field.onChange}
+            />
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
+      {/* END OF NAME */}
 
-        <PositionInput form={form} />
+      <PositionInput form={form} />
 
-        <div className="flex w-full justify-end gap-2">
-          <Button type="button" variant="outline" onClick={handleCancel}>
-            Cancel
-          </Button>
+      <div className="flex w-full justify-end gap-2">
+        <Button type="button" variant="outline" onClick={handleCancel}>
+          Cancel
+        </Button>
 
-          <Button type="button" variant="outline" onClick={handleReset}>
-            Reset
-          </Button>
+        <Button type="button" variant="outline" onClick={handleReset}>
+          Reset
+        </Button>
 
-          <Button type="submit" form="focal-form">
-            Submit
-          </Button>
-        </div>
-      </FieldGroup>
-    </form>
+        <Button type="button" onClick={form.handleSubmit(handleSubmit)}>
+          Submit
+        </Button>
+      </div>
+    </FieldGroup>
   );
 }

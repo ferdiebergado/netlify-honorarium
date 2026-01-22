@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/input-group';
 import { useEffect } from 'react';
 import { Controller } from 'react-hook-form';
+import { toast } from 'sonner';
 import FocalInput from '../../features/focals/FocalInput';
 import VenueInput from '../../features/venues/VenueInput';
 import type { ActivityFormValues } from '../../shared/schema';
@@ -17,10 +18,9 @@ import { type ActivityHookForm } from './activity';
 
 type ActivityFormProps = {
   form: ActivityHookForm;
-  onSubmit: (data: ActivityFormValues) => void;
+  onSubmit: (data: ActivityFormValues) => Promise<void>;
   setIsDialogOpen: (open: boolean) => void;
   isSuccess: boolean;
-  isError: boolean;
 };
 
 export default function ActivityForm({
@@ -28,12 +28,11 @@ export default function ActivityForm({
   onSubmit,
   setIsDialogOpen,
   isSuccess,
-  isError,
 }: ActivityFormProps) {
   const handleSubmit = (formData: ActivityFormValues) => {
-    setIsDialogOpen(false);
-
-    onSubmit(formData);
+    toast.promise(onSubmit(formData), {
+      loading: 'Creating activity...',
+    });
   };
 
   const handleReset = () => {
@@ -46,12 +45,11 @@ export default function ActivityForm({
   };
 
   useEffect(() => {
-    if (isError) setIsDialogOpen(true);
-  }, [isError, setIsDialogOpen]);
-
-  useEffect(() => {
-    if (isSuccess) form.reset();
-  });
+    if (isSuccess) {
+      form.reset();
+      setIsDialogOpen(false);
+    }
+  }, [isSuccess, form, setIsDialogOpen]);
 
   return (
     <form id="activity-form" onSubmit={form.handleSubmit(handleSubmit)}>

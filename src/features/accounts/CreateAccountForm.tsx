@@ -63,88 +63,86 @@ export default function CreateAccountForm({ payeeId }: CreateAccountFormProps) {
 
         {isError && <p className="text-destructive">{error.message}</p>}
 
-        <form id="account-form" onSubmit={form.handleSubmit(handleSubmit)}>
-          <FieldGroup>
+        <FieldGroup>
+          {/*  BANK */}
+          <BankInput form={form} />
+          {/* END OF BANK */}
+
+          <FieldGroup className="flex flex-row">
             {/*  BANK */}
-            <BankInput form={form} />
-            {/* END OF BANK */}
-
-            <FieldGroup className="@container/field-group flex flex-row">
-              {/*  BANK */}
-              <Controller
-                name="bankBranch"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="bank-branch">Bank Branch</FieldLabel>
-                    <Input
-                      {...field}
-                      id="bank-branch"
-                      aria-invalid={fieldState.invalid}
-                      placeholder="Baclaran"
-                      autoComplete="off"
-                    />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-              {/* END OF BANK BRANCH */}
-
-              {/*  ACCOUNT NO. */}
-              <Controller
-                name="accountNo"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="account-no">Account Number</FieldLabel>
-                    <Input
-                      {...field}
-                      id="account-no"
-                      aria-invalid={fieldState.invalid}
-                      placeholder="1234-5678-90"
-                      autoComplete="off"
-                    />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-              {/* END OF ACCOUNT NO. */}
-            </FieldGroup>
-
-            {/*  ACCOUNT NAME */}
             <Controller
-              name="accountName"
+              name="bankBranch"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="account-name">Account Name</FieldLabel>
+                  <FieldLabel htmlFor="bank-branch">Bank Branch</FieldLabel>
                   <Input
                     {...field}
-                    id="account-name"
+                    id="bank-branch"
                     aria-invalid={fieldState.invalid}
-                    placeholder="Apolinario Mabini"
+                    placeholder="Baclaran"
                     autoComplete="off"
                   />
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
               )}
             />
-            {/* END OF ACCOUNT NAME */}
+            {/* END OF BANK BRANCH */}
 
-            <div className="flex w-full justify-end gap-2">
-              <Button type="button" variant="outline" onClick={handleCancel}>
-                Cancel
-              </Button>
-
-              <Button type="button" variant="outline" onClick={handleReset}>
-                Reset
-              </Button>
-              <Button type="submit" form="account-form" disabled={isPending}>
-                {isPending ? <Loader text="Saving..." /> : 'Submit'}
-              </Button>
-            </div>
+            {/*  ACCOUNT NO. */}
+            <Controller
+              name="accountNo"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="account-no">Account Number</FieldLabel>
+                  <Input
+                    {...field}
+                    id="account-no"
+                    aria-invalid={fieldState.invalid}
+                    placeholder="1234-5678-90"
+                    autoComplete="off"
+                  />
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
+            {/* END OF ACCOUNT NO. */}
           </FieldGroup>
-        </form>
+
+          {/*  ACCOUNT NAME */}
+          <Controller
+            name="accountName"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="account-name">Account Name</FieldLabel>
+                <Input
+                  {...field}
+                  id="account-name"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="Apolinario Mabini"
+                  autoComplete="off"
+                />
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
+          {/* END OF ACCOUNT NAME */}
+
+          <div className="flex w-full justify-end gap-2">
+            <Button type="button" variant="outline" onClick={handleCancel}>
+              Cancel
+            </Button>
+
+            <Button type="button" variant="outline" onClick={handleReset}>
+              Reset
+            </Button>
+            <Button type="button" onClick={form.handleSubmit(handleSubmit)} disabled={isPending}>
+              {isPending ? <Loader text="Saving..." /> : 'Submit'}
+            </Button>
+          </div>
+        </FieldGroup>
       </PopoverContent>
     </Popover>
   );

@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { useEffect } from 'react';
 import { Controller } from 'react-hook-form';
@@ -50,43 +50,41 @@ export default function PositionForm({
   }, [isSuccess, form]);
 
   return (
-    <form id="position-form" onSubmit={form.handleSubmit(handleSubmit)}>
-      <FieldGroup>
-        {/*  NAME */}
-        <Controller
-          name="name"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={field.name}>Name</FieldLabel>
-              <Input
-                {...field}
-                id={field.name}
-                aria-invalid={fieldState.invalid}
-                autoComplete="off"
-                onChange={field.onChange}
-                placeholder="Administrative Assistant II"
-              />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-        {/* END OF NAME */}
+    <FieldGroup>
+      {/*  NAME */}
+      <Controller
+        name="name"
+        control={form.control}
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor={field.name}>Name</FieldLabel>
+            <Input
+              {...field}
+              id={field.name}
+              aria-invalid={fieldState.invalid}
+              autoComplete="off"
+              onChange={field.onChange}
+            />
+            <FieldDescription>Ex. Administrative Assistant II</FieldDescription>
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
+      {/* END OF NAME */}
 
-        <div className="flex w-full justify-end gap-2">
-          <Button type="button" variant="outline" onClick={handleCancel}>
-            Cancel
-          </Button>
+      <div className="flex w-full justify-end gap-2">
+        <Button type="button" variant="outline" onClick={handleCancel}>
+          Cancel
+        </Button>
 
-          <Button type="button" variant="outline" onClick={handleReset}>
-            Reset
-          </Button>
+        <Button type="button" variant="outline" onClick={handleReset}>
+          Reset
+        </Button>
 
-          <Button type="submit" form="position-form">
-            Submit
-          </Button>
-        </div>
-      </FieldGroup>
-    </form>
+        <Button type="button" onClick={form.handleSubmit(handleSubmit)}>
+          Submit
+        </Button>
+      </div>
+    </FieldGroup>
   );
 }

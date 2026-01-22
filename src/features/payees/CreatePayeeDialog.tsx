@@ -27,7 +27,7 @@ export default function CreatePayeeDialog() {
   };
 
   const form = usePayeeForm(formData);
-  const { isError, isSuccess, mutateAsync: createPayee } = useCreatePayee();
+  const { isSuccess, mutateAsync: createPayee } = useCreatePayee();
 
   const handleClick = () => {
     setIsDialogOpen(true);
@@ -52,7 +52,6 @@ export default function CreatePayeeDialog() {
           loadingMsg="Creating payee..."
           setIsDialogOpen={setIsDialogOpen}
           isSuccess={isSuccess}
-          isError={isError}
         />
       </DialogContent>
     </Dialog>

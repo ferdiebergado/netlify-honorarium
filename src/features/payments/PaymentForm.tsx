@@ -19,7 +19,6 @@ type PaymentFormProps = {
   setIsDialogOpen: (open: boolean) => void;
   activity?: Pick<Activity, 'id' | 'title'>;
   isSuccess: boolean;
-  isError: boolean;
 };
 
 export default function PaymentForm({
@@ -28,10 +27,8 @@ export default function PaymentForm({
   setIsDialogOpen,
   activity,
   isSuccess,
-  isError,
 }: PaymentFormProps) {
   const handleSubmit = (formData: PaymentFormValues) => {
-    setIsDialogOpen(false);
     onSubmit(formData);
   };
 
@@ -45,12 +42,11 @@ export default function PaymentForm({
   };
 
   useEffect(() => {
-    if (isError) setIsDialogOpen(true);
-  }, [isError, setIsDialogOpen]);
-
-  useEffect(() => {
-    if (isSuccess) form.reset();
-  }, [isSuccess, form]);
+    if (isSuccess) {
+      form.reset();
+      setIsDialogOpen(false);
+    }
+  }, [isSuccess, form, setIsDialogOpen]);
 
   return (
     <form id="payment-form" onSubmit={form.handleSubmit(handleSubmit)}>

@@ -21,7 +21,7 @@ export default function UpdateActivityForm({ activity }: UpdateActivityProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const form = useActivityForm(activity);
-  const { isSuccess, isError, mutateAsync: updateActivity } = useUpdateActivity();
+  const { isSuccess, mutateAsync: updateActivity } = useUpdateActivity();
 
   const handleSubmit = useCallback(
     (formData: ActivityFormValues) => updateActivity({ activityId: activity.id, formData }),
@@ -51,7 +51,6 @@ export default function UpdateActivityForm({ activity }: UpdateActivityProps) {
           onSubmit={handleSubmit}
           setIsDialogOpen={setIsDialogOpen}
           isSuccess={isSuccess}
-          isError={isError}
         />
       </DialogContent>
     </Dialog>

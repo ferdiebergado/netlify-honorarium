@@ -62,41 +62,39 @@ export default function CreateTinForm({ payeeId }: CreateTinFormProps) {
 
         {isError && <p className="text-destructive">{error.message}</p>}
 
-        <form id="tin-form" onSubmit={form.handleSubmit(handleSubmit)}>
-          <FieldGroup>
-            <Controller
-              name="tin"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Tax Identification Number (TIN)</FieldLabel>
-                  <Input
-                    {...field}
-                    id={field.name}
-                    aria-invalid={fieldState.invalid}
-                    autoComplete="off"
-                    onChange={field.onChange}
-                  />
-                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                </Field>
-              )}
-            />
+        <FieldGroup>
+          <Controller
+            name="tin"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={field.name}>Tax Identification Number (TIN)</FieldLabel>
+                <Input
+                  {...field}
+                  id={field.name}
+                  aria-invalid={fieldState.invalid}
+                  autoComplete="off"
+                  onChange={field.onChange}
+                />
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
 
-            <div className="flex w-full justify-end gap-2">
-              <Button type="button" variant="outline" onClick={handleCancel}>
-                Cancel
-              </Button>
+          <div className="flex w-full justify-end gap-2">
+            <Button type="button" variant="outline" onClick={handleCancel}>
+              Cancel
+            </Button>
 
-              <Button type="button" variant="outline" onClick={handleReset}>
-                Reset
-              </Button>
+            <Button type="button" variant="outline" onClick={handleReset}>
+              Reset
+            </Button>
 
-              <Button type="submit" form="tin-form" disabled={isPending}>
-                {isPending ? <Loader text="Saving..." /> : 'Submit'}
-              </Button>
-            </div>
-          </FieldGroup>
-        </form>
+            <Button type="button" onClick={form.handleSubmit(handleSubmit)} disabled={isPending}>
+              {isPending ? <Loader text="Saving..." /> : 'Submit'}
+            </Button>
+          </div>
+        </FieldGroup>
       </PopoverContent>
     </Popover>
   );

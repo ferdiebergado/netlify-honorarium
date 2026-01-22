@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { useEffect } from 'react';
 import { Controller } from 'react-hook-form';
@@ -13,7 +13,6 @@ type RoleFormProps = {
   setIsPopoverOpen: (open: boolean) => void;
   loadingMsg: string;
   isSuccess: boolean;
-  isError: boolean;
 };
 
 export default function RoleForm({
@@ -22,11 +21,8 @@ export default function RoleForm({
   loadingMsg,
   setIsPopoverOpen,
   isSuccess,
-  isError,
 }: RoleFormProps) {
   const handleSubmit = (formData: RoleFormValues) => {
-    setIsPopoverOpen(false);
-
     toast.promise(onSubmit(formData), {
       loading: loadingMsg,
     });
@@ -42,52 +38,48 @@ export default function RoleForm({
   };
 
   useEffect(() => {
-    if (isError) setIsPopoverOpen(true);
-  }, [isError, setIsPopoverOpen]);
-
-  useEffect(() => {
-    if (isSuccess) form.reset();
-  }, [isSuccess, form]);
+    if (isSuccess) {
+      form.reset();
+      setIsPopoverOpen(false);
+    }
+  }, [isSuccess, form, setIsPopoverOpen]);
 
   return (
-    <form id="role-form" onSubmit={form.handleSubmit(handleSubmit)}>
-      <FieldGroup>
-        <FieldGroup className="@container/field-group flex flex-row">
-          {/*  ROLE */}
-          <Controller
-            name="name"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>Role</FieldLabel>
-                <Input
-                  {...field}
-                  id={field.name}
-                  aria-invalid={fieldState.invalid}
-                  autoComplete="off"
-                  onChange={field.onChange}
-                />
-                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-              </Field>
-            )}
-          />
-          {/* END OF ROLE */}
-        </FieldGroup>
+    <FieldGroup>
+      {/*  ROLE */}
+      <Controller
+        name="name"
+        control={form.control}
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor={field.name}>Role</FieldLabel>
+            <Input
+              {...field}
+              id={field.name}
+              aria-invalid={fieldState.invalid}
+              autoComplete="off"
+              onChange={field.onChange}
+            />
+            <FieldDescription>Ex. Resource Person</FieldDescription>
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
+      {/* END OF ROLE */}
 
-        <div className="flex w-full justify-end gap-2">
-          <Button type="button" variant="outline" onClick={handleCancel}>
-            Cancel
-          </Button>
+      <div className="flex w-full justify-end gap-2">
+        <Button type="button" variant="outline" onClick={handleCancel}>
+          Cancel
+        </Button>
 
-          <Button type="button" variant="outline" onClick={handleReset}>
-            Reset
-          </Button>
+        <Button type="button" variant="outline" onClick={handleReset}>
+          Reset
+        </Button>
 
-          <Button type="submit" form="role-form">
-            Submit
-          </Button>
-        </div>
-      </FieldGroup>
-    </form>
+        <Button type="button" onClick={form.handleSubmit(handleSubmit)}>
+          Submit
+        </Button>
+      </div>
+    </FieldGroup>
   );
 }

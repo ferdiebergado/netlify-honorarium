@@ -15,7 +15,6 @@ type PayeeFormProps = {
   setIsDialogOpen: (open: boolean) => void;
   loadingMsg: string;
   isSuccess: boolean;
-  isError: boolean;
 };
 
 export default function PayeeForm({
@@ -24,11 +23,8 @@ export default function PayeeForm({
   loadingMsg,
   setIsDialogOpen,
   isSuccess,
-  isError,
 }: PayeeFormProps) {
   const handleSubmit = (formData: CreatePayeeFormValues) => {
-    setIsDialogOpen(false);
-
     toast.promise(onSubmit(formData), {
       loading: loadingMsg,
     });
@@ -44,12 +40,11 @@ export default function PayeeForm({
   };
 
   useEffect(() => {
-    if (isError) setIsDialogOpen(true);
-  }, [isError, setIsDialogOpen]);
-
-  useEffect(() => {
-    if (isSuccess) form.reset();
-  }, [isSuccess, form]);
+    if (isSuccess) {
+      form.reset();
+      setIsDialogOpen(false);
+    }
+  }, [isSuccess, form, setIsDialogOpen]);
 
   return (
     <form id="payee-form" onSubmit={form.handleSubmit(handleSubmit)}>
