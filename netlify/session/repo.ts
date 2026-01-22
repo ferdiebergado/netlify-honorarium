@@ -1,8 +1,8 @@
 import { setSessionDuration, type Session } from '.';
-import { db, type Database } from '../db';
+import { type Database } from '../db';
 import { ResourceNotFoundError } from '../errors';
 
-export async function createSession(session: Session): Promise<void> {
+export async function createSession(db: Database, session: Session): Promise<void> {
   console.log('Creating session...');
 
   const { userId, sessionId, expiresAt, userAgent, ip } = session;

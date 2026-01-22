@@ -25,7 +25,7 @@ export async function newSession(user: Omit<User, 'id'>, req: Request): Promise<
   const userAgent = req.headers.get('User-Agent') ?? 'unknown';
   const ip = getClientIP(req);
 
-  await createSession({ sessionId, userId, expiresAt, maxAge, userAgent, ip });
+  await createSession(db, { sessionId, userId, expiresAt, maxAge, userAgent, ip });
 
   return {
     userId,
