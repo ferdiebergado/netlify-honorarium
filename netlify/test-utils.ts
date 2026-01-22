@@ -73,6 +73,12 @@ export function assertTimestamps(row: BaseRow, startTime: number) {
   expect(row.created_at).toBe(row.updated_at);
 }
 
+export function assertTimestamp(date: string, startTime: number) {
+  const timestamp = new Date(date);
+  const diff = Math.abs(timestamp.getTime() - startTime);
+  expect(diff).toBeLessThan(1000);
+}
+
 export function assertUser(row: BaseRow, userId: number) {
   expect(row.created_by).toBe(userId);
   expect(row.updated_by).toBe(userId);
