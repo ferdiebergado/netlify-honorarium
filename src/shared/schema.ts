@@ -90,6 +90,12 @@ export type Bank = {
   name: string;
 };
 
+export const bankSchema = z.object({
+  name: z.string().min(1, 'Bank is required.').max(150),
+});
+
+export type BankFormValues = z.infer<typeof bankSchema>;
+
 export type Focal = {
   id: number;
   name: string;

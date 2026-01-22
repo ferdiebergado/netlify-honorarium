@@ -1,7 +1,8 @@
 import { ComboboxField } from '@/components/ComboBox';
 import { useMemo } from 'react';
 import type { FieldValues, Path, UseFormReturn } from 'react-hook-form';
-import { useBanks } from './banks';
+import { useBanks } from '.';
+import CreateBankPopover from './CreateBankPopover';
 
 type WithBankId = {
   bankId: number;
@@ -33,6 +34,8 @@ export default function BankInput<T extends FieldValues & WithBankId>({ form }: 
       isPending={isPending}
       isError={isError}
       errorMessage={error?.message}
-    />
+    >
+      <CreateBankPopover />
+    </ComboboxField>
   );
 }
