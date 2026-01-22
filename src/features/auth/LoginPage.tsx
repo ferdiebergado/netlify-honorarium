@@ -2,10 +2,12 @@ import Splash from '@/components/Splash';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { GoogleLogin, type CredentialResponse } from '@react-oauth/google';
 import { toast } from 'sonner';
-import { useIdToken } from '../../features/auth/auth';
+import { useAuth, useIdToken } from '../../features/auth/auth';
 
 export default function LoginPage() {
   const app = import.meta.env.VITE_APP_TITLE;
+
+  const { isLoading } = useAuth();
   const { isPending, mutate: verifyIdToken } = useIdToken();
 
   const handleSuccess = ({ credential }: CredentialResponse) => {
@@ -17,7 +19,7 @@ export default function LoginPage() {
     toast.error('Login failed.');
   };
 
-  if (isPending) return <Splash />;
+  if (isPending || isLoading) return <Splash />;
 
   return (
     <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
