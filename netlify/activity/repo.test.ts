@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { ActivityFormValues } from '../../src/shared/schema';
 import type { Database } from '../db';
 import { assertTimestamps, assertUser, seedDb, setupTestDb, type BaseRow } from '../test-utils';
-import { create, find, findAll, softDelete, update } from './repo';
+import { create, findActiveActivities, findActiveActivity, softDelete, update } from './repo';
 
 describe('activity repo', () => {
   const mockActivity: ActivityFormValues = {
@@ -102,14 +102,14 @@ describe('activity repo', () => {
   describe('find', () => {
     it('should find and return the activity', async () => {
       const id = await create(db, mockActivity, userId);
-      const activity = await find(db, id);
+      const activity = await findActiveActivity(db, id);
 
       expect(activity.title).toBe(mockActivity.title);
-      expect(activity.venue_id).toBe(mockActivity.venueId);
-      expect(activity.start_date).toBe(mockActivity.startDate);
-      expect(activity.end_date).toBe(mockActivity.endDate);
+      expect(activity.venueId).toBe(mockActivity.venueId);
+      expect(activity.startDate).toBe(mockActivity.startDate);
+      expect(activity.endDate).toBe(mockActivity.endDate);
       expect(activity.code).toBe(mockActivity.code);
-      expect(activity.focal_id).toBe(mockActivity.focalId);
+      expect(activity.focalId).toBe(mockActivity.focalId);
     });
   });
 
@@ -128,7 +128,7 @@ describe('activity repo', () => {
 
       mockActivities.forEach(async activity => await create(db, activity, userId));
 
-      const rows = await findAll(db);
+      const rows = await findActiveActivities(db);
 
       expect(rows.length).toBe(mockActivities.length);
 
@@ -136,11 +136,11 @@ describe('activity repo', () => {
 
       rows.forEach(row => {
         expect(row.title).toBe(mockActivities[i].title);
-        expect(row.venue_id).toBe(mockActivities[i].venueId);
-        expect(row.start_date).toBe(mockActivities[i].startDate);
-        expect(row.end_date).toBe(mockActivities[i].endDate);
+        expect(row.venueId).toBe(mockActivities[i].venueId);
+        expect(row.startDate).toBe(mockActivities[i].startDate);
+        expect(row.endDate).toBe(mockActivities[i].endDate);
         expect(row.code).toBe(mockActivities[i].code);
-        expect(row.focal_id).toBe(mockActivities[i].focalId);
+        expect(row.focalId).toBe(mockActivities[i].focalId);
         i++;
       });
     });

@@ -1,8 +1,18 @@
-import type { ActivityFormValues } from '../../src/shared/schema';
+import { getFundCluster } from '.';
+import { type Activity, type ActivityFormValues } from '../../src/shared/schema';
 import { type Database } from '../db';
 import { ResourceNotFoundError } from '../errors';
+import { keysToCamel, toDateRange } from '../lib';
 
-export async function create(db: Database, data: ActivityFormValues, userId: number) {
+type NewActivityRow = {
+  id: number;
+};
+
+export async function create(
+  db: Database,
+  data: ActivityFormValues,
+  userId: number
+): Promise<number> {
   const { title, venueId, startDate, endDate, code, focalId } = data;
   const sql = `
 INSERT INTO
@@ -22,7 +32,7 @@ VALUES
 RETURNING 
     id`;
 
-  const { rows } = await db.execute(sql, [
+  const { rows } = await db.execute<NewActivityRow>(sql, [
     title,
     venueId,
     startDate,
@@ -35,10 +45,10 @@ RETURNING
 
   if (rows.length === 0) throw new Error('Failed to insert activity: no data returned.');
 
-  return rows[0].id as number;
+  return rows[0].id;
 }
 
-export async function softDelete(db: Database, id: number, userId: number) {
+export async function softDelete(db: Database, id: number, userId: number): Promise<void> {
   const sql = `
 UPDATE
   activities
@@ -92,6 +102,20 @@ WHERE
     throw new ResourceNotFoundError(`Activity with id: ${id.toString()} does not exists.`);
 }
 
+type ActivityRow = {
+  id: number;
+  title: string;
+  code: string;
+  start_date: string;
+  end_date: string;
+  venue_id: number;
+  venue: string;
+  focal_id: number;
+  focal: string;
+  position_id: number;
+  position: string;
+};
+
 export const activitiesSql = `
 SELECT
   a.id,
@@ -125,20 +149,28 @@ ON
 WHERE
   a.deleted_at IS NULL`;
 
-export async function find(db: Database, id: number) {
+export async function findActiveActivity(db: Database, id: number): Promise<Activity> {
   const sql = `${activitiesSql} AND a.id = ?`;
-  const { rows } = await db.execute(sql, [id]);
+  const { rows } = await db.execute<ActivityRow>(sql, [id]);
 
   if (rows.length === 0)
     throw new ResourceNotFoundError(`Activity with id: ${id.toString()} does not exists.`);
 
-  return rows[0];
+  return rowToActivity(rows[0]);
 }
 
-export async function findAll(db: Database) {
+export async function findActiveActivities(db: Database): Promise<Activity[]> {
   const sql = `${activitiesSql} ORDER BY a.created_at DESC`;
 
-  const { rows } = await db.execute(sql);
+  const { rows } = await db.execute<ActivityRow>(sql);
 
-  return rows;
+  return rows.map(rowToActivity);
+}
+
+function rowToActivity(row: ActivityRow): Activity {
+  return {
+    ...(keysToCamel(row) as Activity),
+    fundCluster: getFundCluster(row.code),
+    dateRange: toDateRange(row.start_date, row.end_date),
+  };
 }
