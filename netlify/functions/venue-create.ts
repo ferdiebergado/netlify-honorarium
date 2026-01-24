@@ -1,6 +1,6 @@
 import type { Config } from '@netlify/functions';
 import { venueSchema } from '../../src/shared/schema';
-import { newVenue } from '../activity/service';
+import { newVenue } from '../activity';
 import { errorResponse, ValidationError } from '../errors';
 import { checkSession } from '../session';
 

@@ -1,5 +1,5 @@
 import type { Config, Context } from '@netlify/functions';
-import { deleteActivity } from '../activity/service';
+import { deleteActivity } from '../activity';
 import { errorResponse } from '../errors';
 import { parseId } from '../lib';
 import { checkSession } from '../session';

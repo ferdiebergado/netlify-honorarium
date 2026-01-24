@@ -1,6 +1,6 @@
 import type { Config, Context } from '@netlify/functions';
 import { activitySchema } from '../../src/shared/schema';
-import { updateActivity } from '../activity/service';
+import { updateActivity } from '../activity';
 import { errorResponse, ValidationError } from '../errors';
 import { parseId } from '../lib';
 import { checkSession } from '../session';
