@@ -1,4 +1,4 @@
-import type { Row } from '@libsql/client';
+import type { Bank } from '../../src/shared/schema';
 import type { Database } from '../db';
 
 export async function createBank(db: Database, name: string, userId: number): Promise<number> {
@@ -22,7 +22,12 @@ RETURNING
   return rows[0].id as number;
 }
 
-export async function findBanks(db: Database): Promise<Row[]> {
+type BankRow = {
+  id: number;
+  name: string;
+};
+
+export async function findBanks(db: Database): Promise<Bank[]> {
   const sql = `
 SELECT 
   id,
@@ -34,6 +39,6 @@ WHERE
 ORDER BY
   name`;
 
-  const { rows } = await db.execute(sql);
+  const { rows } = await db.execute<BankRow>(sql);
   return rows;
 }
