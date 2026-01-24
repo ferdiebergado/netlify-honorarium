@@ -1,14 +1,21 @@
-import { createClient, type Client, type InArgs, type InStatement, type Row } from '@libsql/client';
+import {
+  createClient,
+  type Client,
+  type InArgs,
+  type InStatement,
+  type ResultSet,
+  type Row,
+} from '@libsql/client';
 
 const DEFAULT_DB = 'file:local.db';
 
-export interface ResultSet<T = Row> {
+export type TResultSet<T> = Omit<ResultSet, 'rows'> & {
   rows: T[];
-}
+};
 
 export interface Database {
-  execute<T = Row>(stmt: InStatement): Promise<ResultSet<T>>;
-  execute<T = Row>(sql: string, args?: InArgs): Promise<ResultSet<T>>;
+  execute<T = Row>(stmt: InStatement): Promise<TResultSet<T>>;
+  execute<T = Row>(sql: string, args?: InArgs): Promise<TResultSet<T>>;
   close: () => void;
 }
 
