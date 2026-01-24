@@ -1,7 +1,7 @@
 import type { Config } from '@netlify/functions';
 import { focalSchema } from '../../src/shared/schema';
 import { errorResponse, ValidationError } from '../errors';
-import { newFocal } from '../focal/service';
+import { newFocal } from '../focal';
 import { checkSession } from '../session';
 
 export const config: Config = {
@@ -14,11 +14,11 @@ export default async (req: Request) => {
     const userId = await checkSession(req);
 
     const body = await req.json();
-    const { error, data } = focalSchema.safeParse(body);
+    const { error, data: focal } = focalSchema.safeParse(body);
 
     if (error) throw new ValidationError();
 
-    await newFocal(data, userId);
+    await newFocal(focal, userId);
 
     return Response.json({ message: 'Focal person created.' }, { status: 201 });
   } catch (error) {
