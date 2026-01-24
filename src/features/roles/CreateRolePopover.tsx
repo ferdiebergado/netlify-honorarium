@@ -14,7 +14,7 @@ export default function CreateRolePopover() {
   };
 
   const form = useRoleForm(formData);
-  const { isError, isSuccess, mutateAsync: createRole } = useCreateRole();
+  const { isSuccess, mutateAsync: createRole } = useCreateRole();
 
   const handleClick = () => {
     setIsOpen(true);
@@ -44,7 +44,6 @@ export default function CreateRolePopover() {
           loadingMsg="Creating role..."
           setIsPopoverOpen={setIsOpen}
           isSuccess={isSuccess}
-          isError={isError}
         />
       </PopoverContent>
     </Popover>
