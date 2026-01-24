@@ -19,16 +19,20 @@ export type BaseRow = {
   updated_by: number;
 };
 
+export async function seedUser(db: Database): Promise<number> {
+  const user: Omit<User, 'id'> = {
+    googleId: '9876543210',
+    name: 'test user',
+    email: 'test@example.com',
+    picture: 'http://example.com/avatar.jpg',
+  };
+
+  return await upsertUser(db, user);
+}
+
 export async function seedDb(db: Database): Promise<void> {
   try {
-    const user: Omit<User, 'id'> = {
-      googleId: '9876543210',
-      name: 'test user',
-      email: 'test@example.com',
-      picture: 'http://example.com/avatar.jpg',
-    };
-
-    const userId = await upsertUser(db, user);
+    const userId = await seedUser(db);
 
     await createVenue(db, 'Hotel Example', userId);
 
