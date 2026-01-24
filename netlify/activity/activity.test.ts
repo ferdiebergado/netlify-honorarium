@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parseActivityCode, type FundCluster } from './activity';
+import { parseActivityCode, type FundCluster } from '.';
 
 describe('parseActivityCode', () => {
   it('parses year correctly', () => {

@@ -1,3 +1,8 @@
+import type { Activity, ActivityFormValues, VenueFormValues } from '../../src/shared/schema';
+import { db } from '../db';
+import { create, findActiveActivities, findActiveActivity, softDelete, update } from './repo';
+import { createVenue } from './venue-repo';
+
 const mfoCodes = {
   BEC: '310100100003000',
   ELLN: '310100100007000',
@@ -33,4 +38,28 @@ export function getFundCluster(activityCode: string): string {
   const { year, appropriation, program } = parseActivityCode(activityCode);
 
   return `${year.toString()} ${program} ${appropriation}`;
+}
+
+export async function newActivity(activity: ActivityFormValues, userId: number) {
+  await create(db, activity, userId);
+}
+
+export async function newVenue(venue: VenueFormValues, userId: number) {
+  await createVenue(db, venue.name, userId);
+}
+
+export async function deleteActivity(id: number, userId: number) {
+  await softDelete(db, id, userId);
+}
+
+export async function updateActivity(id: number, data: ActivityFormValues, userId: number) {
+  await update(db, id, data, userId);
+}
+
+export async function getActivity(id: number): Promise<Activity> {
+  return await findActiveActivity(db, id);
+}
+
+export async function getActivities(): Promise<Activity[]> {
+  return await findActiveActivities(db);
 }

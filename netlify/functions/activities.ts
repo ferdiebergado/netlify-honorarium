@@ -1,5 +1,5 @@
 import type { Config } from '@netlify/functions';
-import { findActivities } from '../activity/service';
+import { getActivities } from '../activity';
 import { errorResponse } from '../errors';
 import { checkSession } from '../session';
 
@@ -12,7 +12,7 @@ export default async (req: Request) => {
   try {
     await checkSession(req);
 
-    const data = await findActivities();
+    const data = await getActivities();
 
     return Response.json({ data });
   } catch (error) {

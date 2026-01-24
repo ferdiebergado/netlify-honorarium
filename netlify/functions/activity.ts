@@ -1,5 +1,5 @@
 import type { Config, Context } from '@netlify/functions';
-import { findActivity } from '../activity/service';
+import { getActivity } from '../activity';
 import { errorResponse } from '../errors';
 import { parseId } from '../lib';
 import { checkSession } from '../session';
@@ -17,7 +17,7 @@ export default async (req: Request, ctx: Context) => {
 
     const id = parseId(ctx.params.id);
 
-    const data = await findActivity(id);
+    const data = await getActivity(id);
 
     return Response.json({ data });
   } catch (error) {

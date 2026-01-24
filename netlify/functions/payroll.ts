@@ -1,6 +1,6 @@
 import type { Config, Context } from '@netlify/functions';
 import Excel from 'exceljs';
-import { getFundCluster } from '../activity/activity';
+import { getFundCluster } from '../activity';
 import { db } from '../db';
 import { errorResponse, NotFoundError } from '../errors';
 import { toDateRange } from '../lib';

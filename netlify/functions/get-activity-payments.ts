@@ -1,6 +1,6 @@
 import type { Config, Context } from '@netlify/functions';
 import type { Activity, Payee, Payment, PaymentData } from '../../src/shared/schema';
-import { getFundCluster } from '../activity/activity';
+import { getFundCluster } from '../activity';
 import { db } from '../db';
 import { errorResponse } from '../errors';
 import { keysToCamel, parseId, toDateRange } from '../lib';
