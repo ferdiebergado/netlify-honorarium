@@ -41,7 +41,7 @@ describe('session repo', () => {
       expect(newSession.user_agent).toBe(session.userAgent);
       expect(newSession.expires_at).toBe(session.expiresAt.toISOString());
 
-      assertTimestamp(newSession.last_active_at as string, startTime);
+      assertTimestamp((newSession.last_active_at as string) + 'Z', startTime);
     });
   });
 
