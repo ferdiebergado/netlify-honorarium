@@ -26,7 +26,7 @@ describe('createPosition', () => {
 
     const sql = 'SELECT * FROM positions WHERE id = ?';
     const { rows } = await db.execute(sql, [positionId]);
-    expect(rows.length).toBe(1);
+    expect(rows).toHaveLength(1);
 
     const position = rows[0];
     expect(position.name).toBe(name);

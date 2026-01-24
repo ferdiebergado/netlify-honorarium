@@ -26,7 +26,7 @@ describe('createVenue', () => {
 
     const sql = 'SELECT * FROM venues WHERE id = ?';
     const { rows } = await db.execute(sql, [venueId]);
-    expect(rows.length).toBe(1);
+    expect(rows).toHaveLength(1);
 
     const venue = rows[0];
     expect(venue.name).toBe(venueName);

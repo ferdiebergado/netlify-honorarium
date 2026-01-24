@@ -32,7 +32,7 @@ describe('session repo', () => {
 
       const sql = 'SELECT * FROM sessions WHERE session_id = ?';
       const { rows } = await db.execute(sql, [session.sessionId]);
-      expect(rows.length).toBe(1);
+      expect(rows).toHaveLength(1);
 
       const newSession = rows[0];
 
@@ -65,7 +65,7 @@ describe('session repo', () => {
 
       const sql = 'SELECT * FROM sessions WHERE session_id = ?';
       const { rows } = await db.execute(sql, [session.sessionId]);
-      expect(rows.length).toBe(1);
+      expect(rows).toHaveLength(1);
 
       const newSession = rows[0];
 

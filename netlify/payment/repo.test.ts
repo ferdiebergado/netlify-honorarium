@@ -70,7 +70,7 @@ describe('createPayment', () => {
 
     const sql = 'SELECT * FROM payments WHERE id = ?';
     const { rows } = await db.execute(sql, [paymentId]);
-    expect(rows.length).toBe(1);
+    expect(rows).toHaveLength(1);
 
     const newPayment = rows[0];
     expect(newPayment.activity_id).toBe(activityId);

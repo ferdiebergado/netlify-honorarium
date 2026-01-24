@@ -26,7 +26,7 @@ describe('createRole', () => {
 
     const sql = 'SELECT * FROM roles WHERE id = ?';
     const { rows } = await db.execute(sql, [roleId]);
-    expect(rows.length).toBe(1);
+    expect(rows).toHaveLength(1);
 
     const role = rows[0];
     expect(role.name).toBe(name);

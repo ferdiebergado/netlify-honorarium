@@ -181,7 +181,7 @@ describe('payee-repo', () => {
 
 async function assertPayee(db: Database, id: number, startTime: number) {
   const { rows } = await db.execute('SELECT * FROM payees WHERE id = ?', [id]);
-  expect(rows.length).toBe(1);
+  expect(rows).toHaveLength(1);
 
   const newPayee = rows[0];
   expect(newPayee.name).toBe(mockPayee.name);
@@ -199,7 +199,7 @@ async function assertAccount(
   startTime: number
 ) {
   const { rows } = await db.execute('SELECT * FROM accounts WHERE id = ?', [id]);
-  expect(rows.length).toBe(1);
+  expect(rows).toHaveLength(1);
 
   const newAccount = rows[0];
   expect(newAccount.bank_id).toBe(bankId);
@@ -223,7 +223,7 @@ async function assertSalary(
   startTime: number
 ) {
   const { rows } = await db.execute('SELECT * FROM salaries WHERE id = ?', [id]);
-  expect(rows.length).toBe(1);
+  expect(rows).toHaveLength(1);
 
   const newSalary = rows[0];
   expect(newSalary.salary).toBe(mockSalary.salary);
@@ -235,7 +235,7 @@ async function assertSalary(
 
 async function assertTin(db: Database, id: number, mockData: Omit<Tin, 'id'>, startTime: number) {
   const { rows } = await db.execute('SELECT * FROM tins WHERE id = ?', [id]);
-  expect(rows.length).toBe(1);
+  expect(rows).toHaveLength(1);
 
   const newTin = rows[0];
   expect(newTin.tin).toBe(mockData.tin);

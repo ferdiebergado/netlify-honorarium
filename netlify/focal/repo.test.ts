@@ -35,7 +35,7 @@ describe('focal repo', () => {
 
       const sql = 'SELECT * FROM focals WHERE id = ?';
       const { rows } = await db.execute(sql, [focalId]);
-      expect(rows.length).toBe(1);
+      expect(rows).toHaveLength(1);
 
       const newFocal = rows[0];
       expect(newFocal.name).toBe(focal.name);

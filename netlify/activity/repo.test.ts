@@ -36,7 +36,7 @@ describe('activity repo', () => {
 
       const sql = 'SELECT * FROM activities WHERE id = ?';
       const { rows } = await db.execute(sql, [activityId]);
-      expect(rows.length).toBe(1);
+      expect(rows).toHaveLength(1);
 
       const newActivity = rows[0];
       expect(newActivity.title).toBe(mockActivity.title);
@@ -64,7 +64,7 @@ describe('activity repo', () => {
 
       const sql = 'SELECT * FROM activities WHERE id = ?';
       const { rows } = await db.execute(sql, [id]);
-      expect(rows.length).toBe(1);
+      expect(rows).toHaveLength(1);
 
       const deletedAtColumn = rows[0].deleted_at as string;
       expect(deletedAtColumn).toBeDefined();
@@ -85,7 +85,7 @@ describe('activity repo', () => {
 
       const sql = 'SELECT * FROM activities WHERE id = ?';
       const { rows } = await db.execute(sql, [id]);
-      expect(rows.length).toBe(1);
+      expect(rows).toHaveLength(1);
 
       const activity = rows[0];
       expect(activity.title).toBe(title);
@@ -130,7 +130,7 @@ describe('activity repo', () => {
 
       const rows = await findActiveActivities(db);
 
-      expect(rows.length).toBe(mockActivities.length);
+      expect(rows).toHaveLength(mockActivities.length);
 
       let i = 0;
 

@@ -31,7 +31,7 @@ describe('upsertUser', () => {
 
     const sql = 'SELECT * FROM users WHERE id = ?';
     const { rows } = await db.execute(sql, [userId]);
-    expect(rows.length).toBe(1);
+    expect(rows).toHaveLength(1);
 
     const newUser = rows[0];
 
