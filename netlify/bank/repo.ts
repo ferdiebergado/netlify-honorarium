@@ -1,3 +1,4 @@
+import type { Row } from '@libsql/client';
 import type { Database } from '../db';
 
 export async function createBank(db: Database, name: string, userId: number): Promise<number> {
@@ -19,4 +20,20 @@ RETURNING
   if (rows.length === 0) throw new Error('Failed to insert bank: no data returned.');
 
   return rows[0].id as number;
+}
+
+export async function findBanks(db: Database): Promise<Row[]> {
+  const sql = `
+SELECT 
+  id,
+  name
+FROM
+  banks
+WHERE
+  deleted_at IS NULL
+ORDER BY
+  name`;
+
+  const { rows } = await db.execute(sql);
+  return rows;
 }

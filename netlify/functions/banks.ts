@@ -1,5 +1,5 @@
 import type { Config } from '@netlify/functions';
-import { db } from '../db';
+import { allBanks } from '../bank';
 import { errorResponse } from '../errors';
 import { checkSession } from '../session';
 
@@ -12,9 +12,8 @@ export default async (req: Request) => {
   try {
     await checkSession(req);
 
-    const sql = 'SELECT id, name FROM banks WHERE deleted_at IS NULL ORDER BY name';
-    const { rows } = await db.execute(sql);
-    return Response.json({ data: rows });
+    const data = await allBanks();
+    return Response.json({ data });
   } catch (error) {
     return errorResponse(error);
   }
