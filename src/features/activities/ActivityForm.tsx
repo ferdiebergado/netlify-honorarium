@@ -18,7 +18,7 @@ import { type ActivityHookForm } from './activity';
 
 type ActivityFormProps = {
   form: ActivityHookForm;
-  onSubmit: (data: ActivityFormValues) => Promise<void>;
+  onSubmit: (data: ActivityFormValues) => Promise<{ message: string }>;
   setIsDialogOpen: (open: boolean) => void;
   isSuccess: boolean;
 };
