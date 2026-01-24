@@ -2,15 +2,8 @@ import { mergeDocx } from '@benedicte/docx-merge';
 import type { Config, Context } from '@netlify/functions';
 import type { Payment } from '../../src/shared/schema';
 import { errorResponse, NotFoundError } from '../errors';
-import {
-  amountToWords,
-  docxResponse,
-  formatDate,
-  formatToPhp,
-  patchDoc,
-  toDateRange,
-} from '../lib';
-import { cert } from '../payment/cert';
+import { amountToWords, docxResponse, formatToPhp, patchDoc, toDateRange } from '../lib';
+import { cert } from '../payment/certification';
 import { getPayments } from '../payment/payments';
 
 type CertificationPatches = {
@@ -78,12 +71,16 @@ export default async (_req: Request, ctx: Context) => {
 };
 
 function createPatches(payment: Payment): CertificationPatches {
-  const tags: CertificationPatches = {
+  return {
     payee: payment.payee.toLocaleUpperCase(),
     role: payment.role,
     activity: payment.activity,
     venue: payment.venue,
-    end_date: formatDate(payment.endDate),
+    end_date: new Date().toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    }),
     amount: formatToPhp(payment.honorarium),
     tax: payment.taxRate.toString(),
     focal: payment.focal.toLocaleUpperCase(),
@@ -91,6 +88,4 @@ function createPatches(payment: Payment): CertificationPatches {
     date: toDateRange(payment.startDate, payment.endDate),
     amount_words: amountToWords(payment.honorarium),
   };
-
-  return tags;
 }
