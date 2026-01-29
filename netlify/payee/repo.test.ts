@@ -1,7 +1,6 @@
-import type { Client } from '@libsql/client';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { CreatePayeeFormValues, Salary, Tin } from '../../src/shared/schema';
-import { runInTransaction, type Database } from '../db';
+import { type Database } from '../db';
 import { assertTimestamps, assertUser, seedDb, setupTestDb, type BaseRow } from '../test-utils';
 import { deserializeDetails } from './account';
 import {
@@ -145,27 +144,25 @@ describe('payee-repo', () => {
     it('should create payee and return the new ids', async () => {
       const startTime = Date.now();
 
-      const { payeeId, salaryId, accountId, tinId } = await runInTransaction(
-        db as Client,
-        createPayee,
-        [mockPayeeData, userId]
-      );
+      const { payeeId, salaryId, accountId, tinId } = await createPayee(db, mockPayeeData, userId);
+
       expect(payeeId).toBeTypeOf('number');
       expect(payeeId).toBe(1);
-      assertPayee(db, payeeId, startTime);
+      await assertPayee(db, payeeId, startTime);
 
       expect(accountId).toBeTypeOf('number');
       expect(accountId).toBe(1);
-      assertAccount(db, accountId, mockAccountData, startTime);
+      await assertAccount(db, accountId, mockAccountData, startTime);
 
       expect(salaryId).toBeTypeOf('number');
       expect(salaryId).toBe(1);
-      assertSalary(db, salaryId, { salary: mockPayeeData.salary, payeeId }, startTime);
+      await assertSalary(db, salaryId, { salary: mockPayeeData.salary, payeeId }, startTime);
 
       if (tinId) {
         expect(tinId).toBeTypeOf('number');
         expect(tinId).toBe(1);
-        if (mockPayeeData.tin) assertTin(db, tinId, { tin: mockPayeeData.tin, payeeId }, startTime);
+        if (mockPayeeData.tin)
+          await assertTin(db, tinId, { tin: mockPayeeData.tin, payeeId }, startTime);
       }
     });
   });
