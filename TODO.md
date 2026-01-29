@@ -18,18 +18,19 @@
 - user roles
 - replace number input with text input
 - move data to schema (ex. CreateTinData)
-- suspense
+- suspense with error-boundary
 - remove mutationcache
 - replace all mutateasync
-- current date on certification
 - remove nested forms
 - index files
-- toHaveLength
 - return schema from repo
 - refactor combobox and select based on shadcn docs
+- selectively seed tables
 
 # Done
 
+- current date on certification
+- toHaveLength
 - include updated_by on inserts
 - keystocamel (frm frontend)
 - full text Search
