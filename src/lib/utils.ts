@@ -29,5 +29,5 @@ export async function startDownload(res: Response, filename: string) {
 export function checkId(id: string) {
   const parsedId = parseInt(id);
 
-  if (isNaN(parsedId)) throw new Error('id is not a number.');
+  if (Number.isNaN(parsedId)) throw new Error('id is not a number.');
 }

@@ -112,7 +112,7 @@ export function toBuffer(value: ArrayBuffer | Uint8Array | Buffer): Buffer {
 
 export function parseId(id: string): number {
   const parsedId = parseInt(id);
-  if (isNaN(parsedId)) throw new NotFoundError();
+  if (Number.isNaN(parsedId)) throw new NotFoundError();
 
   return parsedId;
 }
