@@ -63,7 +63,8 @@ export function usePayments(activityId?: string) {
 
 async function genCert(activityId: string) {
   checkId(activityId);
-  const res = await fetch('/api/certification/' + activityId, {
+
+  const res = await fetch(`/api/activities/${activityId}/certification`, {
     method: 'POST',
   });
 

@@ -1,12 +1,12 @@
 import type { Config, Context } from '@netlify/functions';
-import { errorResponse, NotFoundError } from '../errors';
+import { errorResponse, ResourceNotFoundError } from '../errors';
 import { docxResponse, parseId } from '../lib';
 import { generateCertification } from '../payment';
 import { getPayments } from '../payment/payments';
 
 export const config: Config = {
   method: 'POST',
-  path: '/api/certification/:activity_id',
+  path: '/api/activities/:activity_id/certification',
 };
 
 export default async (_req: Request, ctx: Context) => {
@@ -17,7 +17,10 @@ export default async (_req: Request, ctx: Context) => {
 
     const payments = await getPayments(activityId);
 
-    if (payments.length === 0) throw new NotFoundError();
+    if (payments.length === 0)
+      throw new ResourceNotFoundError(
+        `No payments found for activity with id: ${activityId.toString()}`
+      );
 
     const { doc, filename } = await generateCertification(payments);
     return docxResponse(doc, filename);
