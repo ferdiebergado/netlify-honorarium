@@ -2,7 +2,7 @@ import { mergeDocx } from '@benedicte/docx-merge';
 import type { Config, Context } from '@netlify/functions';
 import type { Payment } from '../../src/shared/schema';
 import { errorResponse, NotFoundError } from '../errors';
-import { docxResponse, formatToPhp, patchDoc, toDateRange } from '../lib';
+import { docxResponse, formatToPhp, parseId, patchDoc, toDateRange } from '../lib';
 import { comp } from '../payment/computation';
 import { getMaxSalary, getPayments } from '../payment/payments';
 
@@ -34,9 +34,7 @@ export default async (_req: Request, ctx: Context) => {
   console.log('Generating computation...');
 
   try {
-    const { activity_id } = ctx.params;
-    const activityId = parseInt(activity_id);
-    if (isNaN(activityId)) throw new Error('invalid activity id');
+    const activityId = parseId(ctx.params.activity_id);
 
     const payments = await getPayments(activityId);
 

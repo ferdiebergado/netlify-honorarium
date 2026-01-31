@@ -3,7 +3,7 @@ import Excel from 'exceljs';
 import { getFundCluster } from '../activity';
 import { db } from '../db';
 import { errorResponse, NotFoundError } from '../errors';
-import { toDateRange } from '../lib';
+import { parseId, toDateRange } from '../lib';
 import { deserializeDetails } from '../payee/account';
 import { payroll } from '../payment/payroll';
 
@@ -44,9 +44,7 @@ export const config: Config = {
 
 export default async (_req: Request, ctx: Context) => {
   try {
-    const { activity_id } = ctx.params;
-    const activityId = parseInt(activity_id);
-    if (isNaN(activityId)) throw new Error('invalid activity id');
+    const activityId = parseId(ctx.params.activity_id);
 
     const sql = `
 SELECT

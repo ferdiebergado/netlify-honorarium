@@ -3,7 +3,7 @@ import Excel from 'exceljs';
 import { parseActivityCode } from '../activity';
 import { db } from '../db';
 import { errorResponse, NotFoundError } from '../errors';
-import { toDateRange } from '../lib';
+import { parseId, toDateRange } from '../lib';
 import { ors } from '../payment/ors';
 
 type ORSPaymentRow = {
@@ -33,9 +33,7 @@ export const config: Config = {
 
 export default async (_req: Request, ctx: Context) => {
   try {
-    const { activity_id } = ctx.params;
-    const activityId = parseInt(activity_id);
-    if (isNaN(activityId)) throw new Error('invalid activity id');
+    const activityId = parseId(ctx.params.activity_id);
 
     const sql = `
 SELECT 
