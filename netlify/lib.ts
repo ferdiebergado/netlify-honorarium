@@ -170,6 +170,7 @@ export async function patchDoc(template: string, tags: Record<string, string>) {
     console.log('Document patched successfully.');
     return doc;
   } catch (error) {
-    console.error('Failed to patch document:', error);
+    console.error(error);
+    throw new Error('Failed to patch document.');
   }
 }
